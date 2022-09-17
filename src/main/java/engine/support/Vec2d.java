@@ -187,6 +187,13 @@ public final class Vec2d implements Serializable {
 	}
 
 	/**
+	 * Primitive version of {@link #plus(Vec2d)}.
+	 */
+	public final Vec2d plus(double x, double y) {
+		return new Vec2d(this.x + x, this.y + y);
+	}
+
+	/**
 	 * Subtracts another vector from this vector.
 	 * 
 	 * @param v

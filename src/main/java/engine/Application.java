@@ -7,6 +7,9 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * This is your main Application class that you will contain your
  * 'draws' and 'ticks'. This class is also used for controlling
@@ -14,11 +17,32 @@ import javafx.scene.input.ScrollEvent;
  */
 public class Application extends FXFrontEnd {
 
+  private final Map<String, Screen> screens;
+  private Screen activeScreen;
+
+  protected Vec2d originalSize;
+
   public Application(String title) {
     super(title);
+    this.screens = new HashMap<>();
+    this.activeScreen = null;
   }
   public Application(String title, Vec2d windowSize, boolean debugMode, boolean fullscreen) {
     super(title, windowSize, debugMode, fullscreen);
+    this.screens = new HashMap<>();
+    this.activeScreen = null;
+  }
+
+  protected void addScreen(String name, Screen screen) {
+    screens.put(name, screen);
+  }
+  public void setActiveScreen(String name) {
+    activeScreen = screens.get(name);
+    activeScreen.reset();
+  }
+
+  public Vec2d getCurrentStageSize() {
+    return this.currentStageSize;
   }
 
   /**
@@ -27,7 +51,7 @@ public class Application extends FXFrontEnd {
    */
   @Override
   protected void onTick(long nanosSincePreviousTick) {
-
+    activeScreen.onTick(nanosSincePreviousTick);
   }
 
   /**
@@ -44,7 +68,7 @@ public class Application extends FXFrontEnd {
    */
   @Override
   protected void onDraw(GraphicsContext g) {
-
+    activeScreen.onDraw(g);
   }
 
   /**
@@ -80,7 +104,7 @@ public class Application extends FXFrontEnd {
    */
   @Override
   protected void onMouseClicked(MouseEvent e) {
-
+    activeScreen.onMouseClicked(e);
   }
 
   /**
@@ -116,7 +140,7 @@ public class Application extends FXFrontEnd {
    */
   @Override
   protected void onMouseMoved(MouseEvent e) {
-
+    activeScreen.onMouseMoved(e);
   }
 
   /**
@@ -143,7 +167,10 @@ public class Application extends FXFrontEnd {
    */
   @Override
   protected void onResize(Vec2d newSize) {
-
+    // Change Size from Absolute to Scale
+    currentStageSize = newSize;
+    double scale = Math.min(newSize.x/ originalSize.x, newSize.y/ originalSize.y);
+    activeScreen.onResize(new Vec2d(scale, scale));
   }
 
   /**
@@ -159,7 +186,7 @@ public class Application extends FXFrontEnd {
    */
   @Override
   protected void onStartup() {
-
+    // Set Original Size (Used for Resizing)
+    this.originalSize = currentStageSize;
   }
-
 }

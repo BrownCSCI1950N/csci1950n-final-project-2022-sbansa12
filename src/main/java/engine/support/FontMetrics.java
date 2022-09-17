@@ -25,4 +25,7 @@ public final class FontMetrics {
 		height = b.getHeight();
 	}
 
+	public Vec2d toVector() {
+		return new Vec2d(width, height);
+	}
 }
