@@ -26,9 +26,9 @@ public class App extends Application {
     // Add All Screens to Application
     this.addScreen("start", new StartScreen(this));
     this.addScreen("game", new GameScreen(this));
-    this.addScreen("X-win", new WinScreen(this, "X Wins!", "Restart"));
-    this.addScreen("O-win", new WinScreen(this, "O Wins!", "Restart"));
-    this.addScreen("draw", new WinScreen(this, "Draw~!!", "Restart"));
+    this.addScreen("x-win", new WinScreen(this, "x wins!", "restart"));
+    this.addScreen("o-win", new WinScreen(this, "o wins!", "restart"));
+    this.addScreen("draw", new WinScreen(this, " draw  ", "restart"));
 
     // Set Active Screen
     this.setActiveScreen("start");

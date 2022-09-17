@@ -18,7 +18,7 @@ import tic.UITimer;
 import java.util.Objects;
 
 public class GameScreen extends Screen {
-    private String currentPlayer = "X";
+    private String currentPlayer = "x";
     private String[][] boardArray = new String[3][3];
 
     public GameScreen(Application engine) {
@@ -55,10 +55,10 @@ public class GameScreen extends Screen {
         createPieces(background);
 
         // Create Turn Text
-        UIElement turnText = new UIText(this, background, Constants.turnTextPosition, currentPlayer + "'s Turn!", Constants.turnTextColor, Constants.turnTextFont) {
+        UIElement turnText = new UIText(this, background, Constants.turnTextPosition, currentPlayer + "'s turn!", Constants.turnTextColor, Constants.turnTextFont) {
             @Override
             public void onMouseClicked(MouseEvent e) {
-                this.text = currentPlayer + "'s Turn!";
+                this.text = currentPlayer + "'s turn!";
 
                 super.onMouseMoved(e);
             }
@@ -67,10 +67,10 @@ public class GameScreen extends Screen {
     }
 
     private void swapPlayer() {
-        if (Objects.equals(currentPlayer, "X")) {
-            currentPlayer = "O";
+        if (Objects.equals(currentPlayer, "x")) {
+            currentPlayer = "o";
         } else {
-            currentPlayer = "X";
+            currentPlayer = "x";
         }
     }
 
@@ -97,12 +97,12 @@ public class GameScreen extends Screen {
     }
 
     private boolean checkDraw() {
-        return !checkWin("X") && !checkWin("O") && checkFull();
+        return !checkWin("x") && !checkWin("o") && checkFull();
     }
 
     @Override
     protected void reset() {
-        currentPlayer = "X";
+        currentPlayer = "x";
         boardArray = new String[3][3];
 
         super.reset();
@@ -138,17 +138,17 @@ public class GameScreen extends Screen {
         Vec2d C2PieceDraw = Constants.initialBoardTopRight.plus(new Vec2d(Constants.intialBoardSquaresAndBars(Constants.initialBoardSize, 1, 1), Constants.intialBoardSquaresAndBars(Constants.initialBoardSize, 3, 2))).plus(Constants.gamePiecesLocation);
         Vec2d C3PieceDraw = Constants.initialBoardTopRight.plus(new Vec2d(Constants.intialBoardSquaresAndBars(Constants.initialBoardSize, 2, 2), Constants.intialBoardSquaresAndBars(Constants.initialBoardSize, 3, 2))).plus(Constants.gamePiecesLocation);
 
-        UIElement A1 = new UIPiece(this, background, A1PieceDraw, null, null,  new FontWrapper("Arial Narrow",null, null, 60), new Vec2i(0,0), new Vec2i(0,0), new Vec2i(1,0), new Vec2i(1,0), new Vec2i(0,0));
-        UIElement A2 = new UIPiece(this, background, A2PieceDraw, null, null,  new FontWrapper("Arial Narrow",null, null, 60), new Vec2i(1,1), new Vec2i(0,0), new Vec2i(1,0), new Vec2i(1,0), new Vec2i(0,1));
-        UIElement A3 = new UIPiece(this, background, A3PieceDraw, null, null,  new FontWrapper("Arial Narrow",null, null, 60), new Vec2i(2,2), new Vec2i(0,0), new Vec2i(1,0), new Vec2i(1,0), new Vec2i(0,2));
+        UIElement A1 = new UIPiece(this, background, A1PieceDraw, null, null,  Constants.gamePieceFont, new Vec2i(0,0), new Vec2i(0,0), new Vec2i(1,0), new Vec2i(1,0), new Vec2i(0,0));
+        UIElement A2 = new UIPiece(this, background, A2PieceDraw, null, null,  Constants.gamePieceFont, new Vec2i(1,1), new Vec2i(0,0), new Vec2i(1,0), new Vec2i(1,0), new Vec2i(0,1));
+        UIElement A3 = new UIPiece(this, background, A3PieceDraw, null, null,  Constants.gamePieceFont, new Vec2i(2,2), new Vec2i(0,0), new Vec2i(1,0), new Vec2i(1,0), new Vec2i(0,2));
 
-        UIElement B1 = new UIPiece(this, background, B1PieceDraw, null, null,  new FontWrapper("Arial Narrow",null, null, 60), new Vec2i(0,0), new Vec2i(1,1), new Vec2i(1,0), new Vec2i(1,0), new Vec2i(1,0));
-        UIElement B2 = new UIPiece(this, background, B2PieceDraw, null, null,  new FontWrapper("Arial Narrow",null, null, 60), new Vec2i(1,1), new Vec2i(1,1), new Vec2i(1,0), new Vec2i(1,0), new Vec2i(1,1));
-        UIElement B3 = new UIPiece(this, background, B3PieceDraw, null, null,  new FontWrapper("Arial Narrow",null, null, 60), new Vec2i(2,2), new Vec2i(1,1), new Vec2i(1,0), new Vec2i(1,0), new Vec2i(1,2));
+        UIElement B1 = new UIPiece(this, background, B1PieceDraw, null, null,  Constants.gamePieceFont, new Vec2i(0,0), new Vec2i(1,1), new Vec2i(1,0), new Vec2i(1,0), new Vec2i(1,0));
+        UIElement B2 = new UIPiece(this, background, B2PieceDraw, null, null,  Constants.gamePieceFont, new Vec2i(1,1), new Vec2i(1,1), new Vec2i(1,0), new Vec2i(1,0), new Vec2i(1,1));
+        UIElement B3 = new UIPiece(this, background, B3PieceDraw, null, null,  Constants.gamePieceFont, new Vec2i(2,2), new Vec2i(1,1), new Vec2i(1,0), new Vec2i(1,0), new Vec2i(1,2));
 
-        UIElement C1 = new UIPiece(this, background, C1PieceDraw, null, null,  new FontWrapper("Arial Narrow",null, null, 60), new Vec2i(0,0), new Vec2i(2,2), new Vec2i(1,0), new Vec2i(1,0), new Vec2i(2,0));
-        UIElement C2 = new UIPiece(this, background, C2PieceDraw, null, null,  new FontWrapper("Arial Narrow",null, null, 60), new Vec2i(1,1), new Vec2i(2,2), new Vec2i(1,0), new Vec2i(1,0), new Vec2i(2,1));
-        UIElement C3 = new UIPiece(this, background, C3PieceDraw, null, null,  new FontWrapper("Arial Narrow",null, null, 60), new Vec2i(2,2), new Vec2i(2,2), new Vec2i(1,0), new Vec2i(1,0), new Vec2i(2,2));
+        UIElement C1 = new UIPiece(this, background, C1PieceDraw, null, null,  Constants.gamePieceFont, new Vec2i(0,0), new Vec2i(2,2), new Vec2i(1,0), new Vec2i(1,0), new Vec2i(2,0));
+        UIElement C2 = new UIPiece(this, background, C2PieceDraw, null, null,  Constants.gamePieceFont, new Vec2i(1,1), new Vec2i(2,2), new Vec2i(1,0), new Vec2i(1,0), new Vec2i(2,1));
+        UIElement C3 = new UIPiece(this, background, C3PieceDraw, null, null,  Constants.gamePieceFont, new Vec2i(2,2), new Vec2i(2,2), new Vec2i(1,0), new Vec2i(1,0), new Vec2i(2,2));
 
         background.addChildren(A1);
         background.addChildren(A2);

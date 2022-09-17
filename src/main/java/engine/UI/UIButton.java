@@ -27,8 +27,8 @@ public class UIButton extends UIElement {
         this.originalSize = size;
         this.currentSize = size;
         this.arcSize = arcSize;
-        this.originalPositionText = position.plus(0, size.y).plus(positionText);
-        this.currentPositionText = position.plus(0, size.y).plus(positionText);
+        this.originalPositionText = position.plus(0, size.y).plus(positionText.x, -positionText.y);
+        this.currentPositionText = position.plus(0, size.y).plus(positionText.x, -positionText.y);
         this.buttonText = buttonText;
         this.originalFont = font.copy();
         this.currentFont = font.copy();
