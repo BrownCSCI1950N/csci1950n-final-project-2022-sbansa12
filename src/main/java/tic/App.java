@@ -2,6 +2,7 @@ package tic;
 
 import engine.Application;
 import engine.support.Vec2d;
+import javafx.scene.input.KeyCharacterCombination;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import tic.screens.GameScreen;
@@ -24,16 +25,12 @@ public class App extends Application {
   }
 
   @Override
-  protected void onKeyTyped(KeyEvent e) {
-    // KeyEvent [source = javafx.scene.Scene@7b8ee390, target = javafx.scene.Scene@7b8ee390, eventType = KEY_TYPED, consumed = false, character = , text = , code = UNDEFINED]
-    System.out.println(e);
+  protected void onKeyPressed(KeyEvent e) {
     if (e.getCode() == KeyCode.ESCAPE){
-      System.out.println("ESCAPED!");
-    } else {
-      System.out.println("TRAPPED!");
+      this.shutdown();
     }
 
-    super.onKeyTyped(e);
+    super.onKeyPressed(e);
   }
 
   @Override

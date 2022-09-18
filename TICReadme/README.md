@@ -48,10 +48,10 @@
 --------------------------------------------------------------
 
 ## Instructions on How to Run:
-1) 
+1) Hit start button on start screen.
 
 ## Known bugs: 
 - None
 
 ## Hours spent on assignment: 
-- 12
+- 16

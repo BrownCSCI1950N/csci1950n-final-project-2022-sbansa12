@@ -86,7 +86,7 @@ public class Application extends FXFrontEnd {
    */
   @Override
   protected void onKeyPressed(KeyEvent e) {
-
+    activeScreen.onKeyPressed(e);
   }
 
   /**
