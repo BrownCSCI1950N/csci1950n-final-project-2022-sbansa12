@@ -1,7 +1,6 @@
 package tic.screens;
 
 import engine.Application;
-import engine.FontWrapper;
 import engine.Screen;
 import engine.UI.UIButton;
 import engine.UI.UIElement;
@@ -10,7 +9,6 @@ import engine.UI.UIText;
 import engine.Utility;
 import engine.support.Vec2d;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
 import tic.Constants;
 
 public class StartScreen extends Screen {

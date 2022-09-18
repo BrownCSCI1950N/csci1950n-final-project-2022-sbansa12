@@ -16,7 +16,7 @@ public abstract class UIElement {
     // Screen a UIElement is Associated With
     private final Screen screen;
     private final UIElement parent;
-    private List<UIElement> children;
+    private final List<UIElement> children;
     protected Vec2d originalPosition;
     protected Vec2d currentPosition;
 
@@ -25,8 +25,8 @@ public abstract class UIElement {
     public UIElement(Screen screen, UIElement parent, Vec2d position, Color color) {
         this.screen = screen;
         this.parent = parent;
-        this.originalPosition = position;
-        this.currentPosition = position;
+        this.originalPosition = new Vec2d(position);
+        this.currentPosition = new Vec2d(position);
         this.color = color;
         this.children = new ArrayList<>();
     }
@@ -76,8 +76,10 @@ public abstract class UIElement {
      * Called when a key is typed.
      * @param e		an FX {@link KeyEvent} representing the input event.
      */
-    protected void onKeyTyped(KeyEvent e) {
-
+    public void onKeyTyped(KeyEvent e) {
+        for (UIElement child: children) {
+            child.onKeyTyped(e);
+        }
     }
 
     /**

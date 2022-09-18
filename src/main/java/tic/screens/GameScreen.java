@@ -9,17 +9,22 @@ import engine.UI.UIText;
 import engine.Utility;
 import engine.support.Vec2d;
 import engine.support.Vec2i;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import tic.Constants;
 import tic.UIBoard;
-import tic.UITimer;
+import tic.UITimerBar;
+import tic.UITimerText;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 public class GameScreen extends Screen {
     private String currentPlayer = "x";
     private String[][] boardArray = new String[3][3];
+
+    public static BigDecimal count;
 
     public GameScreen(Application engine) {
         super(engine);
@@ -43,7 +48,7 @@ public class GameScreen extends Screen {
         background.addChildren(board);
 
         // Create Timer
-        UIElement timer = new UITimer(
+        UIElement timer = new UITimerBar(
                 this,
                 background,
                 Constants.timerPosition,
@@ -51,19 +56,31 @@ public class GameScreen extends Screen {
                 Constants.timerBorder);
         background.addChildren(timer);
 
+        // Create TimerText
+        UIElement timer2 = new UITimerText(
+                this,
+                background,
+                Constants.timerTextPosition,
+                Constants.timerContainerColor,
+                Constants.turnTextFont);
+        background.addChildren(timer2);
+
         // Create Pieces
         createPieces(background);
 
         // Create Turn Text
         UIElement turnText = new UIText(this, background, Constants.turnTextPosition, currentPlayer + "'s turn!", Constants.turnTextColor, Constants.turnTextFont) {
             @Override
-            public void onMouseClicked(MouseEvent e) {
+            public void onDraw(GraphicsContext g) {
+                // Account for the Swapping of Current Player due to Clicks and Timer
                 this.text = currentPlayer + "'s turn!";
 
-                super.onMouseMoved(e);
+                super.onDraw(g);
             }
         };
         background.addChildren(turnText);
+
+        resetTimer();
     }
 
     private void swapPlayer() {
@@ -100,17 +117,23 @@ public class GameScreen extends Screen {
         return !checkWin("x") && !checkWin("o") && checkFull();
     }
 
+    private void resetTimer() {count = new BigDecimal(String.valueOf(0));}
+
     @Override
     protected void reset() {
+        super.reset();
         currentPlayer = "x";
         boardArray = new String[3][3];
-
-        super.reset();
+        resetTimer();
     }
 
     @Override
     protected void onTick(long nanosSincePreviousTick) {
-        // check whether timer ran out
+        count = count.add(new BigDecimal(nanosSincePreviousTick));
+        if (count.compareTo(Constants.TIMER_VALUE) > 0) {
+            swapPlayer();
+            resetTimer();
+        }
 
         super.onTick(nanosSincePreviousTick);
     }
@@ -165,6 +188,7 @@ public class GameScreen extends Screen {
 
         private final Vec2i boardPosition;
         private boolean piecePlaced = false;
+        private boolean pieceHover = false;
         private final Vec2d originalBoundingBoxPosition;
         private Vec2d currentBoundingBoxPosition;
         private final Vec2d originalBoundingBoxSize;
@@ -183,7 +207,19 @@ public class GameScreen extends Screen {
         @Override
         public void reset() {
             piecePlaced = false;
+            pieceHover = false;
             text = "";
+        }
+
+        @Override
+        public void onDraw(GraphicsContext g) {
+            // Account for the Swapping of Current Player due to Clicks and Timer
+            if (!piecePlaced && pieceHover) {
+                this.text = currentPlayer;
+                this.color = Constants.hoverColors.get(currentPlayer);
+            }
+
+            super.onDraw(g);
         }
 
         @Override
@@ -196,6 +232,7 @@ public class GameScreen extends Screen {
                     piecePlaced = true;
                     boardArray[boardPosition.x][boardPosition.y] = currentPlayer;
                     swapPlayer();
+                    resetTimer();
                 }
             }
 
@@ -206,9 +243,11 @@ public class GameScreen extends Screen {
         public void onMouseMoved(MouseEvent e) {
             if (!piecePlaced) {
                 if (Utility.inBoundingBox(currentBoundingBoxPosition, currentBoundingBoxPosition.plus(currentBoundingBoxSize), new Vec2d(e.getX(), e.getY()))) {
+                    pieceHover = true;
                     this.text = currentPlayer;
                     this.color = Constants.hoverColors.get(currentPlayer);
                 } else {
+                    pieceHover = false;
                     this.text = "";
                 }
             }

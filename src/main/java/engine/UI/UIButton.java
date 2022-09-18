@@ -26,7 +26,7 @@ public class UIButton extends UIElement {
         super(screen, parent, position, color);
         this.originalSize = size;
         this.currentSize = size;
-        this.arcSize = arcSize;
+        this.arcSize = new Vec2d(arcSize);
         this.originalPositionText = position.plus(0, size.y).plus(positionText.x, -positionText.y);
         this.currentPositionText = position.plus(0, size.y).plus(positionText.x, -positionText.y);
         this.buttonText = buttonText;

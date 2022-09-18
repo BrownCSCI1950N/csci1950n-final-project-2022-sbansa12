@@ -2,19 +2,18 @@ package engine.UI;
 
 import engine.Screen;
 import engine.support.Vec2d;
-import engine.support.Vec2i;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class UIRectangle extends UIElement {
 
-    private final Vec2d originalSize;
+    protected final Vec2d originalSize;
     protected Vec2d currentSize;
 
     public UIRectangle(Screen screen, UIElement parent, Vec2d position, Vec2d size, Color color) {
         super(screen, parent, position, color);
-        this.originalSize = size;
-        this.currentSize = size;
+        this.originalSize = new Vec2d(size);
+        this.currentSize = new Vec2d(size);
     }
 
     @Override

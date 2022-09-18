@@ -77,7 +77,7 @@ public class Application extends FXFrontEnd {
    */
   @Override
   protected void onKeyTyped(KeyEvent e) {
-
+    activeScreen.onKeyTyped(e);
   }
 
   /**
@@ -113,7 +113,6 @@ public class Application extends FXFrontEnd {
    */
   @Override
   protected void onMousePressed(MouseEvent e) {
-
   }
 
   /**
@@ -122,7 +121,6 @@ public class Application extends FXFrontEnd {
    */
   @Override
   protected void onMouseReleased(MouseEvent e) {
-
   }
 
   /**

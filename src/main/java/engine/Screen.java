@@ -62,7 +62,9 @@ public abstract class Screen {
      * @param e		an FX {@link KeyEvent} representing the input event.
      */
     protected void onKeyTyped(KeyEvent e) {
-
+        for (UIElement uiElement : uiElements) {
+            uiElement.onKeyTyped(e);
+        }
     }
 
     /**

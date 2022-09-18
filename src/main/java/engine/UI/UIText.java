@@ -2,13 +2,9 @@ package engine.UI;
 
 import engine.FontWrapper;
 import engine.Screen;
-import engine.support.FontMetrics;
 import engine.support.Vec2d;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
 
 public class UIText extends UIElement{
 

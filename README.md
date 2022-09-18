@@ -1,10 +1,12 @@
 # TIC Handin README
-#### Fill out this README before turning in this project. Make sure to fill this out again for each assignment!
----
-### Banner ID:
----
-### Already uploaded demo onto Slack:
----
+
+## Banner ID: 
+- B01601657
+
+## Demo Uploaded to Slack: 
+- Yes
+
+--------------------------------------------------------------
 ## Primary Requirements:
 | Requirement | Location in code or steps to view in game  |
 |---|---|
@@ -45,8 +47,11 @@
 
 --------------------------------------------------------------
 
-Instructions on how to run
+## Instructions on How to Run:
+1) 
 
-Known bugs:
+## Known bugs: 
+- None
 
-Hours spent on assignment: 
+## Hours spent on assignment: 
+- 12

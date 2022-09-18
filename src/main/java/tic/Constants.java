@@ -21,11 +21,13 @@ public class Constants {
     public static final double initialBoardSize = 300;
 
     // Control Timer
-    public static final BigDecimal TIMER_VALUE = new BigDecimal("6000000000"); // 6 seconds
+    public static final BigDecimal TIMER_VALUE = new BigDecimal("8000000000"); // 8 seconds
+    public static final Vec2d timerTextPosition = new Vec2d(134, 40);
     public static final Vec2d timerPosition = new Vec2d(170, 60);
     public static final Vec2d timerSize = new Vec2d(40, 440);
     public static final double timerBorder = 10;
-
+    public static final int timerTextDecimalPlaces = 1;
+    public static final int timerBarSmoothness = 5;
     public static final Color timerContainerColor = Color.rgb(255, 206,206);
     public static final Color timerMaxColor = Color.rgb(255, 151,151);
     public static final Color timerColor = Color.rgb(255, 255,255);
