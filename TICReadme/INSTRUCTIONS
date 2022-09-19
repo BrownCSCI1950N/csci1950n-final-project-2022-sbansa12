@@ -1,5 +1,11 @@
 How To Play Game:
-1) Run the main function in tic/Main
-2) Wait till the game screen pops up
+1) Run the main function in tic/Main.
+2) Wait till the game screen pops up.
 3) Click the start button on the title screen.
-4)
+4) You will be brought to the game screen.
+5) There is a bar timer and text timer on the left-hand side that shows how much time the current player has left to play.
+6) There is a board in the center of the screen and when hovering over a slot, a ghost piece of drawn and clicking on the slot places the piece.
+7) At the bottom of the screen, it indicates which player's turn it is.
+8) If the timer runs out for a player, we move onto the next player.
+9) If a player wins or the game ends in a draw, a new screen gets displayed about the outcome of the game, and a restart button is shown.
+10) Clicking the escape button at any moment causes the game to exit.
