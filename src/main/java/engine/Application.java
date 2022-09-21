@@ -40,7 +40,6 @@ public class Application extends FXFrontEnd {
     activeScreen = screens.get(name);
     activeScreen.reset();
   }
-
   public Vec2d getCurrentStageSize() {
     return this.currentStageSize;
   }
@@ -59,7 +58,7 @@ public class Application extends FXFrontEnd {
    */
   @Override
   protected void onLateTick() {
-    // Don't worry about this method until you need it. (It'll be covered in class.)
+    activeScreen.onLateTick();
   }
 
   /**
@@ -95,7 +94,7 @@ public class Application extends FXFrontEnd {
    */
   @Override
   protected void onKeyReleased(KeyEvent e) {
-
+    activeScreen.onKeyReleased(e);
   }
 
   /**
@@ -113,6 +112,7 @@ public class Application extends FXFrontEnd {
    */
   @Override
   protected void onMousePressed(MouseEvent e) {
+    activeScreen.onMousePressed(e);
   }
 
   /**
@@ -121,6 +121,7 @@ public class Application extends FXFrontEnd {
    */
   @Override
   protected void onMouseReleased(MouseEvent e) {
+    activeScreen.onMouseReleased(e);
   }
 
   /**
@@ -129,7 +130,7 @@ public class Application extends FXFrontEnd {
    */
   @Override
   protected void onMouseDragged(MouseEvent e) {
-
+    activeScreen.onMouseDragged(e);
   }
 
   /**
@@ -147,7 +148,7 @@ public class Application extends FXFrontEnd {
    */
   @Override
   protected void onMouseWheelMoved(ScrollEvent e) {
-
+    activeScreen.onMouseWheelMoved(e);
   }
 
   /**
@@ -156,7 +157,7 @@ public class Application extends FXFrontEnd {
    */
   @Override
   protected void onFocusChanged(boolean newVal) {
-
+    activeScreen.onFocusChanged(newVal);
   }
 
   /**
@@ -176,7 +177,7 @@ public class Application extends FXFrontEnd {
    */
   @Override
   protected void onShutdown() {
-
+    activeScreen.onShutdown();
   }
 
   /**

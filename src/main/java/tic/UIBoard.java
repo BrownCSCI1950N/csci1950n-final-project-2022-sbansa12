@@ -12,11 +12,11 @@ public class UIBoard extends UIElement {
         super(screen, parent, position, color);
 
         // Bars of Board
-        UIElement horz1 = new UIRectangle(screen, this, new Vec2d(position.x + Constants.intialBoardSquaresAndBars(size, 1, 0), position.y), new Vec2d(size/Constants.DIVISION_FACTOR, size), color);
-        UIElement horz2 = new UIRectangle(screen, this, new Vec2d(position.x + Constants.intialBoardSquaresAndBars(size, 2, 1), position.y), new Vec2d(size/Constants.DIVISION_FACTOR, size), color);
+        UIElement horz1 = new UIRectangle(screen, this, new Vec2d(position.x + Constants.initialBoardSquaresAndBars(size, 1, 0), position.y), new Vec2d(size/Constants.DIVISION_FACTOR, size), color);
+        UIElement horz2 = new UIRectangle(screen, this, new Vec2d(position.x + Constants.initialBoardSquaresAndBars(size, 2, 1), position.y), new Vec2d(size/Constants.DIVISION_FACTOR, size), color);
 
-        UIElement vert1 = new UIRectangle(screen, this, new Vec2d(position.x, position.y + Constants.intialBoardSquaresAndBars(size, 1, 0)), new Vec2d(size, size/Constants.DIVISION_FACTOR), color);
-        UIElement vert2 = new UIRectangle(screen, this, new Vec2d(position.x, position.y + Constants.intialBoardSquaresAndBars(size, 2, 1)), new Vec2d(size, size/Constants.DIVISION_FACTOR), color);
+        UIElement vert1 = new UIRectangle(screen, this, new Vec2d(position.x, position.y + Constants.initialBoardSquaresAndBars(size, 1, 0)), new Vec2d(size, size/Constants.DIVISION_FACTOR), color);
+        UIElement vert2 = new UIRectangle(screen, this, new Vec2d(position.x, position.y + Constants.initialBoardSquaresAndBars(size, 2, 1)), new Vec2d(size, size/Constants.DIVISION_FACTOR), color);
 
         this.addChildren(horz1);
         this.addChildren(horz2);

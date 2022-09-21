@@ -44,7 +44,9 @@ public abstract class Screen {
      * Called after onTick().
      */
     protected void onLateTick() {
-        // Don't worry about this method until you need it. (It'll be covered in class.)
+        for (UIElement uiElement : uiElements) {
+            uiElement.onLateTick();
+        }
     }
 
     /**
@@ -72,7 +74,9 @@ public abstract class Screen {
      * @param e		an FX {@link KeyEvent} representing the input event.
      */
     protected void onKeyPressed(KeyEvent e) {
-
+        for (UIElement uiElement : uiElements) {
+            uiElement.onKeyPressed(e);
+        }
     }
 
     /**
@@ -80,7 +84,9 @@ public abstract class Screen {
      * @param e		an FX {@link KeyEvent} representing the input event.
      */
     protected void onKeyReleased(KeyEvent e) {
-
+        for (UIElement uiElement : uiElements) {
+            uiElement.onKeyReleased(e);
+        }
     }
 
     /**
@@ -98,7 +104,9 @@ public abstract class Screen {
      * @param e		an FX {@link MouseEvent} representing the input event.
      */
     protected void onMousePressed(MouseEvent e) {
-
+        for (UIElement uiElement : uiElements) {
+            uiElement.onMousePressed(e);
+        }
     }
 
     /**
@@ -106,7 +114,9 @@ public abstract class Screen {
      * @param e		an FX {@link MouseEvent} representing the input event.
      */
     protected void onMouseReleased(MouseEvent e) {
-
+        for (UIElement uiElement : uiElements) {
+            uiElement.onMouseReleased(e);
+        }
     }
 
     /**
@@ -114,7 +124,9 @@ public abstract class Screen {
      * @param e		an FX {@link MouseEvent} representing the input event.
      */
     protected void onMouseDragged(MouseEvent e) {
-
+        for (UIElement uiElement : uiElements) {
+            uiElement.onMouseDragged(e);
+        }
     }
 
     /**
@@ -132,7 +144,9 @@ public abstract class Screen {
      * @param e		an FX {@link ScrollEvent} representing the input event.
      */
     protected void onMouseWheelMoved(ScrollEvent e) {
-
+        for (UIElement uiElement : uiElements) {
+            uiElement.onMouseWheelMoved(e);
+        }
     }
 
     /**
@@ -140,7 +154,9 @@ public abstract class Screen {
      * @param newVal	a boolean representing the new focus state
      */
     protected void onFocusChanged(boolean newVal) {
-
+        for (UIElement uiElement : uiElements) {
+            uiElement.onFocusChanged(newVal);
+        }
     }
 
     /**
@@ -157,13 +173,17 @@ public abstract class Screen {
      * Called when the app is shutdown.
      */
     protected void onShutdown() {
-
+        for (UIElement uiElement : uiElements) {
+            uiElement.onShutdown();
+        }
     }
 
     /**
      * Called when the app is starting up.s
      */
     protected void onStartup() {
-
+        for (UIElement uiElement : uiElements) {
+            uiElement.onStartup();
+        }
     }
 }

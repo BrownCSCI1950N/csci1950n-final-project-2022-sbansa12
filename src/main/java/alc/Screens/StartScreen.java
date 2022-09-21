@@ -1,4 +1,4 @@
-package tic.screens;
+package alc.Screens;
 
 import engine.Application;
 import engine.Screen;
@@ -9,10 +9,10 @@ import engine.UI.UIText;
 import engine.Utility;
 import engine.support.Vec2d;
 import javafx.scene.input.MouseEvent;
-import tic.Constants;
+import alc.Constants;
 
-public class WinScreen extends Screen {
-    public WinScreen(Application engine, String titleText, String buttonText) {
+public class StartScreen extends Screen {
+    public StartScreen(Application engine) {
         super(engine);
 
         // Create Background
@@ -28,8 +28,8 @@ public class WinScreen extends Screen {
         UIElement title = new UIText(
                 this,
                 background,
-                Constants.winScreenTitlePosition,
-                titleText,
+                Constants.startScreenTitlePosition,
+                Constants.startScreenTitle,
                 Constants.titleColor,
                 Constants.titleFont);
         background.addChildren(title);
@@ -42,7 +42,7 @@ public class WinScreen extends Screen {
                 Constants.buttonSize,
                 Constants.buttonColor,
                 Constants.buttonArcSize,
-                buttonText,
+                Constants.startScreenButtonText,
                 Constants.buttonTextPosition,
                 Constants.buttonTextColor,
                 Constants.buttonTextFont) {
@@ -62,12 +62,9 @@ public class WinScreen extends Screen {
                     this.color = Constants.buttonColor;
                 }
 
-
                 super.onMouseMoved(e);
             }
-
         };
         background.addChildren(startButton);
     }
 }
-

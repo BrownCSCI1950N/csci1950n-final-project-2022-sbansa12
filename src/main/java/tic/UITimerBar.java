@@ -4,7 +4,7 @@ import engine.Screen;
 import engine.UI.UIElement;
 import engine.UI.UIRectangle;
 import engine.support.Vec2d;
-import tic.screens.GameScreen;
+import tic.Screens.GameScreen;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

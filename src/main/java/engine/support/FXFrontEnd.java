@@ -3,15 +3,18 @@ package engine.support;// package
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
-
 
 public abstract class FXFrontEnd extends CS1971FrontEnd {
 	/**
@@ -186,21 +189,49 @@ public abstract class FXFrontEnd extends CS1971FrontEnd {
 			stage.setTitle(debugTitle);
 		}
 	}
-	
-	
+
+	boolean wasMaximised;
+	Vec2d previousSize;
+
+	ChangeListener<Number> sizeListener = new ChangeListener<Number>() {
+		@Override
+		public void changed(ObservableValue<? extends Number> obs, Number oldVal, Number newVal) {
+
+			// Screen is maximized
+			if (stage.isMaximized() && !wasMaximised) {
+				Rectangle2D screenBounds = Screen.getPrimary().getBounds();
+				previousSize = currentStageSize;
+				currentStageSize = new Vec2d(screenBounds.getWidth(), screenBounds.getHeight());
+				wasMaximised = true;
+			}
+
+			// Screen is normal
+			if (!stage.isMaximized() && !wasMaximised) {
+				currentStageSize = new Vec2d(scene.getWidth(), scene.getHeight());
+			}
+
+			// Screen was just un-maximized
+			if (!stage.isMaximized() && wasMaximised) {
+				if (currentStageSize == previousSize) {
+					wasMaximised = false;
+				}
+				currentStageSize = previousSize;
+			}
+
+			// Resize with StageSize
+			callAllResize(currentStageSize);
+		}
+	};
+
 	private final void listen() {
-		stage.widthProperty().addListener((obs, oldVal, newVal) -> {
-			currentStageSize = new Vec2d(scene.getWidth(), scene.getHeight());
-			callAllResize(currentStageSize);
-		});
-		stage.heightProperty().addListener((obs, oldVal, newVal) -> {
-			currentStageSize = new Vec2d(scene.getWidth(), scene.getHeight());
-			callAllResize(currentStageSize);
+		stage.widthProperty().addListener(sizeListener);
+		stage.heightProperty().addListener(sizeListener);
+		stage.maximizedProperty().addListener((obs, oldVal, newVal) -> {
+			wasMaximised = oldVal;
 		});
 		stage.focusedProperty().addListener((obs, oldVal, newVal) -> {
 			onFocusChanged(newVal);
 		});
-		
 		scene.setOnKeyPressed(e -> {
 			onKeyPressed(e);
 		});
@@ -210,7 +241,6 @@ public abstract class FXFrontEnd extends CS1971FrontEnd {
 		scene.setOnKeyReleased(e -> {
 			onKeyReleased(e);
 		});
-		
 		scene.setOnMouseMoved(e -> {
 			onMouseMoved(e);
 		});
@@ -232,9 +262,7 @@ public abstract class FXFrontEnd extends CS1971FrontEnd {
 		});
 		
 	}
-	
 
-	
 	private final class CS1971Canvas {
 		
 		private final Pane root;

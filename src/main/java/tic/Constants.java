@@ -73,7 +73,7 @@ public class Constants {
         put("o", Color.rgb(255, 198, 198));
     }};
 
-    public static double intialBoardSquaresAndBars(double size, int numberOfSquare, int numberOfBars) {
+    public static double initialBoardSquaresAndBars(double size, int numberOfSquare, int numberOfBars) {
         return ((size/DIVISION_FACTOR) * ((numberOfSquare * SQUARE_SIZE) + (numberOfBars * BAR_SIZE)));
     }
 }

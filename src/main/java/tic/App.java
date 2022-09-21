@@ -2,12 +2,11 @@ package tic;
 
 import engine.Application;
 import engine.support.Vec2d;
-import javafx.scene.input.KeyCharacterCombination;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import tic.screens.GameScreen;
-import tic.screens.StartScreen;
-import tic.screens.WinScreen;
+import tic.Screens.GameScreen;
+import tic.Screens.StartScreen;
+import tic.Screens.WinScreen;
 
 
 /**

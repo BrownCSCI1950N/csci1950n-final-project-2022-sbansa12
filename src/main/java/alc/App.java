@@ -1,0 +1,42 @@
+package alc;
+
+import alc.Screens.EndScreen;
+import alc.Screens.GameScreen;
+import alc.Screens.StartScreen;
+import engine.Application;
+import engine.support.Vec2d;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+
+public class App extends Application {
+
+    public App(String title) {
+        super(title);
+    }
+
+    public App(String title, Vec2d windowSize, boolean debugMode, boolean fullscreen) {
+        super(title, windowSize, debugMode, fullscreen);
+    }
+
+    @Override
+    protected void onKeyPressed(KeyEvent e) {
+        if (e.getCode() == KeyCode.ESCAPE){
+            this.shutdown();
+        }
+
+        super.onKeyPressed(e);
+    }
+
+    @Override
+    protected void onStartup() {
+        // Add All Screens to Application
+        this.addScreen("start", new StartScreen(this));
+        this.addScreen("game", new GameScreen(this));
+        this.addScreen("end", new EndScreen(this));
+
+        // Set Active Screen
+        this.setActiveScreen("start");
+
+        super.onStartup();
+    }
+}

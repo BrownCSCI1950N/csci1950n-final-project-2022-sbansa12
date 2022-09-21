@@ -1,4 +1,4 @@
-package tic.screens;
+package tic.Screens;
 
 import engine.Application;
 import engine.Screen;

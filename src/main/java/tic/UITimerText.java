@@ -6,7 +6,7 @@ import engine.UI.UIElement;
 import engine.UI.UIText;
 import engine.support.Vec2d;
 import javafx.scene.paint.Color;
-import tic.screens.GameScreen;
+import tic.Screens.GameScreen;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

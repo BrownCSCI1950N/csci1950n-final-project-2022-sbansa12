@@ -58,8 +58,10 @@ public abstract class UIElement {
     /**
      * Called after onTick().
      */
-    protected void onLateTick() {
-        // Don't worry about this method until you need it. (It'll be covered in class.)
+    public void onLateTick() {
+        for (UIElement child: children) {
+            child.onLateTick();
+        }
     }
 
     /**
@@ -86,16 +88,20 @@ public abstract class UIElement {
      * Called when a key is pressed.
      * @param e		an FX {@link KeyEvent} representing the input event.
      */
-    protected void onKeyPressed(KeyEvent e) {
-
+    public void onKeyPressed(KeyEvent e) {
+        for (UIElement child: children) {
+            child.onKeyPressed(e);
+        }
     }
 
     /**
      * Called when a key is released.
      * @param e		an FX {@link KeyEvent} representing the input event.
      */
-    protected void onKeyReleased(KeyEvent e) {
-
+    public void onKeyReleased(KeyEvent e) {
+        for (UIElement child: children) {
+            child.onKeyReleased(e);
+        }
     }
 
     /**
@@ -112,24 +118,30 @@ public abstract class UIElement {
      * Called when the mouse is pressed.
      * @param e		an FX {@link MouseEvent} representing the input event.
      */
-    protected void onMousePressed(MouseEvent e) {
-
+    public void onMousePressed(MouseEvent e) {
+        for (UIElement child: children) {
+            child.onMousePressed(e);
+        }
     }
 
     /**
      * Called when the mouse is released.
      * @param e		an FX {@link MouseEvent} representing the input event.
      */
-    protected void onMouseReleased(MouseEvent e) {
-
+    public void onMouseReleased(MouseEvent e) {
+        for (UIElement child: children) {
+            child.onMouseReleased(e);
+        }
     }
 
     /**
      * Called when the mouse is dragged.
      * @param e		an FX {@link MouseEvent} representing the input event.
      */
-    protected void onMouseDragged(MouseEvent e) {
-
+    public void onMouseDragged(MouseEvent e) {
+        for (UIElement child: children) {
+            child.onMouseDragged(e);
+        }
     }
 
     /**
@@ -146,16 +158,20 @@ public abstract class UIElement {
      * Called when the mouse wheel is moved.
      * @param e		an FX {@link ScrollEvent} representing the input event.
      */
-    protected void onMouseWheelMoved(ScrollEvent e) {
-
+    public void onMouseWheelMoved(ScrollEvent e) {
+        for (UIElement child: children) {
+            child.onMouseWheelMoved(e);
+        }
     }
 
     /**
      * Called when the window's focus is changed.
      * @param newVal	a boolean representing the new focus state
      */
-    protected void onFocusChanged(boolean newVal) {
-
+    public void onFocusChanged(boolean newVal) {
+        for (UIElement child: children) {
+            child.onFocusChanged(newVal);
+        }
     }
 
     /**
@@ -171,14 +187,18 @@ public abstract class UIElement {
     /**
      * Called when the app is shutdown.
      */
-    protected void onShutdown() {
-
+    public void onShutdown() {
+        for (UIElement child: children) {
+            child.onShutdown();
+        }
     }
 
     /**
      * Called when the app is starting up.s
      */
-    protected void onStartup() {
-
+    public void onStartup() {
+        for (UIElement child: children) {
+            child.onStartup();
+        }
     }
 }

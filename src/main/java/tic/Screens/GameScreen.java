@@ -1,4 +1,4 @@
-package tic.screens;
+package tic.Screens;
 
 import engine.Application;
 import engine.FontWrapper;
@@ -151,15 +151,15 @@ public class GameScreen extends Screen {
     }
 
     public void createPieces(UIElement background) {
-        Vec2d A1PieceDraw = Constants.initialBoardTopRight.plus(new Vec2d(0, Constants.intialBoardSquaresAndBars(Constants.initialBoardSize, 1, 0))).plus(Constants.gamePiecesLocation);
-        Vec2d A2PieceDraw = Constants.initialBoardTopRight.plus(new Vec2d(Constants.intialBoardSquaresAndBars(Constants.initialBoardSize, 1, 1), Constants.intialBoardSquaresAndBars(Constants.initialBoardSize, 1, 0))).plus(Constants.gamePiecesLocation);
-        Vec2d A3PieceDraw = Constants.initialBoardTopRight.plus(new Vec2d(Constants.intialBoardSquaresAndBars(Constants.initialBoardSize, 2, 2), Constants.intialBoardSquaresAndBars(Constants.initialBoardSize, 1, 0))).plus(Constants.gamePiecesLocation);
-        Vec2d B1PieceDraw = Constants.initialBoardTopRight.plus(new Vec2d(0, Constants.intialBoardSquaresAndBars(Constants.initialBoardSize, 2, 1))).plus(Constants.gamePiecesLocation);
-        Vec2d B2PieceDraw = Constants.initialBoardTopRight.plus(new Vec2d(Constants.intialBoardSquaresAndBars(Constants.initialBoardSize, 1, 1), Constants.intialBoardSquaresAndBars(Constants.initialBoardSize, 2, 1))).plus(Constants.gamePiecesLocation);
-        Vec2d B3PieceDraw = Constants.initialBoardTopRight.plus(new Vec2d(Constants.intialBoardSquaresAndBars(Constants.initialBoardSize, 2, 2), Constants.intialBoardSquaresAndBars(Constants.initialBoardSize, 2, 1))).plus(Constants.gamePiecesLocation);
-        Vec2d C1PieceDraw = Constants.initialBoardTopRight.plus(new Vec2d(0, Constants.intialBoardSquaresAndBars(Constants.initialBoardSize, 3, 2))).plus(Constants.gamePiecesLocation);
-        Vec2d C2PieceDraw = Constants.initialBoardTopRight.plus(new Vec2d(Constants.intialBoardSquaresAndBars(Constants.initialBoardSize, 1, 1), Constants.intialBoardSquaresAndBars(Constants.initialBoardSize, 3, 2))).plus(Constants.gamePiecesLocation);
-        Vec2d C3PieceDraw = Constants.initialBoardTopRight.plus(new Vec2d(Constants.intialBoardSquaresAndBars(Constants.initialBoardSize, 2, 2), Constants.intialBoardSquaresAndBars(Constants.initialBoardSize, 3, 2))).plus(Constants.gamePiecesLocation);
+        Vec2d A1PieceDraw = Constants.initialBoardTopRight.plus(new Vec2d(0, Constants.initialBoardSquaresAndBars(Constants.initialBoardSize, 1, 0))).plus(Constants.gamePiecesLocation);
+        Vec2d A2PieceDraw = Constants.initialBoardTopRight.plus(new Vec2d(Constants.initialBoardSquaresAndBars(Constants.initialBoardSize, 1, 1), Constants.initialBoardSquaresAndBars(Constants.initialBoardSize, 1, 0))).plus(Constants.gamePiecesLocation);
+        Vec2d A3PieceDraw = Constants.initialBoardTopRight.plus(new Vec2d(Constants.initialBoardSquaresAndBars(Constants.initialBoardSize, 2, 2), Constants.initialBoardSquaresAndBars(Constants.initialBoardSize, 1, 0))).plus(Constants.gamePiecesLocation);
+        Vec2d B1PieceDraw = Constants.initialBoardTopRight.plus(new Vec2d(0, Constants.initialBoardSquaresAndBars(Constants.initialBoardSize, 2, 1))).plus(Constants.gamePiecesLocation);
+        Vec2d B2PieceDraw = Constants.initialBoardTopRight.plus(new Vec2d(Constants.initialBoardSquaresAndBars(Constants.initialBoardSize, 1, 1), Constants.initialBoardSquaresAndBars(Constants.initialBoardSize, 2, 1))).plus(Constants.gamePiecesLocation);
+        Vec2d B3PieceDraw = Constants.initialBoardTopRight.plus(new Vec2d(Constants.initialBoardSquaresAndBars(Constants.initialBoardSize, 2, 2), Constants.initialBoardSquaresAndBars(Constants.initialBoardSize, 2, 1))).plus(Constants.gamePiecesLocation);
+        Vec2d C1PieceDraw = Constants.initialBoardTopRight.plus(new Vec2d(0, Constants.initialBoardSquaresAndBars(Constants.initialBoardSize, 3, 2))).plus(Constants.gamePiecesLocation);
+        Vec2d C2PieceDraw = Constants.initialBoardTopRight.plus(new Vec2d(Constants.initialBoardSquaresAndBars(Constants.initialBoardSize, 1, 1), Constants.initialBoardSquaresAndBars(Constants.initialBoardSize, 3, 2))).plus(Constants.gamePiecesLocation);
+        Vec2d C3PieceDraw = Constants.initialBoardTopRight.plus(new Vec2d(Constants.initialBoardSquaresAndBars(Constants.initialBoardSize, 2, 2), Constants.initialBoardSquaresAndBars(Constants.initialBoardSize, 3, 2))).plus(Constants.gamePiecesLocation);
 
         UIElement A1 = new UIPiece(this, background, A1PieceDraw, null, null,  Constants.gamePieceFont, new Vec2i(0,0), new Vec2i(0,0), new Vec2i(1,0), new Vec2i(1,0), new Vec2i(0,0));
         UIElement A2 = new UIPiece(this, background, A2PieceDraw, null, null,  Constants.gamePieceFont, new Vec2i(1,1), new Vec2i(0,0), new Vec2i(1,0), new Vec2i(1,0), new Vec2i(0,1));
@@ -198,9 +198,9 @@ public class GameScreen extends Screen {
             super(screen, parent, position, text, color, font);
             this.boardPosition = boardPosition;
 
-            this.originalBoundingBoxPosition = new Vec2d(Constants.intialBoardSquaresAndBars(Constants.initialBoardSize, boundingBoxPositionX.x, boundingBoxPositionX.y), Constants.intialBoardSquaresAndBars(Constants.initialBoardSize, boundingBoxPositionY.x, boundingBoxPositionY.y)).plus(Constants.initialBoardTopRight);
+            this.originalBoundingBoxPosition = new Vec2d(Constants.initialBoardSquaresAndBars(Constants.initialBoardSize, boundingBoxPositionX.x, boundingBoxPositionX.y), Constants.initialBoardSquaresAndBars(Constants.initialBoardSize, boundingBoxPositionY.x, boundingBoxPositionY.y)).plus(Constants.initialBoardTopRight);
             this.currentBoundingBoxPosition = new Vec2d(originalBoundingBoxPosition);
-            this.originalBoundingBoxSize = new Vec2d(Constants.intialBoardSquaresAndBars(Constants.initialBoardSize, boundingBoxSizeX.x, boundingBoxSizeX.y), Constants.intialBoardSquaresAndBars(Constants.initialBoardSize, boundingBoxSizeY.x, boundingBoxSizeY.y));
+            this.originalBoundingBoxSize = new Vec2d(Constants.initialBoardSquaresAndBars(Constants.initialBoardSize, boundingBoxSizeX.x, boundingBoxSizeX.y), Constants.initialBoardSquaresAndBars(Constants.initialBoardSize, boundingBoxSizeY.x, boundingBoxSizeY.y));
             this.currentBoundingBoxSize = new Vec2d(originalBoundingBoxSize);
         }
 
