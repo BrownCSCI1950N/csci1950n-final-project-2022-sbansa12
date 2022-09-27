@@ -5,7 +5,7 @@ import engine.support.Vec2d;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-public class SpriteComponent extends Component<Void> {
+public class SpriteComponent extends Component {
     private final GameObject gameObject;
     private final Image image;
 
@@ -32,10 +32,5 @@ public class SpriteComponent extends Component<Void> {
     @Override
     public String getTag() {
         return "sprite";
-    }
-
-    @Override
-    public void script(Void input) {
-
     }
 }

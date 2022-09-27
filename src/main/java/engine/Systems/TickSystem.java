@@ -2,7 +2,6 @@ package engine.Systems;
 
 import engine.GameObject;
 import engine.GameWorld;
-import engine.support.Vec2d;
 import javafx.scene.canvas.GraphicsContext;
 
 public class TickSystem extends System {

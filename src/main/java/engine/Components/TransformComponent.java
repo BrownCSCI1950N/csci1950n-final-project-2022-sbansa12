@@ -3,7 +3,7 @@ package engine.Components;
 import engine.support.Vec2d;
 import javafx.scene.canvas.GraphicsContext;
 
-public class TransformComponent extends Component<Void> {
+public class TransformComponent extends Component {
 
     private Vec2d gameSpacePosition;
     private final Vec2d currentSize;
@@ -43,10 +43,5 @@ public class TransformComponent extends Component<Void> {
     @Override
     public String getTag() {
         return "transform";
-    }
-
-    @Override
-    public void script(Void input) {
-
     }
 }

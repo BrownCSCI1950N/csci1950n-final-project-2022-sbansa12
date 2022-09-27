@@ -7,7 +7,7 @@
 - https://github.com/BrownCSCI1950N/2d-game-engines-2022-stencil-sahilbansal2701
 
 ## Version Number:
-- Alc 1.0
+- Alc 1.1
 
 ## Demo Uploaded to Slack: 
 - Yes

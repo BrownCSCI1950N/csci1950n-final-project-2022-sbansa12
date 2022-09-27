@@ -8,7 +8,7 @@ import engine.support.Vec2d;
 import javafx.scene.canvas.GraphicsContext;
 
 
-public class MouseDragComponent extends Component<Pair<InputEvents,Vec2d>> {
+public class MouseDragComponent extends Component {
     private final GameObject gameObject;
     private boolean startedDragging;
     private Vec2d startDragCoordinate;
@@ -56,7 +56,6 @@ public class MouseDragComponent extends Component<Pair<InputEvents,Vec2d>> {
         return "mouseDrag";
     }
 
-    @Override
     public void script(Pair<InputEvents, Vec2d> input) {
         if (!startedDragging && input.getLeft().equals(InputEvents.ONMOUSEPRESSED)) {
             Vec2d gameSpacePosition = gameObject.getTransform().getGameSpacePosition();

@@ -4,7 +4,7 @@ import alc.Element;
 import engine.Components.Component;
 import javafx.scene.canvas.GraphicsContext;
 
-public class ElementComponent extends Component<Void> {
+public class ElementComponent extends Component {
 
     public Element e;
 
@@ -30,10 +30,5 @@ public class ElementComponent extends Component<Void> {
     @Override
     public String getTag() {
         return "element";
-    }
-
-    @Override
-    public void script(Void input) {
-
     }
 }

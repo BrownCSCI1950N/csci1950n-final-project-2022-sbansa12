@@ -83,10 +83,6 @@ public class Viewport extends UIElement {
         return screenCoordinate.minus(currentViewportSize.sdiv(2)).sdiv(scale).plus(currentGamePointCenter);
     }
 
-    public double getScale() {
-        return scale;
-    }
-
     /**
      * Called periodically and used to update the state of your game.
      * @param nanosSincePreviousTick	approximate number of nanoseconds since the previous call
