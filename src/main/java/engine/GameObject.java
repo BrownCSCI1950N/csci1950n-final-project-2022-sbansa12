@@ -6,12 +6,13 @@ import javafx.scene.canvas.GraphicsContext;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class GameObject {
     private final List<Component> _components;
     private TransformComponent transformComponent;
 
-    Integer zIndex;
+    public Integer zIndex;
 
     public GameObject(TransformComponent t,  Integer zIndex) {
         this._components = new ArrayList<>();
@@ -49,6 +50,14 @@ public class GameObject {
         transformComponent = t;
     }
 
+    public List<String> getComponentTags() {
+        List<String> toReturn = new ArrayList<>();
+        for (Component c: _components) {
+            toReturn.add(c.getTag());
+        }
+        return toReturn;
+    }
+
     public void tick(long t) {
         for (Component c: _components) {
             c.tick(t);
@@ -64,5 +73,21 @@ public class GameObject {
         for (Component c: _components) {
             c.draw(g);
         }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof GameObject) {
+            GameObject gO = (GameObject) obj;
+            return gO._components.equals(this._components)
+                    && gO.transformComponent.equals(this.transformComponent);
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(_components, transformComponent);
     }
 }

@@ -66,7 +66,7 @@ public final class Vec2d implements Serializable {
 	 * Constructor. Creates a new instance from an existing Vec2f {@code float}
 	 * s.
 	 * 
-	 * @param f
+	 * @param v
 	 *            the {@code Vec2f} from which to copy the values
 	 */
 	public Vec2d(Vec2d v) {
@@ -145,6 +145,9 @@ public final class Vec2d implements Serializable {
 	 *         divided by {@code s}
 	 */
 	public final Vec2d sdiv(float s) {
+		return new Vec2d(this.x / s, this.y / s);
+	}
+	public final Vec2d sdiv(double s) {
 		return new Vec2d(this.x / s, this.y / s);
 	}
 

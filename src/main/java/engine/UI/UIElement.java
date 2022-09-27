@@ -39,12 +39,6 @@ public abstract class UIElement {
         children.add(e);
     }
 
-    public void reset() {
-        for (UIElement uiElement : children) {
-            uiElement.reset();
-        }
-    }
-
     /**
      * Called periodically and used to update the state of your game.
      * @param nanosSincePreviousTick	approximate number of nanoseconds since the previous call
@@ -71,6 +65,12 @@ public abstract class UIElement {
     public void onDraw(GraphicsContext g) {
         for (UIElement child: children) {
             child.onDraw(g);
+        }
+    }
+
+    public void reset() {
+        for (UIElement uiElement : children) {
+            uiElement.reset();
         }
     }
 

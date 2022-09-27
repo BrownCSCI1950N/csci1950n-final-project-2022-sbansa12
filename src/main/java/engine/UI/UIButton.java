@@ -13,15 +13,28 @@ public class UIButton extends UIElement {
     public Vec2d originalSize;
     public Vec2d currentSize;
     private final Vec2d arcSize;
-    private final String buttonText;
+    protected final String buttonText;
 
     private final FontWrapper originalFont;
     private final FontWrapper currentFont;
 
     private final Color colorText;
     private final Vec2d originalPositionText;
-    private Vec2d currentPositionText;
+    protected Vec2d currentPositionText;
 
+    /**
+     * UIButton Constructor
+     * @param screen - the screen this UIButton is a part of
+     * @param parent - the parent UIElement of this UIButton
+     * @param position - position of this UIButton on the screen
+     * @param size  - size of this UIButton on the screen
+     * @param color - color of this UIButton on the screen
+     * @param arcSize - how round to make the corners of this UIButton
+     * @param buttonText - text written on this UIButton
+     * @param positionText - position of the text relative to the bottom-left corner of this UIButton
+     * @param colorText - color of the text on this UIButton
+     * @param font - font of the text on this UIButton
+     */
     public UIButton(Screen screen, UIElement parent, Vec2d position, Vec2d size, Color color, Vec2d arcSize, String buttonText, Vec2d positionText, Color colorText, FontWrapper font) {
         super(screen, parent, position, color);
         this.originalSize = size;

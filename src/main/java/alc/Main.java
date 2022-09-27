@@ -2,7 +2,6 @@ package alc;
 
 import engine.support.FXApplication;
 import engine.support.FXFrontEnd;
-import alc.App;
 
 public class Main {
 

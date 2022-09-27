@@ -1,0 +1,10 @@
+How To Play Game:
+1) Run the main function in alc/Main.
+2) Wait till the game screen pops up.
+3) Click the start button on the title screen.
+4) You will be brought to the game screen.
+5) There is a menu on the right with element names.
+6) You can click over an element name in the menu and drag an element of that type into view in the viewport on the left.
+7) You can use the WASD keys to pan the viewport
+8) You can use the ZX keys to zoom in and out, respectively.
+9) Clicking the escape button at any moment causes the game to exit.

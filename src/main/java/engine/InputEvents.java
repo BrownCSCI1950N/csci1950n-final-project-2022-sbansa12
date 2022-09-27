@@ -1,4 +1,10 @@
 package engine;
 
 public enum InputEvents {
+    ONMOUSECLICKED,
+    ONMOUSEPRESSED,
+    ONMOUSERELEASED,
+    ONMOUSEDRAGGED,
+    ONMOUSEMOVED,
+    ONMOUSEWHEELMOVED
 }
