@@ -5,6 +5,7 @@ import engine.GameWorld;
 import javafx.scene.canvas.GraphicsContext;
 
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -12,6 +13,8 @@ public abstract class System {
     GameWorld gameWorld;
     String relevantTag;
     TreeSet<GameObject> gameObjects;
+    List<GameObject> toAdd;
+    List<GameObject> toRemove;
 
     /**
      * Constructor for a System. Requires all game objects zIndex to be unique game object for the system.
@@ -22,6 +25,8 @@ public abstract class System {
         this.gameWorld = gameWorld;
         this.relevantTag = relevantTag;
         gameObjects = new TreeSet<>(Comparator.comparing(s -> s.zIndex));
+        this.toAdd = new LinkedList<>();
+        this.toRemove = new LinkedList<>();
     }
 
     /**
@@ -32,19 +37,30 @@ public abstract class System {
         List<String> gameObjectTags = g.getComponentTags();
 
         if (gameObjectTags.contains(relevantTag)) {
-            gameObjects.add(g);
+            toAdd.add(g);
         }
     }
 
     public void removeGameObject(GameObject g) {
-        gameObjects.remove(g);
+        toRemove.add(g);
     }
 
     public String getRelevantTag(){
         return relevantTag;
     }
 
-    public abstract void tick(long t);
+    public void tick(long t) {
+        if (toAdd.size() != 0) {
+            gameObjects.addAll(toAdd);
+            toAdd.clear();
+        }
+        if (toRemove.size() != 0) {
+            for (GameObject g: toRemove) {
+                gameObjects.remove(g);
+            }
+            toRemove.clear();
+        }
+    }
     public abstract void lateTick();
     public abstract void draw(GraphicsContext g);
 }

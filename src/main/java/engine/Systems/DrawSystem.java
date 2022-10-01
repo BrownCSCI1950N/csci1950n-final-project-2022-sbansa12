@@ -11,7 +11,7 @@ public class DrawSystem extends System {
 
     @Override
     public void tick(long t) {
-
+        super.tick(t);
     }
 
     @Override

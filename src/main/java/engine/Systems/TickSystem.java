@@ -13,6 +13,8 @@ public class TickSystem extends System {
         for (GameObject g: gameObjects) {
             g.tick(t);
         }
+
+        super.tick(t);
     }
 
     @Override

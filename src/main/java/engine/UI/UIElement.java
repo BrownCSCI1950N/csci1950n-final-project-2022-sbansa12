@@ -31,6 +31,10 @@ public abstract class UIElement {
         this.children = new ArrayList<>();
     }
 
+    public Vec2d getCurrentPosition() {
+        return currentPosition;
+    }
+
     /**
      * Called to add children to the UIElement
      * @param e - single UIElement to add as child

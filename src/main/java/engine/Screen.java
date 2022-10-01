@@ -20,7 +20,7 @@ public abstract class Screen {
         uiElements = new ArrayList<>();
     }
 
-    protected void setActiveScreen(String name) {
+    public void setActiveScreen(String name) {
         engine.setActiveScreen(name);
     }
 

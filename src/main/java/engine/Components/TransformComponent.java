@@ -3,7 +3,7 @@ package engine.Components;
 import engine.support.Vec2d;
 import javafx.scene.canvas.GraphicsContext;
 
-public class TransformComponent extends Component {
+public class TransformComponent implements Component {
 
     private Vec2d gameSpacePosition;
     private final Vec2d currentSize;

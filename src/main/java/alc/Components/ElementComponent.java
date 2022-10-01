@@ -4,12 +4,16 @@ import alc.Element;
 import engine.Components.Component;
 import javafx.scene.canvas.GraphicsContext;
 
-public class ElementComponent extends Component {
+public class ElementComponent implements Component {
 
-    public Element e;
+    public Element ele;
 
     public ElementComponent(Element e) {
-        this.e = e;
+        this.ele = e;
+    }
+
+    public Element getElement() {
+        return ele;
     }
 
     @Override

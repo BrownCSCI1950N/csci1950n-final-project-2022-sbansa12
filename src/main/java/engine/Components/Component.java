@@ -2,9 +2,9 @@ package engine.Components;
 
 import javafx.scene.canvas.GraphicsContext;
 
-public abstract class Component {
-    public abstract void tick(long nanosSinceLastTick);
-    public abstract void lateTick();
-    public abstract void draw(GraphicsContext g);
-    public abstract String getTag();
+public interface Component {
+    void tick(long nanosSinceLastTick);
+    void lateTick();
+    void draw(GraphicsContext g);
+    String getTag();
 }

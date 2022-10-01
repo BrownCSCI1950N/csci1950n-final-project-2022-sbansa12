@@ -1,18 +1,22 @@
 package engine.Components;
 
 import engine.GameObject;
+import engine.Sprite;
 import engine.support.Vec2d;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 
-public class SpriteComponent extends Component {
+public class SpriteComponent implements Component {
     private final GameObject gameObject;
-    private final Image image;
+    private final Sprite sprite;
 
-    public SpriteComponent(GameObject gameObject, Image image) {
+    private final Vec2d spritePosition;
+
+    public SpriteComponent(GameObject gameObject, Sprite sprite, Vec2d spritePosition) {
         this.gameObject = gameObject;
-        this.image = image;
+        this.sprite = sprite;
+        this.spritePosition = spritePosition;
     }
+
     @Override
     public void tick(long nanosSinceLastTick) {
 
@@ -26,7 +30,7 @@ public class SpriteComponent extends Component {
     @Override
     public void draw(GraphicsContext g) {
         Vec2d gameSpacePosition = gameObject.getTransform().getGameSpacePosition();
-        g.drawImage(image, gameSpacePosition.x, gameSpacePosition.y);
+        sprite.draw(g, gameSpacePosition, gameObject.getTransform().getSize(), this.spritePosition);
     }
 
     @Override

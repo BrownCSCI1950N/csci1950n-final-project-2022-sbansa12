@@ -1,8 +1,25 @@
 package alc;
 
 public enum Element {
+    NULL,
     WATER,
-    EARTH,
     FIRE,
-    AIR
+    EARTH,
+    AIR,
+    STEAM,
+    LAVA,
+    PRESSURE,
+    ENERGY,
+    MUD,
+    DUST,
+    EARTHQUAKE,
+    ERUPTION,
+    GUNPOWDER,
+    EXPLOSION,
+    SMOKE,
+    OBSIDIAN,
+    PUDDLE,
+    GRANITE,
+    LAND,
+    MIST
 }

@@ -33,6 +33,12 @@ public class GameWorld {
         }
     }
 
+    public void removeGameObject(GameObject gameObject) {
+        for (System s: systems) {
+            s.removeGameObject(gameObject);
+        }
+    }
+
     public void addSystem(System system) {
         systems.add(system);
     }

@@ -44,6 +44,8 @@ public class MouseDragSystem extends System {
                 c.script(new Pair<>(InputEvents.ONMOUSERELEASED, onMouseReleased));
             }
         }
+
+        super.tick(t);
     }
 
     @Override

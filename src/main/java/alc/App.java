@@ -1,9 +1,6 @@
 package alc;
 
-import alc.Screens.EndScreen;
-import alc.Screens.GameScreen;
-import alc.Screens.InstructionScreen;
-import alc.Screens.StartScreen;
+import alc.Screens.*;
 import engine.Application;
 import engine.support.Vec2d;
 import javafx.scene.input.KeyCode;
@@ -35,7 +32,6 @@ public class App extends Application {
             this.addScreen("start", new StartScreen(this));
             this.addScreen("instructions", new InstructionScreen(this));
             this.addScreen("game", new GameScreen(this));
-            this.addScreen("end", new EndScreen(this));
 
             // Set Active Screen
             this.setActiveScreen("start");
@@ -44,6 +40,5 @@ public class App extends Application {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-
     }
 }

@@ -16,6 +16,10 @@ public class UIRectangle extends UIElement {
         this.currentSize = new Vec2d(size);
     }
 
+    public Vec2d getCurrentSize() {
+        return currentSize;
+    }
+
     @Override
     public void onDraw(GraphicsContext g) {
         g.setFill(color);

@@ -2,27 +2,34 @@ package alc.Screens;
 
 import alc.Constants;
 import alc.Element;
-import alc.ElementCreator;
+import alc.AlcGame;
 import engine.*;
-import engine.Components.SpriteComponent;
-import engine.Components.TransformComponent;
+import engine.Systems.CollisionSystem;
 import engine.Systems.MouseDragSystem;
 import engine.UI.UIButton;
 import engine.UI.UIElement;
 import engine.UI.UIRectangle;
+import engine.UI.UIText;
 import engine.UI.Viewport;
 import engine.support.Vec2d;
-import javafx.scene.image.Image;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+
+import java.util.List;
+import java.util.Objects;
 
 public class GameScreen extends Screen {
     Viewport viewport;
     GameWorld gameWorld;
-    Integer numberOfElements;
+    AlcGame alcGame;
+    UIRectangle elementMenuBackground;
+    Double elementMenuStartButtonPositionChange;
     public GameScreen(Application engine) throws Exception {
         super(engine);
 
-        this.numberOfElements = 0;
+        this.elementMenuStartButtonPositionChange = 0.0;
 
         // Create Background
         UIElement backgroundGame = new UIRectangle(
@@ -33,16 +40,14 @@ public class GameScreen extends Screen {
                 Constants.backgroundColorGame);
         uiElements.add(backgroundGame);
 
+        // Create Game World
         this.gameWorld = new GameWorld();
 
         this.gameWorld.addSystem(new MouseDragSystem(this.gameWorld));
+        this.gameWorld.addSystem(new CollisionSystem(this.gameWorld));
 
-        // Background to Game World
-        Image sprite = new Image("file:.\\src\\main\\java\\alc\\ElementImages\\" + "BACKGROUND" + ".png");
-        TransformComponent backgroundTransformComponent = new TransformComponent(Constants.backgroundPosition, new Vec2d(0,0));
-        GameObject background = new GameObject(backgroundTransformComponent, 0);
-        background.addComponent(new SpriteComponent(background, sprite));
-        this.gameWorld.addGameObject(background);
+        // Create Alc Game
+        this.alcGame = new AlcGame(this, gameWorld);
 
         // Viewport
         this.viewport = new Viewport(
@@ -60,38 +65,88 @@ public class GameScreen extends Screen {
         );
         backgroundGame.addChildren(viewport);
 
-        UIElement elementMenuBackground = new UIRectangle(
+        // Create Element Menu
+        elementMenuBackground = new UIRectangle(
                 this,
                 null,
                 Constants.elementMenuPosition,
                 Constants.elementMenuSize,
                 Constants.elementMenuColor
-        );
+        ){
+            final List<KeyCode> upDownButtons = List.of(KeyCode.UP, KeyCode.DOWN);
+            @Override
+            public void onKeyPressed(KeyEvent e) {
+                int directionPan = upDownButtons.indexOf(e.getCode());
+                if (directionPan != -1) {
+                    if (directionPan == 0) {
+                        elementMenuStartButtonPositionChange -= Constants.elementButtonSize.y;
+                        elementMenuStartButtonPositionChange = Math.max(-1 * (alcGame.getNumberOfElements() - 1) * Constants.elementButtonSize.y, elementMenuStartButtonPositionChange);
+                    } else if (directionPan == 1) {
+                        elementMenuStartButtonPositionChange += Constants.elementButtonSize.y;
+                        elementMenuStartButtonPositionChange = Math.min(currentSize.y-(Constants.elementButtonSize.y * 2), elementMenuStartButtonPositionChange);
+                    }
+                }
+
+                super.onKeyPressed(e);
+            }
+        };
         viewport.addChildren(elementMenuBackground);
 
-        elementMenuBackground.addChildren(elementButtonGenerator(elementMenuBackground, Element.FIRE));
-        elementMenuBackground.addChildren(elementButtonGenerator(elementMenuBackground, Element.WATER));
-        elementMenuBackground.addChildren(elementButtonGenerator(elementMenuBackground, Element.EARTH));
-        elementMenuBackground.addChildren(elementButtonGenerator(elementMenuBackground, Element.AIR));
+        elementButtonGenerator(Element.FIRE);
+        elementButtonGenerator(Element.WATER);
+        elementButtonGenerator(Element.EARTH);
+        elementButtonGenerator(Element.AIR);
+
+        UIText countElements = new UIText(this, viewport, Constants.countElementsPosition, "4" + "/" + Constants.totalNumberOfElements, Constants.countElementsColor, Constants.countElementsFont){
+            @Override
+            public void onDraw(GraphicsContext g) {
+                this.text = alcGame.getNumberOfElements() + "/" + Constants.totalNumberOfElements;
+
+                super.onDraw(g);
+            }
+        };
+        viewport.addChildren(countElements);
     }
 
-    private UIElement elementButtonGenerator(UIElement parent, Element ele) {
+    public Viewport getViewport() {
+        return viewport;
+    }
+
+    public void elementButtonGenerator(Element ele) {
+        String name = ele.name();
+        if (alcGame.getFinalElements().contains(ele)) {
+            name = ele.name() + ": FINAL";
+        }
+
         UIElement toReturn = new UIButton(
                 this,
-                parent,
-                new Vec2d(Constants.elementMenuPosition.x, this.numberOfElements * Constants.elementButtonSize.y),
+                elementMenuBackground,
+                new Vec2d(Constants.elementMenuPosition.x, alcGame.getNumberOfElements() * Constants.elementButtonSize.y),
                 Constants.elementButtonSize,
                 Constants.elementButtonColor,
                 new Vec2d(0,0),
-                ele.toString(),
+                name,
                 Constants.elementButtonTextPosition,
                 Constants.elementButtonTextColor,
                 Constants.elementButtonTextFont){
 
             @Override
+            public void onDraw(GraphicsContext g) {
+                if (currentPosition.y+elementMenuStartButtonPositionChange+currentSize.y <= elementMenuBackground.getCurrentPosition().plus(elementMenuBackground.getCurrentSize()).y) {
+                    g.setFill(color);
+                    g.fillRoundRect(currentPosition.x, currentPosition.y+elementMenuStartButtonPositionChange, currentSize.x, currentSize.y, arcSize.x, arcSize.y);
+                    if (!Objects.equals(buttonText, "")) {
+                        g.setFont(this.currentFont.font());
+                        g.setFill(this.colorText);
+                        g.fillText(this.buttonText, this.currentPositionText.x, this.currentPositionText.y+elementMenuStartButtonPositionChange);
+                    }
+                }
+            }
+
+            @Override
             public void onMousePressed(MouseEvent e) {
-                if (Utility.inBoundingBox(currentPosition, currentPosition.plus(currentSize), new Vec2d(e.getX(), e.getY()))) {
-                    ElementCreator.makeElement(viewport, gameWorld, ele, new Vec2d(e.getX(), e.getY()));
+                if (Utility.inBoundingBox(new Vec2d(currentPosition.x, currentPosition.y + elementMenuStartButtonPositionChange), new Vec2d(currentPosition.x, currentPosition.y + elementMenuStartButtonPositionChange).plus(currentSize), new Vec2d(e.getX(), e.getY()))) {
+                    alcGame.makeElement(ele, new Vec2d(e.getX(), e.getY()), false);
                 }
 
                 super.onMousePressed(e);
@@ -99,7 +154,7 @@ public class GameScreen extends Screen {
 
             @Override
             public void onMouseMoved(MouseEvent e) {
-                if (Utility.inBoundingBox(currentPosition, currentPosition.plus(currentSize), new Vec2d(e.getX(), e.getY()))) {
+                if (Utility.inBoundingBox(new Vec2d(currentPosition.x, currentPosition.y + elementMenuStartButtonPositionChange), new Vec2d(currentPosition.x, currentPosition.y + elementMenuStartButtonPositionChange).plus(currentSize), new Vec2d(e.getX(), e.getY()))) {
                     this.color = Constants.elementButtonHoverColor;
                 } else {
                     this.color = Constants.elementButtonColor;
@@ -108,8 +163,7 @@ public class GameScreen extends Screen {
                 super.onMouseMoved(e);
             }
         };
-
-        numberOfElements += 1;
-        return toReturn;
+        alcGame.incrementNumberOfElements();
+        elementMenuBackground.addChildren(toReturn);
     }
 }

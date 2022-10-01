@@ -8,4 +8,16 @@ public class Utility {
         boolean yInRange = (start.y < coordinate.y && coordinate.y < end.y);
         return xInRange && yInRange;
     }
+
+    /**
+     * Clamp Double values to a given range
+     *
+     * @param value     the value to clamp
+     * @param min       the minimum value
+     * @param max       the maximum value
+     * @return          the clamped value
+     */
+    public static double clamp(double value, double min, double max) {
+        return Math.max(min, Math.min(max, value));
+    }
 }

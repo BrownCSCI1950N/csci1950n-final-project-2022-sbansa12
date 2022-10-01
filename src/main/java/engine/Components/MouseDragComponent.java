@@ -8,7 +8,7 @@ import engine.support.Vec2d;
 import javafx.scene.canvas.GraphicsContext;
 
 
-public class MouseDragComponent extends Component {
+public class MouseDragComponent implements Component {
     private final GameObject gameObject;
     private boolean startedDragging;
     private Vec2d startDragCoordinate;
