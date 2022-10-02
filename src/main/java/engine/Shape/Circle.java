@@ -33,7 +33,7 @@ public class Circle implements Shape {
     @Override
     public boolean collidesCircle(Circle c) {
         double distance = this.getCenter().minus(c.getCenter()).mag();
-        double sumRadius = this.getRadius() * c.getRadius();
+        double sumRadius = this.getRadius() + c.getRadius();
         return (distance * distance) <= (sumRadius * sumRadius);
     }
 

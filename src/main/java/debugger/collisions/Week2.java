@@ -58,7 +58,7 @@ public final class Week2 extends Week2Reqs {
 	@Override
 	public boolean isColliding(CircleShape s1, CircleShape s2) {
 		double distance = s1.getCenter().minus(s2.getCenter()).mag();
-		double sumRadius = s1.getRadius() * s2.getRadius();
+		double sumRadius = s1.getRadius() + s2.getRadius();
 		return (distance * distance) <= (sumRadius * sumRadius);
 	}
 
