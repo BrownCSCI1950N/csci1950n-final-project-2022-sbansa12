@@ -58,7 +58,7 @@ public class MouseDragComponent implements Component {
 
     public void script(Pair<InputEvents, Vec2d> input) {
         if (!startedDragging && input.getLeft().equals(InputEvents.ONMOUSEPRESSED)) {
-            Vec2d gameSpacePosition = gameObject.getTransform().getGameSpacePosition();
+            Vec2d gameSpacePosition = gameObject.getTransform().getCurrentGameSpacePosition();
             Vec2d size = gameObject.getTransform().getSize();
 
             if (Utility.inBoundingBox(gameSpacePosition, gameSpacePosition.plus(size), input.getRight())) {
@@ -67,7 +67,7 @@ public class MouseDragComponent implements Component {
                 this.startDragObjectPosition = gameSpacePosition;
             }
         } else if (startedDragging && input.getLeft().equals(InputEvents.ONMOUSEDRAGGED)) {
-            gameObject.getTransform().setGameSpacePosition(startDragObjectPosition.plus(input.getRight().minus(startDragCoordinate)));
+            gameObject.getTransform().setCurrentGameSpacePosition(startDragObjectPosition.plus(input.getRight().minus(startDragCoordinate)));
         } else if (startedDragging && input.getLeft().equals(InputEvents.ONMOUSERELEASED)) {
             startedDragging = false;
             startDragCoordinate = null;

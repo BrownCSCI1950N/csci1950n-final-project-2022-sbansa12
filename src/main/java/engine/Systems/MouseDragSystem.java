@@ -8,20 +8,23 @@ import engine.InputEvents;
 import engine.support.Vec2d;
 import javafx.scene.canvas.GraphicsContext;
 
+import java.util.Collections;
+
 public class MouseDragSystem extends System {
 
     private boolean startedDrag;
 
     public MouseDragSystem(GameWorld gameWorld) {
-        super(gameWorld,"mouseDrag");
+        super(gameWorld, Collections.singletonList("mouseDrag"));
         this.startedDrag = false;
     }
 
     @Override
     public void tick(long t) {
-        Vec2d onMousePressed = gameWorld.findInputEvent(InputEvents.ONMOUSEPRESSED);
-        Vec2d onMouseDragged = gameWorld.findInputEvent(InputEvents.ONMOUSEDRAGGED);
-        Vec2d onMouseReleased = gameWorld.findInputEvent(InputEvents.ONMOUSERELEASED);
+        Vec2d onMousePressed = gameWorld.findInputEventMouse(InputEvents.ONMOUSEPRESSED);
+        Vec2d onMouseDragged = gameWorld.findInputEventMouse(InputEvents.ONMOUSEDRAGGED);
+        Vec2d onMouseReleased = gameWorld.findInputEventMouse(InputEvents.ONMOUSERELEASED);
+
         if (!startedDrag && onMousePressed != null) {
             this.startedDrag = true;
             for (GameObject gameObject: gameObjects) {
@@ -56,5 +59,10 @@ public class MouseDragSystem extends System {
     @Override
     public void draw(GraphicsContext g) {
 
+    }
+
+    @Override
+    public String name() {
+        return "mouseDrag";
     }
 }

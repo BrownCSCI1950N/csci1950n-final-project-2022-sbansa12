@@ -4,9 +4,11 @@ import engine.GameObject;
 import engine.GameWorld;
 import javafx.scene.canvas.GraphicsContext;
 
+import java.util.Collections;
+
 public class DrawSystem extends System {
     public DrawSystem(GameWorld gameWorld) {
-        super(gameWorld,"sprite");
+        super(gameWorld, Collections.singletonList("sprite"));
     }
 
     @Override
@@ -23,5 +25,10 @@ public class DrawSystem extends System {
         for (GameObject gameObj: gameObjects) {
             gameObj.draw(g);
         }
+    }
+
+    @Override
+    public String name() {
+        return "draw";
     }
 }

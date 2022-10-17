@@ -41,10 +41,10 @@ public class Viewport extends UIElement {
      * @param gameWorld - game world this viewport displays
      * @param panningButtons - list of size 4 denoting the keyboard keys used to pan view port [UP, DOWN, RIGHT, LEFT], if null no panning for viewport
      * @param zoomButtons  - list of size 2 denoting the keyboard keys used to zoom view port [ZOOM IN, ZOOM OUT], if null no zooming for viewport
-     * @param panSpeed - list of size 4 denoting the speed to pan for each of the pan keys
-     * @param zoomSpeed - list of size 2 denoting the speed to zoom for each of the zoom keys
+     * @param panSpeed - list of size 4 denoting the speed to pan for each of the pan keys, unused if panningButtons is null
+     * @param zoomSpeed - list of size 2 denoting the speed to zoom for each of the zoom keys, unused if zoomButtons is null
      */
-    public Viewport(Screen screen, UIElement parent, Vec2d startGamePointCenter, Vec2d viewportPosition, Vec2d viewportSize, GameWorld gameWorld, double scale, List<KeyCode> panningButtons, List<KeyCode> zoomButtons, List<Double> panSpeed, List<Double> zoomSpeed) throws Exception {
+    public Viewport(Screen screen, UIElement parent, Vec2d startGamePointCenter, Vec2d viewportPosition, Vec2d viewportSize, GameWorld gameWorld, double scale, List<KeyCode> panningButtons, List<KeyCode> zoomButtons, List<Double> panSpeed, List<Double> zoomSpeed) {
         super(screen, parent, viewportPosition, null);
         this.currentGamePointCenter = startGamePointCenter;
         this.originalViewportSize = new Vec2d(viewportSize);
@@ -53,24 +53,18 @@ public class Viewport extends UIElement {
         this.scale = scale;
 
         if (panningButtons != null) {
-            if (panningButtons.size() != 4 || panSpeed.size() != 4) {
-                throw new Exception("Too Few or Too Many Panning Buttons Given to Viewport");
-            } else {
-                this.panning = true;
-                this.panningButtons = panningButtons;
-                this.panSpeed = panSpeed;
-            }
+            assert (panningButtons.size() == 4 && panSpeed.size() == 4);
+            this.panning = true;
+            this.panningButtons = panningButtons;
+            this.panSpeed = panSpeed;
         } else {
             this.panning = false;
         }
         if (zoomButtons != null) {
-            if (zoomButtons.size() != 2 || zoomSpeed.size() != 2) {
-                throw new Exception("Too Few or Too Many Zooming Buttons Given to Viewport");
-            } else {
-                this.zooming = true;
-                this.zoomButtons = zoomButtons;
-                this.zoomSpeed = zoomSpeed;
-            }
+            assert (zoomButtons.size() == 2 && zoomSpeed.size() == 2);
+            this.zooming = true;
+            this.zoomButtons = zoomButtons;
+            this.zoomSpeed = zoomSpeed;
         } else {
             this.zooming = false;
         }
@@ -81,6 +75,14 @@ public class Viewport extends UIElement {
 
     public Vec2d convertScreenCoordinateToGame(Vec2d screenCoordinate) {
         return screenCoordinate.minus(currentViewportSize.sdiv(2)).sdiv(scale).plus(currentGamePointCenter);
+    }
+
+    public void setCurrentGamePointCenter(Vec2d newCurrentGamePointCenter) {
+        this.currentGamePointCenter = newCurrentGamePointCenter;
+    }
+
+    public void setGameWorld(GameWorld newGameWorld) {
+        this.gameWorld = newGameWorld;
     }
 
     /**
@@ -114,7 +116,9 @@ public class Viewport extends UIElement {
             }
         }
 
-        gameWorld.onTick(nanosSincePreviousTick);
+        if (gameWorld != null) {
+            gameWorld.onTick(nanosSincePreviousTick);
+        }
 
         super.onTick(nanosSincePreviousTick);
     }
@@ -124,7 +128,9 @@ public class Viewport extends UIElement {
      */
     @Override
     public void onLateTick() {
-        gameWorld.onLateTick();
+        if (gameWorld != null) {
+            gameWorld.onLateTick();
+        }
 
         super.onLateTick();
     }
@@ -145,7 +151,9 @@ public class Viewport extends UIElement {
 
         g.setTransform(gameToScreen);
 
-        gameWorld.draw(g);
+        if (gameWorld != null) {
+            gameWorld.draw(g);
+        }
 
         g.setTransform(originalTransform);
         super.onDraw(g);
@@ -153,7 +161,9 @@ public class Viewport extends UIElement {
 
     @Override
     public void reset() {
-        gameWorld.reset();
+        if (gameWorld != null) {
+            gameWorld.reset();
+        }
 
         super.reset();
     }
@@ -164,7 +174,9 @@ public class Viewport extends UIElement {
      */
     @Override
     public void onKeyTyped(KeyEvent e) {
-        gameWorld.onKeyTyped(e);
+        if (gameWorld != null) {
+            gameWorld.onKeyTyped(e);
+        }
 
         super.onKeyTyped(e);
     }
@@ -207,7 +219,9 @@ public class Viewport extends UIElement {
             }
         }
 
-        gameWorld.onKeyPressed(e);
+        if (gameWorld != null) {
+            gameWorld.onKeyPressed(e);
+        }
 
         super.onKeyPressed(e);
     }
@@ -234,7 +248,9 @@ public class Viewport extends UIElement {
             }
         }
 
-        gameWorld.onKeyReleased(e);
+        if (gameWorld != null) {
+            gameWorld.onKeyReleased(e);
+        }
 
         super.onKeyReleased(e);
     }
@@ -245,7 +261,11 @@ public class Viewport extends UIElement {
      */
     @Override
     public void onMouseClicked(MouseEvent e) {
-        gameWorld.onMouseClicked(e);
+        Vec2d screenCoordinate = new Vec2d(e.getX(), e.getY());
+        Vec2d gameCoordinate = convertScreenCoordinateToGame(screenCoordinate);
+        if (gameWorld != null) {
+            gameWorld.onMouseClicked(gameCoordinate);
+        }
 
         super.onMouseClicked(e);
     }
@@ -258,7 +278,9 @@ public class Viewport extends UIElement {
     public void onMousePressed(MouseEvent e) {
         Vec2d screenCoordinate = new Vec2d(e.getX(), e.getY());
         Vec2d gameCoordinate = convertScreenCoordinateToGame(screenCoordinate);
-        gameWorld.onMousePressed(gameCoordinate);
+        if (gameWorld != null) {
+            gameWorld.onMousePressed(gameCoordinate);
+        }
 
         super.onMousePressed(e);
     }
@@ -271,7 +293,9 @@ public class Viewport extends UIElement {
     public void onMouseReleased(MouseEvent e) {
         Vec2d screenCoordinate = new Vec2d(e.getX(), e.getY());
         Vec2d gameCoordinate = convertScreenCoordinateToGame(screenCoordinate);
-        gameWorld.onMouseReleased(gameCoordinate);
+        if (gameWorld != null) {
+            gameWorld.onMouseReleased(gameCoordinate);
+        }
 
         super.onMouseReleased(e);
     }
@@ -284,7 +308,9 @@ public class Viewport extends UIElement {
     public void onMouseDragged(MouseEvent e) {
         Vec2d screenCoordinate = new Vec2d(e.getX(), e.getY());
         Vec2d gameCoordinate = convertScreenCoordinateToGame(screenCoordinate);
-        gameWorld.onMouseDragged(gameCoordinate);
+        if (gameWorld != null) {
+            gameWorld.onMouseDragged(gameCoordinate);
+        }
 
         super.onMouseDragged(e);
     }
@@ -295,7 +321,9 @@ public class Viewport extends UIElement {
      */
     @Override
     public void onMouseMoved(MouseEvent e) {
-        gameWorld.onMouseMoved(e);
+        if (gameWorld != null) {
+            gameWorld.onMouseMoved(e);
+        }
 
         super.onMouseMoved(e);
     }
@@ -306,7 +334,9 @@ public class Viewport extends UIElement {
      */
     @Override
     public void onMouseWheelMoved(ScrollEvent e) {
-        gameWorld.onMouseWheelMoved(e);
+        if (gameWorld != null) {
+            gameWorld.onMouseWheelMoved(e);
+        }
 
         super.onMouseWheelMoved(e);
     }
@@ -317,7 +347,9 @@ public class Viewport extends UIElement {
      */
     @Override
     public void onFocusChanged(boolean newVal) {
-        gameWorld.onFocusChanged(newVal);
+        if (gameWorld != null) {
+            gameWorld.onFocusChanged(newVal);
+        }
 
         super.onFocusChanged(newVal);
     }
@@ -330,7 +362,9 @@ public class Viewport extends UIElement {
     public void onResize(Vec2d newSize) {
         this.currentPosition = originalPosition.pmult(newSize);
         this.currentViewportSize = originalViewportSize.pmult(newSize);
-        gameWorld.onResize(newSize);
+        if (gameWorld != null) {
+            gameWorld.onResize(newSize);
+        }
 
         super.onResize(newSize);
     }
@@ -340,7 +374,9 @@ public class Viewport extends UIElement {
      */
     @Override
     public void onShutdown() {
-        gameWorld.onShutdown();
+        if (gameWorld != null) {
+            gameWorld.onShutdown();
+        }
 
         super.onShutdown();
     }
@@ -350,7 +386,9 @@ public class Viewport extends UIElement {
      */
     @Override
     public void onStartup() {
-        gameWorld.onStartup();
+        if (gameWorld != null) {
+            gameWorld.onStartup();
+        }
 
         super.onStartup();
     }

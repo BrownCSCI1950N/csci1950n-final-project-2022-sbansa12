@@ -1,5 +1,6 @@
 package alc.Screens;
 
+import Pair.Pair;
 import alc.Constants;
 import alc.Element;
 import alc.AlcGame;
@@ -17,6 +18,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,7 +28,7 @@ public class GameScreen extends Screen {
     AlcGame alcGame;
     UIRectangle elementMenuBackground;
     Double elementMenuStartButtonPositionChange;
-    public GameScreen(Application engine) throws Exception {
+    public GameScreen(Application engine) {
         super(engine);
 
         this.elementMenuStartButtonPositionChange = 0.0;
@@ -43,8 +45,10 @@ public class GameScreen extends Screen {
         // Create Game World
         this.gameWorld = new GameWorld();
 
-        this.gameWorld.addSystem(new MouseDragSystem(this.gameWorld));
-        this.gameWorld.addSystem(new CollisionSystem(this.gameWorld));
+        this.gameWorld.appendSystem(new MouseDragSystem(this.gameWorld));
+        CollisionSystem collisionSystem = new CollisionSystem(this.gameWorld, Collections.singletonList("collision"),false);
+        collisionSystem.setLayersCollide(List.of(new Pair<Integer, Integer>(0,0)));
+        this.gameWorld.appendSystem(collisionSystem);
 
         // Create Alc Game
         this.alcGame = new AlcGame(this, gameWorld);

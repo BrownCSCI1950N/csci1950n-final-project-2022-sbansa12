@@ -4,28 +4,32 @@ import engine.Components.Component;
 import engine.Components.TransformComponent;
 import javafx.scene.canvas.GraphicsContext;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class GameObject {
-    private final List<Component> _components;
-    private TransformComponent transformComponent;
-
+    private final Map<String, Component> _components;
+    private final TransformComponent transformComponent;
     public Integer zIndex;
-
+    String name;
     public GameObject(TransformComponent t,  Integer zIndex) {
-        this._components = new ArrayList<>();
+        this.name = "";
+        this._components = new HashMap<>();
         this.transformComponent = t;
         this.zIndex = zIndex;
     }
 
-    public void addComponent(Component c) {
-        _components.add(c);
+    public GameObject(GameObject g,  Integer zIndex) {
+        this.name = g.name;
+        this._components = g._components;
+        this.transformComponent = g.transformComponent;
+        this.zIndex = zIndex;
     }
 
+    public void addComponent(Component c) {
+        _components.put(c.getTag(), c);
+    }
     public void removeComponent(Component c) {
-        _components.remove(c);
+        _components.remove(c.getTag());
     }
 
     /**
@@ -34,43 +38,30 @@ public class GameObject {
      * @return - component if found, otherwise null
      */
     public Component getComponent(String tag) {
-        for (Component c: _components) {
-            if (c.getTag().equals(tag)) {
-                return c;
-            }
-        }
-        return null;
+        return _components.get(tag);
     }
 
     public TransformComponent getTransform() {
         return transformComponent;
     }
 
-    public void setTransform(TransformComponent t) {
-        transformComponent = t;
-    }
-
-    public List<String> getComponentTags() {
-        List<String> toReturn = new ArrayList<>();
-        for (Component c: _components) {
-            toReturn.add(c.getTag());
-        }
-        return toReturn;
+    public boolean hasComponentTag(String tag) {
+        return _components.containsKey(tag);
     }
 
     public void tick(long t) {
-        for (Component c: _components) {
+        for (Component c: _components.values()) {
             c.tick(t);
         }
     }
     public void lateTick() {
-        for (Component c: _components) {
+        for (Component c: _components.values()) {
             c.lateTick();
         }
     }
 
     public void draw(GraphicsContext g) {
-        for (Component c: _components) {
+        for (Component c: _components.values()) {
             c.draw(g);
         }
     }
@@ -89,5 +80,18 @@ public class GameObject {
     @Override
     public int hashCode() {
         return Objects.hash(_components, transformComponent);
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        if (name.equals("")) {
+            return super.toString();
+        } else {
+            return "(Name: " + name + " Position: " + transformComponent.getCurrentGameSpacePosition() + ")";
+        }
     }
 }

@@ -4,14 +4,12 @@ import engine.Systems.DrawSystem;
 import engine.Systems.System;
 import engine.support.Vec2d;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Class that represents a game world. Comes preloaded with the Draw System.
@@ -19,11 +17,15 @@ import java.util.Map;
 public class GameWorld {
 
     private final List<System> systems;
-    private final Map<InputEvents, Vec2d> inputEvents;
+    private final Map<InputEvents, Vec2d> inputEventsMouse;
+    private final Map<InputEvents, List<KeyCode>> inputEventsKeys;
 
     public GameWorld() {
         this.systems = new ArrayList<>();
-        this.inputEvents = new HashMap<>();
+        this.inputEventsMouse = new HashMap<>();
+        this.inputEventsKeys = new HashMap<>();
+        this.inputEventsKeys.put(InputEvents.ONKEYRELEASED, new LinkedList<>());
+        this.inputEventsKeys.put(InputEvents.ONKEYPRESSED, new LinkedList<>());
         systems.add(new DrawSystem(this));
     }
 
@@ -39,12 +41,29 @@ public class GameWorld {
         }
     }
 
-    public void addSystem(System system) {
+    public void appendSystem(System system) {
         systems.add(system);
     }
 
-    public Vec2d findInputEvent(InputEvents i) {
-        return inputEvents.get(i);
+    public void prependSystem(System system) {
+        systems.add(0,system);
+    }
+
+    public System getSystem(String name) {
+        for (System s: systems) {
+            if (s.name().equals(name)) {
+                return s;
+            }
+        }
+        return null;
+    }
+
+    public Vec2d findInputEventMouse(InputEvents i) {
+        return inputEventsMouse.get(i);
+    }
+
+    public List<KeyCode> findInputEventKeys(InputEvents i) {
+        return inputEventsKeys.get(i);
     }
 
     public void onTick(long nanosSinceLastTick) {
@@ -65,8 +84,11 @@ public class GameWorld {
 
     public void draw(GraphicsContext g) {
         for (System s: systems) {
-            if (systemsDrawTags.contains(s.getRelevantTag())) {
-                s.draw(g);
+            for (String relevantTag: s.getRelevantTags()) {
+                if (systemsDrawTags.contains(relevantTag)) {
+                    s.draw(g);
+                    break;
+                }
             }
         }
     }
@@ -82,7 +104,13 @@ public class GameWorld {
     }
 
     public void onKeyPressed(KeyEvent e) {
+        List<KeyCode> keyCodesToRemove = inputEventsKeys.get(InputEvents.ONKEYRELEASED);
+        keyCodesToRemove.remove(e.getCode());
 
+        List<KeyCode> keyCodesToAdd = inputEventsKeys.get(InputEvents.ONKEYPRESSED);
+        if (!keyCodesToAdd.contains(e.getCode())) {
+            keyCodesToAdd.add(e.getCode());
+        }
     }
 
     /**
@@ -90,14 +118,21 @@ public class GameWorld {
      * @param e		an FX {@link KeyEvent} representing the input event.
      */
     public void onKeyReleased(KeyEvent e) {
+        List<KeyCode> keyCodesToRemove = inputEventsKeys.get(InputEvents.ONKEYPRESSED);
+        keyCodesToRemove.remove(e.getCode());
 
+        List<KeyCode> keyCodesToAdd = inputEventsKeys.get(InputEvents.ONKEYRELEASED);
+        if (!keyCodesToAdd.contains(e.getCode())) {
+            keyCodesToAdd.add(e.getCode());
+        }
     }
 
     /**
      * Called when the mouse is clicked.
      * @param e		an FX {@link MouseEvent} representing the input event.
      */
-    public void onMouseClicked(MouseEvent e) {
+    public void onMouseClicked(Vec2d e) {
+
     }
 
     /**
@@ -105,9 +140,10 @@ public class GameWorld {
      * @param e		an FX {@link MouseEvent} representing the input event.
      */
     public void onMousePressed(Vec2d e) {
-        inputEvents.remove(InputEvents.ONMOUSERELEASED);
-        inputEvents.remove(InputEvents.ONMOUSEDRAGGED);
-        inputEvents.put(InputEvents.ONMOUSEPRESSED, e);
+        inputEventsMouse.remove(InputEvents.ONMOUSERELEASED);
+        inputEventsMouse.remove(InputEvents.ONMOUSEDRAGGED);
+
+        inputEventsMouse.put(InputEvents.ONMOUSEPRESSED, e);
     }
 
     /**
@@ -115,9 +151,10 @@ public class GameWorld {
      * @param e		an FX {@link MouseEvent} representing the input event.
      */
     public void onMouseReleased(Vec2d e) {
-        inputEvents.remove(InputEvents.ONMOUSEPRESSED);
-        inputEvents.remove(InputEvents.ONMOUSEDRAGGED);
-        inputEvents.put(InputEvents.ONMOUSERELEASED, e);
+        inputEventsMouse.remove(InputEvents.ONMOUSEPRESSED);
+        inputEventsMouse.remove(InputEvents.ONMOUSEDRAGGED);
+
+        inputEventsMouse.put(InputEvents.ONMOUSERELEASED, e);
     }
 
     /**
@@ -125,7 +162,7 @@ public class GameWorld {
      * @param e		an FX {@link MouseEvent} representing the input event.
      */
     public void onMouseDragged(Vec2d e) {
-        inputEvents.put(InputEvents.ONMOUSEDRAGGED, e);
+        inputEventsMouse.put(InputEvents.ONMOUSEDRAGGED, e);
     }
 
     /**

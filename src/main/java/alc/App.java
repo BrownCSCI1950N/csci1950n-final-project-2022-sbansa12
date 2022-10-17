@@ -28,17 +28,13 @@ public class App extends Application {
     @Override
     protected void onStartup() {
         // Add All Screens to Application
-        try {
-            this.addScreen("start", new StartScreen(this));
-            this.addScreen("instructions", new InstructionScreen(this));
-            this.addScreen("game", new GameScreen(this));
+        this.addScreen("start", new StartScreen(this));
+        this.addScreen("instructions", new InstructionScreen(this));
+        this.addScreen("game", new GameScreen(this));
 
-            // Set Active Screen
-            this.setActiveScreen("start");
+        // Set Active Screen
+        this.setActiveScreen("start");
 
-            super.onStartup();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+        super.onStartup();
     }
 }

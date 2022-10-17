@@ -3,10 +3,7 @@ package alc;
 import Pair.Pair;
 import alc.Components.ElementComponent;
 import alc.Screens.GameScreen;
-import engine.Components.CollisionComponent;
-import engine.Components.MouseDragComponent;
-import engine.Components.SpriteComponent;
-import engine.Components.TransformComponent;
+import engine.Components.*;
 import engine.GameObject;
 import engine.GameWorld;
 import engine.Resource;
@@ -111,10 +108,10 @@ public class AlcGame {
         GameObject trash = new GameObject(trashTransformComponent, 1);
         trash.addComponent(new SpriteComponent(trash, trashSprite, new Vec2d(0,0)));
         trash.addComponent(new ElementComponent(Element.NULL));
-        trash.addComponent(new CollisionComponent(trash, new AAB(trashTransformComponent.getGameSpacePosition(), trashTransformComponent.getSize())){
+        trash.addComponent(new CollisionComponent(trash, new AAB(trashTransformComponent.getCurrentGameSpacePosition(), trashTransformComponent.getSize()), 0){
             @Override
-            public void onCollide(GameObject collidedObject) {
-                onCollision(trash, collidedObject);
+            public void onCollide(Collision collision) {
+                onCollision(trash, collision.getCollidedObject());
             }
         });
         this.gameWorld.addGameObject(trash);
@@ -145,10 +142,10 @@ public class AlcGame {
         o.addComponent(new ElementComponent(e));
         o.addComponent(new SpriteComponent(o, sprite, new Vec2d(0,0)));
         o.addComponent(new MouseDragComponent(o, startGameCoordinate, startGameCoordinate));
-        o.addComponent(new CollisionComponent(o, new AAB(transformComponent.getGameSpacePosition(), transformComponent.getSize())){
+        o.addComponent(new CollisionComponent(o, new AAB(transformComponent.getCurrentGameSpacePosition(), transformComponent.getSize()), 0){
             @Override
-            public void onCollide(GameObject collidedObject) {
-                onCollision(this.gameObject, collidedObject);
+            public void onCollide(Collision collision) {
+                onCollision(this.gameObject, collision.getCollidedObject());
             }
         });
 
@@ -175,11 +172,11 @@ public class AlcGame {
                         gameWorld.removeGameObject(g1);
                         gameWorld.removeGameObject(g2);
                         screen.elementButtonGenerator(ne);
-                        makeElement(ne, g1.getTransform().getGameSpacePosition(), true);
+                        makeElement(ne, g1.getTransform().getCurrentGameSpacePosition(), true);
                     } else {
                         gameWorld.removeGameObject(g1);
                         gameWorld.removeGameObject(g2);
-                        makeElement(ne, g1.getTransform().getGameSpacePosition(), true);
+                        makeElement(ne, g1.getTransform().getCurrentGameSpacePosition(), true);
                     }
                 }
             }

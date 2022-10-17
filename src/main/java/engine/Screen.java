@@ -13,7 +13,7 @@ import java.util.List;
 public abstract class Screen {
 
     protected List<UIElement> uiElements;
-    private final Application engine;
+    protected final Application engine;
 
     public Screen(Application engine) {
         this.engine = engine;

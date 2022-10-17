@@ -8,6 +8,11 @@ public class Sprite {
     Image image;
     Vec2d spriteSize;
 
+    /**
+     *
+     * @param i - the image file associated with this sprite, assumes it is a sprite sheet
+     * @param numberSprites - number of sprites in x and y direction respectively
+     */
     public Sprite(Image i, Vec2d numberSprites) {
         this.image = i;
         this.spriteSize = new Vec2d(i.getWidth(), i.getHeight()).pdiv(numberSprites);

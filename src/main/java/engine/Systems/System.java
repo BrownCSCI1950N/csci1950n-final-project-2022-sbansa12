@@ -11,7 +11,7 @@ import java.util.TreeSet;
 
 public abstract class System {
     GameWorld gameWorld;
-    String relevantTag;
+    List<String> relevantTags;
     TreeSet<GameObject> gameObjects;
     List<GameObject> toAdd;
     List<GameObject> toRemove;
@@ -19,12 +19,12 @@ public abstract class System {
     /**
      * Constructor for a System. Requires all game objects zIndex to be unique game object for the system.
      * @param gameWorld - game world this system is a part of
-     * @param relevantTag - the component tag this system is relevant for.
+     * @param relevantTags - the component tag this system is relevant for.
      */
-    public System(GameWorld gameWorld, String relevantTag) {
+    public System(GameWorld gameWorld, List<String> relevantTags) {
         this.gameWorld = gameWorld;
-        this.relevantTag = relevantTag;
-        gameObjects = new TreeSet<>(Comparator.comparing(s -> s.zIndex));
+        this.relevantTags = relevantTags;
+        this.gameObjects = new TreeSet<>(Comparator.comparing(s -> s.zIndex));
         this.toAdd = new LinkedList<>();
         this.toRemove = new LinkedList<>();
     }
@@ -34,10 +34,11 @@ public abstract class System {
      * @param g - game object to potentially add
      */
     public void addGameObject(GameObject g) {
-        List<String> gameObjectTags = g.getComponentTags();
-
-        if (gameObjectTags.contains(relevantTag)) {
-            toAdd.add(g);
+        for (String relevantTag: relevantTags) {
+            if (g.hasComponentTag(relevantTag)) {
+                toAdd.add(g);
+                return;
+            }
         }
     }
 
@@ -45,8 +46,8 @@ public abstract class System {
         toRemove.add(g);
     }
 
-    public String getRelevantTag(){
-        return relevantTag;
+    public List<String> getRelevantTags(){
+        return relevantTags;
     }
 
     public void tick(long t) {
@@ -63,4 +64,5 @@ public abstract class System {
     }
     public abstract void lateTick();
     public abstract void draw(GraphicsContext g);
+    public abstract String name();
 }

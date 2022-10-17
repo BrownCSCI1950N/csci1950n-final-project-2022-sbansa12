@@ -1,0 +1,35 @@
+package engine.Components;
+
+import engine.TerrainGeneration.TileType;
+import javafx.scene.canvas.GraphicsContext;
+
+public class TileComponent implements Component {
+    private final TileType tileType;
+    public TileComponent(TileType tileType) {
+        this.tileType = tileType;
+    }
+
+    public TileType getTileType() {
+        return tileType;
+    }
+
+    @Override
+    public void tick(long nanosSinceLastTick) {
+
+    }
+
+    @Override
+    public void lateTick() {
+
+    }
+
+    @Override
+    public void draw(GraphicsContext g) {
+
+    }
+
+    @Override
+    public String getTag() {
+        return "tile";
+    }
+}
