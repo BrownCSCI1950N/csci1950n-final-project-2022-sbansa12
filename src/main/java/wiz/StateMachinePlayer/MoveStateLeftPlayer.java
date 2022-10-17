@@ -33,21 +33,6 @@ public class MoveStateLeftPlayer extends State {
 
     @Override
     public void onSwitch() {
-        ActionKeysComponent c1 = (ActionKeysComponent) gameObject.getComponent("actionKeys");
-
-        if (c1.isOnceHappened()) {
-            Direction directionShoot = WizGame.directionProjectileShoot(gameObject.getTransform().getVelocity());
-            if (directionShoot == Direction.UP) {
-                sm.setCurrentState(new IdleStateUpPlayer(sm, gameObject));
-            } else if (directionShoot == Direction.LEFT) {
-                sm.setCurrentState(new ShootStateLeftPlayer(sm, gameObject));
-            } else if (directionShoot == Direction.RIGHT) {
-                sm.setCurrentState(new ShootStateRightPlayer(sm, gameObject));
-            } else {
-                assert false;
-            }
-        }
-
         MoveKeysComponent c2 = (MoveKeysComponent) gameObject.getComponent("moveKeys");
 
         if (c2.getMoveDirection().equals(Direction.NONE)) {
@@ -58,8 +43,25 @@ public class MoveStateLeftPlayer extends State {
             sm.setCurrentState(new IdleStateLeftPlayer(sm, gameObject));
         } else if (c2.getMoveDirection().equals(Direction.LEFT)) {
             return;
-        }else if (c2.getMoveDirection().equals(Direction.RIGHT)) {
+        } else if (c2.getMoveDirection().equals(Direction.RIGHT)) {
             sm.setCurrentState(new MoveStateRightPlayer(sm, gameObject));
+        }
+
+        ActionKeysComponent c1 = (ActionKeysComponent) gameObject.getComponent("actionKeys");
+
+        if (c1.isOnceHappened()) {
+            Direction directionShoot = WizGame.directionProjectileShoot(gameObject.getTransform().getVelocity());
+            if (directionShoot == Direction.UP) {
+                sm.setCurrentState(new IdleStateUpPlayer(sm, gameObject));
+            } else if (directionShoot == Direction.LEFT) {
+                sm.setCurrentState(new ShootStateLeftPlayer(sm, gameObject));
+            } else if (directionShoot == Direction.RIGHT) {
+                sm.setCurrentState(new ShootStateRightPlayer(sm, gameObject));
+            } else if (directionShoot == Direction.DOWN) {
+                sm.setCurrentState(new IdleStateLeftPlayer(sm, gameObject));
+            } else {
+                assert false;
+            }
         }
     }
 

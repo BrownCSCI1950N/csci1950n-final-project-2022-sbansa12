@@ -82,6 +82,8 @@ public class WizGame {
     }
 
     public void startGame() {
+        this.secretLevel = false;
+        setBossFight(false);
         deathCount = 0;
         this.rand = new Random(initialSeed);
         currentGameWorld = generateLevel(rand, true);

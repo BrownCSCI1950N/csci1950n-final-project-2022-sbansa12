@@ -38,7 +38,7 @@ public class Constants {
     public static final String instructionsScreenInstructions = "          Goal: Escape the Maze!\n"+
                                                                 "               Movement: WASD\n" +
                                                                 "                   Shoot: SPACE\n" +
-                                                                "              Zoom: Z: In, X: Out\n";
+                                                                "            Zoom: In -> Z, Out -> X\n";
     public static final FontWrapper instructionsFont = new FontWrapper("Bauhaus 93", FontWeight.EXTRA_LIGHT, null, 24);
 
     // World Generation Screen Aesthetics
@@ -113,7 +113,7 @@ public class Constants {
     public static final List<Pair<Integer, Integer>> layersCollide = List.of(new Pair<Integer, Integer>(0,1), new Pair<Integer, Integer>(0,2), new Pair<Integer, Integer>(1, 2));
     public static final Integer trapsDamage = 10;
     public static final Integer trapsMaxHealth = 10;
-    public static final Integer bossMaxHealth = 100;
+    public static final Integer bossMaxHealth = 150;
     public static final Integer playerMaxHealth = 10;
     public static final Integer projectileDamage = 10;
     public static final BigDecimal enemyMoveTime = new BigDecimal("500000000");

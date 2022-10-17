@@ -11,6 +11,7 @@ public class IdleStateLeftPlayer extends State {
     StateMachineComponent sm;
     GameObject gameObject;
     SpriteComponent idle;
+    boolean shootOnce;
 
      public IdleStateLeftPlayer(StateMachineComponent sm, GameObject gameObject) {
          this.sm = sm;
@@ -30,6 +31,20 @@ public class IdleStateLeftPlayer extends State {
 
     @Override
     public void onSwitch() {
+        MoveKeysComponent c2 = (MoveKeysComponent) gameObject.getComponent("moveKeys");
+
+        if (c2.getMoveDirection().equals(Direction.NONE)) {
+
+        } else if (c2.getMoveDirection().equals(Direction.UP)) {
+            sm.setCurrentState(new IdleStateUpPlayer(sm, gameObject));
+        } else if (c2.getMoveDirection().equals(Direction.DOWN)) {
+            return;
+        } else if (c2.getMoveDirection().equals(Direction.LEFT)) {
+            sm.setCurrentState(new MoveStateLeftPlayer(sm, gameObject));
+        } else if (c2.getMoveDirection().equals(Direction.RIGHT)) {
+            sm.setCurrentState(new MoveStateRightPlayer(sm, gameObject));
+        }
+
         ActionKeysComponent c1 = (ActionKeysComponent) gameObject.getComponent("actionKeys");
 
         if (c1.isOnceHappened()) {
@@ -45,20 +60,6 @@ public class IdleStateLeftPlayer extends State {
             }  else {
                 assert false;
             }
-        }
-
-        MoveKeysComponent c2 = (MoveKeysComponent) gameObject.getComponent("moveKeys");
-
-        if (c2.getMoveDirection().equals(Direction.NONE)) {
-            return;
-        } else if (c2.getMoveDirection().equals(Direction.UP)) {
-            sm.setCurrentState(new IdleStateUpPlayer(sm, gameObject));
-        }else if (c2.getMoveDirection().equals(Direction.DOWN)) {
-            return;
-        }else if (c2.getMoveDirection().equals(Direction.LEFT)) {
-            sm.setCurrentState(new MoveStateLeftPlayer(sm, gameObject));
-        }else if (c2.getMoveDirection().equals(Direction.RIGHT)) {
-            sm.setCurrentState(new MoveStateRightPlayer(sm, gameObject));
         }
     }
 

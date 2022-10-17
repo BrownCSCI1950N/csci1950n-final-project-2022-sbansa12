@@ -59,7 +59,7 @@ public class GameScreen extends Screen {
         };
         viewport.addChildren(deaths);
 
-        // Create Instructions Button (Changes Screen to Instructions)
+        // Create Hint Button (Changes Screen to Instructions)
         UIElement hintButton = new UIButton(
                 this,
                 viewport,

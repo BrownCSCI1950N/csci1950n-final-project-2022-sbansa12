@@ -1,8 +1,7 @@
 package wiz.StateMachinePlayer;
 
-import engine.Components.SpriteComponent;
-import engine.Components.State;
-import engine.Components.StateMachineComponent;
+import engine.Components.*;
+import engine.Direction;
 import engine.GameObject;
 import engine.TerrainGeneration.TileType;
 import engine.support.Vec2d;
@@ -15,15 +14,11 @@ public class ShootStateRightPlayer extends State {
 
     StateMachineComponent sm;
     GameObject gameObject;
-    BigDecimal count;
-    BigDecimal timer;
     SpriteComponent animation;
 
     public ShootStateRightPlayer(StateMachineComponent sm, GameObject gameObject) {
         this.sm = sm;
         this.gameObject = gameObject;
-        this.count = new BigDecimal("0");
-        this.timer = Constants.playerShootTime;
         this.animation = new SpriteComponent(gameObject, WizGame.images.getResource(TileType.PLAYER.name()),new Vec2d(1,5));
     }
 
@@ -35,17 +30,31 @@ public class ShootStateRightPlayer extends State {
 
     @Override
     public void onTick(long nanosSincePreviousTick) {
-        count = count.add(new BigDecimal(nanosSincePreviousTick));
+
     }
 
 
     @Override
     public void onSwitch() {
-        if (count.compareTo(timer) < 0) {
-            return;
+        ActionKeysComponent c1 = (ActionKeysComponent) gameObject.getComponent("actionKeys");
+
+        if (!c1.isOnceHappened()) {
+            sm.setCurrentState(new IdleStateRightPlayer(sm, gameObject));
         }
-        count = new BigDecimal("0");
-        sm.setCurrentState(new IdleStateRightPlayer(sm, gameObject));
+
+        MoveKeysComponent c2 = (MoveKeysComponent) gameObject.getComponent("moveKeys");
+
+        if (c2.getMoveDirection().equals(Direction.NONE)) {
+            return;
+        } else if (c2.getMoveDirection().equals(Direction.UP)) {
+            sm.setCurrentState(new IdleStateUpPlayer(sm, gameObject));
+        } else if (c2.getMoveDirection().equals(Direction.DOWN)) {
+            sm.setCurrentState(new IdleStateRightPlayer(sm, gameObject));
+        } else if (c2.getMoveDirection().equals(Direction.LEFT)) {
+            sm.setCurrentState(new MoveStateLeftPlayer(sm, gameObject));
+        } else if (c2.getMoveDirection().equals(Direction.RIGHT)) {
+            sm.setCurrentState(new MoveStateRightPlayer(sm, gameObject));
+        }
     }
 
     @Override
