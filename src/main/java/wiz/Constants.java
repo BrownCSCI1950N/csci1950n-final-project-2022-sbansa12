@@ -2,6 +2,7 @@ package wiz;
 
 import Pair.Pair;
 import engine.FontWrapper;
+import engine.TerrainGeneration.TileType;
 import engine.support.Vec2d;
 import engine.support.Vec2i;
 import javafx.scene.input.KeyCode;
@@ -31,14 +32,14 @@ public class Constants {
     public static final Color buttonHoverColor = Color.rgb(207,196,184);
 
     // Instruction Screen Aesthetics
-    public static final Vec2d instructionsScreenTitlePosition = new Vec2d(320, 120);
+    public static final Vec2d instructionsScreenTitlePosition = new Vec2d(320, 140);
     public static final String instructionsScreenTitle = "Instructions!";
     public static final String instructionsScreenButtonText = "     X";
-    public static final Vec2d instructionsScreenInstructionsPosition = new Vec2d(300, 180);
-    public static final String instructionsScreenInstructions = "          Goal: Escape the Maze!\n"+
-                                                                "               Movement: WASD\n" +
-                                                                "                   Shoot: SPACE\n" +
-                                                                "            Zoom: In -> Z, Out -> X\n";
+    public static final Vec2d instructionsScreenInstructionsPosition = new Vec2d(270, 220);
+    public static final String instructionsScreenInstructions = "              Goal: Escape the Maze!\n"+
+                                                                "                   Movement: WASD\n" +
+                                                                "                       Shoot: SPACE\n" +
+                                                                "Go Back To World Generation Screen: R\n";
     public static final FontWrapper instructionsFont = new FontWrapper("Bauhaus 93", FontWeight.EXTRA_LIGHT, null, 24);
 
     // World Generation Screen Aesthetics
@@ -58,15 +59,12 @@ public class Constants {
     public static final Vec2d startingViewportGameCoordinates = new Vec2d(10,10);
     public static final Vec2d viewportScreenPosition = new Vec2d(0,0);
     public static final Vec2d viewportScreenSize =  new Vec2d(960, 540);
-    public static final List<KeyCode> zoomingButtons = List.of(KeyCode.Z, KeyCode.X);
-    public static final List<Double> zoomSpeed = List.of(1.08,1.08);
 
     // Game Aesthetics
     public static final Color backgroundColorGame = backgroundColor;
     public static final Color popUpOverlayColor = Color.rgb(141,139,139 ,0.8);
     public static final Vec2d popUpPanelPosition = new Vec2d(100,80);
     public static final Vec2d popUpPanelSize = new Vec2d(760,380);
-
     public static final Color popUpPanelColor = Color.rgb(243,236,224);
     public static final Vec2d popUpPanelArcSize = new Vec2d(10,10);
     public static final Vec2d popUpTextPosition = new Vec2d(320,270);
@@ -90,6 +88,8 @@ public class Constants {
     public static final Vec2d hintButtonArcSize =  new Vec2d(10, 10);
     public static final String hintButtonText = "hint";
     public static final Vec2d hintButtonTextPosition = new Vec2d(11, 10);
+    public static final Vec2d minimapPosition = new Vec2d(20,390);
+    public static final Vec2d minimapSize = new Vec2d(130,130);
 
     // Game Values
     public static final Vec2i mapSize = new Vec2i(40,40);
@@ -113,16 +113,15 @@ public class Constants {
     public static final List<Pair<Integer, Integer>> layersCollide = List.of(new Pair<Integer, Integer>(0,1), new Pair<Integer, Integer>(0,2), new Pair<Integer, Integer>(1, 2));
     public static final Integer trapsDamage = 10;
     public static final Integer trapsMaxHealth = 10;
-    public static final Integer bossMaxHealth = 150;
+    public static final Integer bossMaxHealth = 200;
     public static final Integer playerMaxHealth = 10;
     public static final Integer projectileDamage = 10;
-    public static final BigDecimal enemyMoveTime = new BigDecimal("500000000");
+    public static final BigDecimal enemyMoveTime = new BigDecimal("2100000000");
     public static final BigDecimal bossMoveTime = new BigDecimal("1800000000");
     public static final BigDecimal bossShootTime = bossMoveTime.multiply(new BigDecimal("3"));
     public static final BigDecimal playerMoveTime = new BigDecimal("180000000");
-    public static final BigDecimal playerShootTime = new BigDecimal("180000000");
     public static final double spawnPointAdd = 25;
-    public static final BigDecimal projectileLifeTime = new BigDecimal("300000000");
+    public static final BigDecimal projectileLifeTime = new BigDecimal("280000000");
 
     // End Screen Aesthetics
     public static final Vec2d endScreenTitlePosition = new Vec2d(300, 190);
@@ -130,4 +129,39 @@ public class Constants {
     public static final String endScreenTitleTryAgain = "  Try Again!";
     public static final String endScreenButtonText = "restart";
     public static final Vec2d endScreenDeathsPosition = new Vec2d(380, 270);
+    private static final double opacityMinimap = 0.7;
+    public static Color tileToColor(TileType t) {
+        switch (t) {
+            case PLAYER:
+                return Color.rgb(136,82,211, opacityMinimap);
+            case ROOM:
+                return Color.rgb(128,181,49, opacityMinimap);
+            case WALL:
+            case HIDDEN:
+                return Color.rgb(87,173,37, opacityMinimap);
+            case SPAWN:
+                return Color.rgb(82,169,43, opacityMinimap);
+            case EXIT:
+                return Color.rgb(229,189,68,opacityMinimap);
+            case STAIRS:
+                return Color.rgb(26,66,187,opacityMinimap);
+            case TRAPS:
+            case ENEMY:
+            case BOSS:
+                return Color.rgb(255,0,0,opacityMinimap);
+            default:
+                return Color.rgb(255,255,255,opacityMinimap);
+        }
+    }
+
+    public static final double distanceDiscover = 86000;
+    public static final Color notDiscoveredColor = Color.rgb(0,0,0,opacityMinimap+0.3);
+    public static final Vec2d bossHealthBarPosition = new Vec2d(250, 8);
+    public static final Vec2d bossHealthBarSize = new Vec2d(680, 50);
+    public static final double bossHealthBarBorder = 10.0;
+    public static final Color bossHealthBarContainerColor = Color.rgb(229,189,68,opacityMinimap);
+    public static final Color bossHealthBarMaxBarColor = Color.rgb(128,181,49, opacityMinimap);
+    public static final Color bossHealthBarColor = Color.rgb(255,0,0,opacityMinimap);
+    public static final FontWrapper bossHealthBarTextFont = new FontWrapper("Colonna MT", FontWeight.EXTRA_LIGHT, null,32);
+
 }

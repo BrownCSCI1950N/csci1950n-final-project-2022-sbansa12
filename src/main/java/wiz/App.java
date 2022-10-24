@@ -39,7 +39,7 @@ public class App extends Application {
         this.addScreen("tryAgain", new TryAgainScreen(this, wizGame));
 
         // Set Active Screen
-        this.setActiveScreen("start");
+        this.setActiveScreen("instructions");
 
         super.onStartup();
     }

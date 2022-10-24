@@ -20,6 +20,9 @@ public class HealthComponent extends CollisionComponent {
     public Integer getCurrentHealth() {
         return currentHealth;
     }
+    public Integer getMaxHealth() {
+        return maxHealth;
+    }
 
     public void heal(Integer health) {
         currentHealth = Math.min(currentHealth + health, maxHealth);

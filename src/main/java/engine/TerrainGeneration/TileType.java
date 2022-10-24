@@ -14,28 +14,29 @@ public enum TileType {
 
     @Override
     public String toString() {
-        if (this.equals(PLAYER)) {
-            return "P";
-        } else if (this.equals(ROOM)) {
-            return "□";
-        } else if (this.equals(WALL)) {
-            return "■";
-        } else if (this.equals(SPAWN)) {
-            return "S";
-        } else if (this.equals(EXIT)) {
-            return "E";
-        } else if (this.equals(STAIRS)) {
-            return "=";
-        } else if (this.equals(TRAPS)) {
-            return "T";
-        } else if (this.equals(ENEMY)) {
-            return "X";
-        } else if (this.equals(BOSS)) {
-            return "B";
-        } else if (this.equals(HIDDEN)) {
-            return "H";
-        } else {
-            return "";
+        switch (this) {
+            case PLAYER:
+                return "P";
+            case ROOM:
+                return "□";
+            case WALL:
+                return "■";
+            case SPAWN:
+                return "S";
+            case EXIT:
+                return "E";
+            case STAIRS:
+                return "=";
+            case TRAPS:
+                return "T";
+            case ENEMY:
+                return "X";
+            case BOSS:
+                return "B";
+            case HIDDEN:
+                return "H";
+            default:
+                return "";
         }
     }
 

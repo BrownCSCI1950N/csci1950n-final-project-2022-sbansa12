@@ -7,5 +7,9 @@ public enum Direction {
     RIGHT,
     LEFT,
     IN,
-    OUT
+    OUT,
+    NE,
+    NW,
+    SE,
+    SW
 }

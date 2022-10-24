@@ -183,5 +183,13 @@ public final class Vec2i implements Serializable {
 	public final String toString() {
 		return "(" + this.x + ", " + this.y + ")";
 	}
-	
+
+	public final double dist2(Vec2i v) {
+		double dx = this.x - v.x;
+		double dy = this.y - v.y;
+		return dx * dx + dy * dy;
+	}
+	public final double dist(Vec2i v) {
+		return Math.sqrt(this.dist2(v));
+	}
 }

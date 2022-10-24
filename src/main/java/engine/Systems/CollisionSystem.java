@@ -41,9 +41,6 @@ public class CollisionSystem extends System {
         this.layersCollide = new LinkedList<>();
         this.bothObjectCollisionScript = bothObjectCollisionScript;
         this.tagsCollide = new LinkedList<>();
-        for (String relevantTag: relevantTags) {
-            addTagsCollide(relevantTag, relevantTag);
-        }
     }
 
     /**

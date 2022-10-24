@@ -47,6 +47,7 @@ public class GameScreen extends Screen {
 
         this.gameWorld.appendSystem(new MouseDragSystem(this.gameWorld));
         CollisionSystem collisionSystem = new CollisionSystem(this.gameWorld, Collections.singletonList("collision"),false);
+        collisionSystem.addTagsCollide("collision", "collision");
         collisionSystem.setLayersCollide(List.of(new Pair<Integer, Integer>(0,0)));
         this.gameWorld.appendSystem(collisionSystem);
 

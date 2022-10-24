@@ -169,7 +169,9 @@ public class Application extends FXFrontEnd {
     // Change Size from Absolute to Scale
     currentStageSize = newSize;
     double scale = Math.min(newSize.x/ originalSize.x, newSize.y/ originalSize.y);
-    activeScreen.onResize(new Vec2d(scale, scale));
+    for (Screen s: screens.values()) {
+      s.onResize(new Vec2d(scale, scale));
+    }
   }
 
   /**

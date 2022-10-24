@@ -73,7 +73,9 @@ public class GameWorld {
     }
 
     public void onLateTick() {
-
+        for (System s: systems) {
+            s.lateTick();
+        }
     }
 
     private List<String> systemsDrawTags = List.of("sprite");

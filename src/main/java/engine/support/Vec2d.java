@@ -87,7 +87,7 @@ public final class Vec2d implements Serializable {
 	}
 
 	/**
-	 * Factory method that creates a Vec2f from the given polar coordinates.
+	 * Factory method that creates a Vec2d from the given polar coordinates.
 	 * 
 	 * @param radians
 	 *            the angle, in radians, of the vector from the x axis
@@ -398,7 +398,7 @@ public final class Vec2d implements Serializable {
 	 * @return true if the magnitude of this vector is zero, false otherwise
 	 */
 	public final boolean isZero() {
-		return this.x == 0 && this.y == 0;
+		return this.x == 0.0 && this.y == 0.0;
 	}
 
 	/**

@@ -1,14 +1,26 @@
 package wiz.Screens;
 
+import Pair.Pair;
 import engine.Application;
+import engine.Components.DiscoveredComponent;
+import engine.Components.TileComponent;
+import engine.GameObject;
 import engine.Screen;
+import engine.TerrainGeneration.Terrain;
 import engine.UI.*;
 import engine.Utility;
 import engine.support.Vec2d;
+import engine.support.Vec2i;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import wiz.Constants;
+import wiz.UIHealthBarBoss;
 import wiz.WizGame;
+
+import java.util.List;
 
 public class GameScreen extends Screen {
     Viewport viewport;
@@ -36,9 +48,9 @@ public class GameScreen extends Screen {
                 null,
                 Constants.scale,
                 null,
-                Constants.zoomingButtons,
                 null,
-                Constants.zoomSpeed
+                null,
+                null
         );
         backgroundGame.addChildren(viewport);
 
@@ -102,7 +114,77 @@ public class GameScreen extends Screen {
         };
         viewport.addChildren(hintButton);
 
+        // Create Minimap
+        UIElement minimap = new UIMinimap(
+                this,viewport,
+                Constants.minimapPosition,
+                Constants.minimapSize){
+            @Override
+            public void onDraw(GraphicsContext g) {
+                Pair<Terrain, List<GameObject>> everything = wizGame.getMapWorld();
+                Vec2i mapSize = everything.getLeft().getSizeOfMap();
+
+                Vec2d sizeTileDrawRaw = currentSize.pdiv(new Vec2d(mapSize));
+                Vec2d sizeTileDraw = new Vec2d(Math.min(sizeTileDrawRaw.x, sizeTileDrawRaw.y));
+
+                Vec2d scale = sizeTileDraw.pdiv(Constants.tileSize);
+
+                double startPositionY = currentPosition.y + ((sizeTileDrawRaw.y - sizeTileDraw.y) * mapSize.y);
+
+                for (GameObject gO: everything.getRight()) {
+                    if (gO.hasComponentTag("tile")) {
+                        Color setColor = Constants.tileToColor(((TileComponent) gO.getComponent("tile")).getTileType());
+                        if (gO.hasComponentTag("discovered")) {
+                            DiscoveredComponent c = (DiscoveredComponent) gO.getComponent("discovered");
+                            if (!c.isDiscovered()) {
+                                setColor = Constants.notDiscoveredColor;
+                            }
+                        }
+                        g.setFill(setColor);
+                        Vec2d p = gO.getTransform().getCurrentGameSpacePosition().pmult(scale);
+                        Vec2d s = gO.getTransform().getSize().pmult(scale);
+                        g.fillRect(currentPosition.x + p.x, startPositionY + p.y, s.x, s.y);
+                    }
+                }
+
+                super.onDraw(g);
+            }
+        };
+        viewport.addChildren(minimap);
+
         createPopUp(viewport);
+
+        // Boss Health Bar
+        UIElement bossHealthBar = new UIHealthBarBoss(
+                this, viewport,
+                Constants.bossHealthBarPosition,
+                Constants.bossHealthBarSize,
+                Constants.bossHealthBarBorder,
+                Constants.bossHealthBarContainerColor,
+                Constants.bossHealthBarMaxBarColor,
+                Constants.bossHealthBarColor,
+                new Vec2d(520, 41),
+                "Boss Health",
+                Color.rgb(255,255,255),
+                Constants.bossHealthBarTextFont
+        ){
+            @Override
+            public void onDraw(GraphicsContext g) {
+                if (wizGame.getBossFight()) {
+                    super.onDraw(g);
+                }
+            }
+
+            @Override
+            public double getScale() {
+                if (wizGame.getBossFight()) {
+                    return wizGame.getBossHealth();
+                } else {
+                    return 1;
+                }
+            }
+        };
+        viewport.addChildren(bossHealthBar);
 
         // Set wizGame Up
         this.wizGame.setViewport(viewport);
@@ -111,10 +193,21 @@ public class GameScreen extends Screen {
 
     @Override
     protected void reset() {
+        wizGame.setPopUp(false);
+
         // Start Wiz
         this.wizGame.startGame();
 
         super.reset();
+    }
+
+    @Override
+    protected void onKeyPressed(KeyEvent e) {
+        if (e.getCode() == KeyCode.R) {
+            setActiveScreen("seed");
+        }
+
+        super.onKeyPressed(e);
     }
 
     private void createPopUp(UIElement parent) {

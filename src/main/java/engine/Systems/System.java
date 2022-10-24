@@ -46,6 +46,10 @@ public abstract class System {
         toRemove.add(g);
     }
 
+    public List<GameObject> getGameObjects() {
+        return new LinkedList<>(this.gameObjects);
+    }
+
     public List<String> getRelevantTags(){
         return relevantTags;
     }

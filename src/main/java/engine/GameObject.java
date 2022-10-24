@@ -31,6 +31,9 @@ public class GameObject {
     public void removeComponent(Component c) {
         _components.remove(c.getTag());
     }
+    public void removeComponent(String c) {
+        _components.remove(c);
+    }
 
     /**
      * Function to find the component in a game object using the component's tag

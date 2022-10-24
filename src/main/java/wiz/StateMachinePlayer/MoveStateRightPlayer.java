@@ -51,7 +51,7 @@ public class MoveStateRightPlayer extends State {
         ActionKeysComponent c1 = (ActionKeysComponent) gameObject.getComponent("actionKeys");
 
         if (c1.isOnceHappened()) {
-            Direction directionShoot = WizGame.directionProjectileShoot(gameObject.getTransform().getVelocity());
+            Direction directionShoot = WizGame.directionProjectileShootPlayer(gameObject.getTransform().getVelocity());
             if (directionShoot == Direction.UP) {
                 sm.setCurrentState(new IdleStateUpPlayer(sm, gameObject));
             } else if (directionShoot == Direction.LEFT) {

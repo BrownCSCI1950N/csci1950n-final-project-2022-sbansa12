@@ -16,12 +16,11 @@ public class CenterComponent implements Component {
 
     @Override
     public void tick(long nanosSinceLastTick) {
-        viewport.setCurrentGamePointCenter(gameObject.getTransform().getCurrentGameSpacePosition());
     }
 
     @Override
     public void lateTick() {
-
+        viewport.setCurrentGamePointCenter(gameObject.getTransform().getCurrentGameSpacePosition().plus(gameObject.getTransform().getSize().sdiv(2)));
     }
 
     @Override

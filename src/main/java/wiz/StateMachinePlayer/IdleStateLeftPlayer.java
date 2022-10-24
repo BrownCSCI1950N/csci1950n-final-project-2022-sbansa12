@@ -11,7 +11,6 @@ public class IdleStateLeftPlayer extends State {
     StateMachineComponent sm;
     GameObject gameObject;
     SpriteComponent idle;
-    boolean shootOnce;
 
      public IdleStateLeftPlayer(StateMachineComponent sm, GameObject gameObject) {
          this.sm = sm;
@@ -48,7 +47,7 @@ public class IdleStateLeftPlayer extends State {
         ActionKeysComponent c1 = (ActionKeysComponent) gameObject.getComponent("actionKeys");
 
         if (c1.isOnceHappened()) {
-            Direction directionShoot = WizGame.directionProjectileShoot(gameObject.getTransform().getVelocity());
+            Direction directionShoot = WizGame.directionProjectileShootPlayer(gameObject.getTransform().getVelocity());
             if (directionShoot == Direction.UP) {
                 sm.setCurrentState(new IdleStateUpPlayer(sm, gameObject));
             } else if (directionShoot == Direction.RIGHT) {

@@ -41,6 +41,10 @@ public class Terrain {
         return map;
     }
 
+    public Vec2i getSizeOfMap() {
+        return sizeOfMap;
+    }
+
     private void drawRooms(TileType[][] map, List<Room> rooms) {
         for (Room r: rooms) {
             for (int i = 0; i < r.getWidth(); i++) {
@@ -159,6 +163,33 @@ public class Terrain {
 
     @Override
     public String toString() {
-        return "Terrain: Rooms: " + rooms + " Halls: " + halls + "\n" + Utility.stringMap(this);
+        return "Terrain: Rooms: " + rooms + " Halls: " + halls + "\n" + stringMap();
+    }
+
+    public TileType[][] convertTerrainFullTileMap() {
+        TileType[][] toReturn = getTileMap();
+
+        Map<TileType, List<Vec2i>> specialTiles = getSpecialTiles();
+
+        for (TileType t: specialTiles.keySet()) {
+            for (Vec2i position: specialTiles.get(t)) {
+                toReturn[position.y][position.x] = t;
+            }
+        }
+
+        return toReturn;
+    }
+
+    public String stringMap() {
+        TileType[][] map = convertTerrainFullTileMap();
+
+        StringBuilder toReturn = new StringBuilder();
+        for (TileType[] tileTypes : map) {
+            for (TileType tileType : tileTypes) {
+                toReturn.append(tileType).append(" ");
+            }
+            toReturn.append("\n");
+        }
+        return toReturn.toString();
     }
 }
