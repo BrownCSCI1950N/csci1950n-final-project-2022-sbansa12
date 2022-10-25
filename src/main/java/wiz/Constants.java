@@ -36,7 +36,7 @@ public class Constants {
     public static final String instructionsScreenTitle = "Instructions!";
     public static final String instructionsScreenButtonText = "     X";
     public static final Vec2d instructionsScreenInstructionsPosition = new Vec2d(270, 220);
-    public static final String instructionsScreenInstructions = "              Goal: Escape the Maze!\n"+
+    public static final String instructionsScreenInstructions = "             Goal: Find the Exit Portal!\n"+
                                                                 "                   Movement: WASD\n" +
                                                                 "                       Shoot: SPACE\n" +
                                                                 "Go Back To World Generation Screen: R\n";
@@ -126,7 +126,7 @@ public class Constants {
     // End Screen Aesthetics
     public static final Vec2d endScreenTitlePosition = new Vec2d(300, 190);
     public static final String endScreenTitleWin = "   You Win!";
-    public static final String endScreenTitleTryAgain = "  Try Again!";
+    public static final String endScreenTitleTryAgain = "Wrong Portal!";
     public static final String endScreenButtonText = "restart";
     public static final Vec2d endScreenDeathsPosition = new Vec2d(380, 270);
     private static final double opacityMinimap = 0.7;
@@ -156,12 +156,14 @@ public class Constants {
 
     public static final double distanceDiscover = 86000;
     public static final Color notDiscoveredColor = Color.rgb(0,0,0,opacityMinimap+0.3);
-    public static final Vec2d bossHealthBarPosition = new Vec2d(250, 8);
+    public static final Vec2d bossHealthBarPosition = new Vec2d(260, 8);
     public static final Vec2d bossHealthBarSize = new Vec2d(680, 50);
     public static final double bossHealthBarBorder = 10.0;
     public static final Color bossHealthBarContainerColor = Color.rgb(229,189,68,opacityMinimap);
     public static final Color bossHealthBarMaxBarColor = Color.rgb(128,181,49, opacityMinimap);
     public static final Color bossHealthBarColor = Color.rgb(255,0,0,opacityMinimap);
     public static final FontWrapper bossHealthBarTextFont = new FontWrapper("Colonna MT", FontWeight.EXTRA_LIGHT, null,32);
-
+    public static final Vec2d deathMessagePosition = new Vec2d(320,500);
+    public static final Color deathMessageColor = deathsColor;
+    public static final FontWrapper deathMessageFont = new FontWrapper("Colonna MT", FontWeight.EXTRA_LIGHT, null,42);
 }

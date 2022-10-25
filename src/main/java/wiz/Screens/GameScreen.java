@@ -20,6 +20,7 @@ import wiz.Constants;
 import wiz.UIHealthBarBoss;
 import wiz.WizGame;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class GameScreen extends Screen {
@@ -185,6 +186,40 @@ public class GameScreen extends Screen {
             }
         };
         viewport.addChildren(bossHealthBar);
+
+        UIElement deathMessage = new UIText(
+                this,
+                viewport,
+                Constants.deathMessagePosition,
+                "",
+                Constants.deathMessageColor,
+                Constants.deathMessageFont) {
+
+            BigDecimal count = new BigDecimal("0");
+            final BigDecimal timer = new BigDecimal("1600000000");
+            @Override
+            public void onTick(long nanosSincePreviousTick) {
+                if (!wizGame.getDeathMessage().equals("")) {
+                    count = count.add(new BigDecimal(nanosSincePreviousTick));
+                    if (count.compareTo(timer) < 0) {
+                        return;
+                    }
+                    count = new BigDecimal("0");
+                }
+
+                wizGame.resetDeathMessage();
+
+                super.onTick(nanosSincePreviousTick);
+            }
+
+            @Override
+            public void onDraw(GraphicsContext g) {
+                this.text = wizGame.getDeathMessage();
+
+                super.onDraw(g);
+            }
+        };
+        viewport.addChildren(deathMessage);
 
         // Set wizGame Up
         this.wizGame.setViewport(viewport);

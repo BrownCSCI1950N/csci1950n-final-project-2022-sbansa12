@@ -37,11 +37,11 @@ public class PathfindingMovementComponent implements Component {
         this.timerMove = timerMove;
 
         // Find Path on Creation so Can Start Moving
-        Vec2i gOTile = ttt.gameToTile(gameObject.getTransform().getCurrentGameSpacePosition());
-        Vec2i playerTile = ttt.gameToTile(player.getTransform().getCurrentGameSpacePosition());
+        List<Vec2i> gOTile = ttt.gameToTile(gameObject.getTransform().getCurrentGameSpacePosition());
+        List<Vec2i> playerTile = ttt.gameToTile(player.getTransform().getCurrentGameSpacePosition());
 
-        path = algo.run(new TerrainNode(gOTile, map, allowedTiles),
-                new TerrainNode(playerTile, map, allowedTiles));
+        path = algo.run(new TerrainNode(gOTile.get(0), map, allowedTiles),
+                new TerrainNode(playerTile.get(0), map, allowedTiles));
     }
 
     public String stringMap(TileType[][] map) {
@@ -70,11 +70,11 @@ public class PathfindingMovementComponent implements Component {
         countAlgo = new BigDecimal("0");
 
 
-        Vec2i gOTile = ttt.gameToTile(gameObject.getTransform().getCurrentGameSpacePosition());
-        Vec2i playerTile = ttt.gameToTile(player.getTransform().getCurrentGameSpacePosition());
+        List<Vec2i> gOTile = ttt.gameToTile(gameObject.getTransform().getCurrentGameSpacePosition());
+        List<Vec2i> playerTile = ttt.gameToTile(player.getTransform().getCurrentGameSpacePosition());
 
-        path = algo.run(new TerrainNode(gOTile, map, allowedTiles),
-                        new TerrainNode(playerTile, map, allowedTiles));
+        path = algo.run(new TerrainNode(gOTile.get(0), map, allowedTiles),
+                        new TerrainNode(playerTile.get(0), map, allowedTiles));
     }
 
     private void move(long nanosSinceLastTick) {

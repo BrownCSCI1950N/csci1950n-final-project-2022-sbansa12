@@ -22,7 +22,6 @@ import engine.support.Vec2d;
 import engine.support.Vec2i;
 import javafx.scene.image.Image;
 import wiz.Screens.GameScreen;
-import wiz.StateMachineBoss.MoveStateBoss;
 import wiz.StateMachinePlayer.IdleStateRightPlayer;
 
 import java.math.BigDecimal;
@@ -46,10 +45,11 @@ public class WizGame {
     List<GameObject> secretHidden = new LinkedList<>();
     List<GameObject> minimapTiles = new LinkedList<>();
     Integer deathCount = 0;
+    String deathMessage = "";
     Boolean popUp = false;
     Boolean bossFight = false;
     AStar<TerrainNode, TerrainEdge> aStar = new AStar<>(new DistanceHeuristic());
-    GameTileConversionFloor gameTileConversionFloor = new GameTileConversionFloor(Constants.tileSize);
+    GameTileConversion gameTileConversion = new GameTileConversionClosest(Constants.tileSize);
     Random randomGlobal;
 
     public WizGame() {
@@ -69,6 +69,12 @@ public class WizGame {
 
     public Integer getDeathCount() {
         return deathCount;
+    }
+    public String getDeathMessage() {
+        return deathMessage;
+    }
+    public void resetDeathMessage() {
+        deathMessage = "";
     }
     public Integer getSeed() {
         return this.initialSeed;
@@ -108,6 +114,7 @@ public class WizGame {
         this.secretHidden.clear();
         setBossFight(false);
         deathCount = 0;
+        deathMessage = "";
         this.rand = new Random(initialSeed);
         if (initialSeed != 2218) {
             currentGameWorld = generateLevel(rand, true);
@@ -321,6 +328,12 @@ public class WizGame {
             @Override
             public void zeroHealthScript() {
                 deathCount += 1;
+                if (!bossFight) {
+                    deathMessage = "Player got Slimed!";
+                } else {
+                    deathMessage = "Player got Catted!";
+                }
+
                 RespawnComponent respawnComponent = (RespawnComponent) playerMake.getComponent("respawn");
                 respawnComponent.script();
             }
@@ -655,14 +668,14 @@ public class WizGame {
     private class MoveAwayAction implements Action {
         @Override
         public Status update(float seconds) {
-            Vec2i gOTile = gameTileConversionFloor.gameToTile(boss.getTransform().getCurrentGameSpacePosition());
-            Vec2i playerTile = gameTileConversionFloor.gameToTile(player.getTransform().getCurrentGameSpacePosition());
+            List<Vec2i> gOTile = gameTileConversion.gameToTile(boss.getTransform().getCurrentGameSpacePosition());
+            List<Vec2i> playerTile = gameTileConversion.gameToTile(player.getTransform().getCurrentGameSpacePosition());
 
-            List<TerrainEdge> path = aStar.run(new TerrainNode(gOTile, mapWorld.getTileMap(), List.of(TileType.ROOM)),
-                    new TerrainNode(playerTile, mapWorld.getTileMap(), List.of(TileType.ROOM)));
+            List<TerrainEdge> path = aStar.run(new TerrainNode(gOTile.get(0), mapWorld.getTileMap(), List.of(TileType.ROOM)),
+                    new TerrainNode(playerTile.get(0), mapWorld.getTileMap(), List.of(TileType.ROOM)));
 
             // Cannot Move Backwards
-            Vec2i nextPosition = gOTile.plus(gOTile.minus(path.get(0).getTo().getCurrentPosition()));
+            Vec2i nextPosition = gOTile.get(0).plus(gOTile.get(0).minus(path.get(0).getTo().getCurrentPosition()));
             if (mapWorld.getTileMap()[nextPosition.y][nextPosition.x] != TileType.ROOM) {
                 return Status.SUCCESS;
             }
@@ -670,7 +683,7 @@ public class WizGame {
             boss.removeComponent("sprite");
             boss.addComponent(new ConstantAnimationComponent(boss, WizGame.images.getResource(TileType.BOSS.name()), List.of(new Vec2d(0,0), new Vec2d(2,0)), Constants.bossMoveTime.divideToIntegralValue(new BigDecimal("2"))));
 
-            boss.getTransform().setCurrentGameSpacePosition(gameTileConversionFloor.tileToGame(nextPosition));
+            boss.getTransform().setCurrentGameSpacePosition(gameTileConversion.tileToGame(nextPosition));
             return Status.SUCCESS;
         }
 
@@ -751,14 +764,19 @@ public class WizGame {
                 boss.addComponent(new ConstantAnimationComponent(boss, WizGame.images.getResource(TileType.BOSS.name()), List.of(new Vec2d(0,0), new Vec2d(2,0)), Constants.bossMoveTime.divideToIntegralValue(new BigDecimal("2"))));
             }
 
-            Vec2i gOTile = gameTileConversionFloor.gameToTile(gO.getTransform().getCurrentGameSpacePosition());
-            Vec2i playerTile = gameTileConversionFloor.gameToTile(player.getTransform().getCurrentGameSpacePosition());
+            List<Vec2i> gOTile = gameTileConversion.gameToTile(gO.getTransform().getCurrentGameSpacePosition());
+            List<Vec2i> playerTileList = gameTileConversion.gameToTile(player.getTransform().getCurrentGameSpacePosition());
 
-            List<TerrainEdge> path = aStar.run(new TerrainNode(gOTile, mapWorld.getTileMap(), List.of(TileType.ROOM)),
+            int randInt = rand.nextInt(playerTileList.size());
+            Vec2i playerTile = playerTileList.get(randInt);
+
+            List<TerrainEdge> path = aStar.run(new TerrainNode(gOTile.get(0), mapWorld.getTileMap(), List.of(TileType.ROOM)),
                     new TerrainNode(playerTile, mapWorld.getTileMap(), List.of(TileType.ROOM)));
 
-            TerrainNode nextPosition = path.get(0).getTo();
-            gO.getTransform().setCurrentGameSpacePosition(gameTileConversionFloor.tileToGame(nextPosition.getCurrentPosition()));
+            if (path.size() > 0) {
+                TerrainNode nextPosition = path.get(0).getTo();
+                gO.getTransform().setCurrentGameSpacePosition(gameTileConversion.tileToGame(nextPosition.getCurrentPosition()));
+            }
             return Status.SUCCESS;
         }
 
