@@ -176,10 +176,8 @@ public class WizGame {
         GameWorld level = new GameWorld();
 
         // Add Appropriate Systems [Tick, Key, Collision, Draw, LateTick]
-        CollisionSystem collisionSystem = new CollisionSystem(level, List.of("collision", "damage", "health"), true);
+        CollisionSystem collisionSystem = new CollisionSystem(level, List.of("collision", "healthDamage"), true);
         collisionSystem.setLayersCollide(Constants.layersCollide);
-        collisionSystem.addTagsCollide("collision", "collision");
-        collisionSystem.addTagsCollide("health", "damage");
         level.prependSystem(collisionSystem);
         level.prependSystem(new KeyProcessSystem(level, List.of("moveKeys", "actionKeys")));
         level.prependSystem(new TickSystem(level, List.of("constantMovement", "timerAction", "sprite", "stateMachine", "discovered", "pathMovement", "AI")));
@@ -211,7 +209,7 @@ public class WizGame {
             gameObject.setName("WALL");
             gameObject.addComponent(new SpriteComponent(gameObject, images.getResource(TileType.WALL.name()), new Vec2d(0,0)));
             gameObject.addComponent(new TileComponent(TileType.WALL));
-            gameObject.addComponent(new CollisionComponent(gameObject, new AAB(transformComponent.getCurrentGameSpacePosition(), transformComponent.getSize()), Constants.mapCollisionLayer, true));
+            gameObject.addComponent(new CollisionComponent(gameObject, new AAB(transformComponent.getCurrentGameSpacePosition(), transformComponent.getSize()), Constants.mapCollisionLayer, false, true));
             return gameObject;
         } else if (t == TileType.SPAWN) {
             GameObject gameObject = new GameObject(transformComponent, getZIndex());
@@ -224,7 +222,7 @@ public class WizGame {
             gameObject.setName("EXIT");
             gameObject.addComponent(new SpriteComponent(gameObject, images.getResource(TileType.EXIT.name()), new Vec2d(0,0)));
             gameObject.addComponent(new TileComponent(TileType.EXIT));
-            gameObject.addComponent(new CollisionComponent(gameObject, new AAB(transformComponent.getCurrentGameSpacePosition(), transformComponent.getSize()), Constants.mapCollisionLayer, false){
+            gameObject.addComponent(new CollisionComponent(gameObject, new AAB(transformComponent.getCurrentGameSpacePosition(), transformComponent.getSize()), Constants.mapCollisionLayer, true, false){
                 @Override
                 public void onCollide(Collision collision) {
                     if (collision.getCollidedObject().hasComponentTag("player")) {
@@ -242,7 +240,7 @@ public class WizGame {
             gameObject.setName("TRAP");
             gameObject.addComponent(new SpriteComponent(gameObject, images.getResource(TileType.TRAPS.name()), new Vec2d(rand.nextInt(4),0)));
             gameObject.addComponent(new TileComponent(TileType.TRAPS));
-            gameObject.addComponent(new DamageComponent(gameObject, new AAB(transformComponent.getCurrentGameSpacePosition(), transformComponent.getSize()), Constants.mapCollisionLayer, Constants.trapsDamage, false));
+            gameObject.addComponent(new HealthDamageComponent(gameObject, new AAB(transformComponent.getCurrentGameSpacePosition(), transformComponent.getSize()), Constants.mapCollisionLayer, 0, Constants.trapsDamage));
             return gameObject;
         } else if (t == TileType.ENEMY) {
             return createEnemy(transformComponent);
@@ -251,7 +249,7 @@ public class WizGame {
             gameObject.setName("STAIRS");
             gameObject.addComponent(new SpriteComponent(gameObject, images.getResource(TileType.STAIRS.name()), new Vec2d(0,0)));
             gameObject.addComponent(new TileComponent(TileType.STAIRS));
-            gameObject.addComponent(new CollisionComponent(gameObject, new AAB(transformComponent.getCurrentGameSpacePosition(), transformComponent.getSize()), Constants.mapCollisionLayer, false){
+            gameObject.addComponent(new CollisionComponent(gameObject, new AAB(transformComponent.getCurrentGameSpacePosition(), transformComponent.getSize()), Constants.mapCollisionLayer, true, false){
                 @Override
                 public void onCollide(Collision collision) {
                     if (collision.getCollidedObject().hasComponentTag("player")) {
@@ -268,7 +266,7 @@ public class WizGame {
             gameObject.setName("HIDDEN");
             gameObject.addComponent(new SpriteComponent(gameObject, images.getResource(TileType.WALL.name()), new Vec2d(0,0)));
             gameObject.addComponent(new TileComponent(TileType.HIDDEN));
-            gameObject.addComponent(new CollisionComponent(gameObject, new AAB(transformComponent.getCurrentGameSpacePosition(), transformComponent.getSize()), Constants.mapCollisionLayer, true));
+            gameObject.addComponent(new CollisionComponent(gameObject, new AAB(transformComponent.getCurrentGameSpacePosition(), transformComponent.getSize()), Constants.mapCollisionLayer, false, true));
             secretHidden.add(gameObject);
             return gameObject;
         } else {
@@ -281,7 +279,7 @@ public class WizGame {
         setBossFight(true);
         randomGlobal = rand;
         try {
-            Terrain map = new TerrainReader().createTerrain(".\\src\\main\\java\\wiz\\Maps\\boss-room.txt", rand);
+            Terrain map = TerrainReader.createTerrain(".\\src\\main\\java\\wiz\\Maps\\boss-room.txt", rand);
 
             mapWorld = map;
 
@@ -324,7 +322,7 @@ public class WizGame {
         playerMake.addComponent(new RespawnComponent(playerMake, respawnLocation));
         viewport.setCurrentGamePointCenter(respawnLocation);
         playerMake.addComponent(new CenterComponent(playerMake, viewport));
-        playerMake.addComponent(new HealthComponent(playerMake, new AAB(transformComponentPlayer.getCurrentGameSpacePosition(), transformComponentPlayer.getSize()), Constants.playerCollisionLayer, Constants.playerMaxHealth){
+        playerMake.addComponent(new HealthDamageComponent(playerMake, new AAB(transformComponentPlayer.getCurrentGameSpacePosition(), transformComponentPlayer.getSize()), Constants.playerCollisionLayer, Constants.playerMaxHealth, 0){
             @Override
             public void zeroHealthScript() {
                 deathCount += 1;
@@ -338,19 +336,7 @@ public class WizGame {
                 respawnComponent.script();
             }
         });
-        playerMake.addComponent(new CollisionComponent(playerMake, new AAB(transformComponentPlayer.getCurrentGameSpacePosition(), transformComponentPlayer.getSize()), Constants.playerCollisionLayer, false){
-            @Override
-            public void onCollide(Collision collision) {
-
-                CollisionComponent otherObjectCollisionComponent = (CollisionComponent) collision.getCollidedObject().getComponent("collision");
-
-                // Collision with Static Object
-                if (otherObjectCollisionComponent.isStaticObject()) {
-                    TransformComponent currentPosition = this.gameObject.getTransform();
-                    this.gameObject.getTransform().setCurrentGameSpacePositionNoVelocity(currentPosition.getCurrentGameSpacePosition().plus(collision.getMTV()));
-                }
-            }
-        });
+        playerMake.addComponent(new CollisionComponent(playerMake, new AAB(transformComponentPlayer.getCurrentGameSpacePosition(), transformComponentPlayer.getSize()), Constants.playerCollisionLayer, false, false));
         playerMake.addComponent(new ActionKeysComponent(playerMake, Constants.projectileKey, true){
 
             @Override
@@ -522,20 +508,19 @@ public class WizGame {
             });
         }
         projectile.addComponent(new ConstantMovementComponent(projectile, velocityProjectile));
-        projectile.addComponent(new CollisionComponent(projectile, new AAB(transformComponentProjectile.getCurrentGameSpacePosition(), transformComponentProjectile.getSize()), collisionLayer, false){
+        projectile.addComponent(new CollisionComponent(projectile, new AAB(transformComponentProjectile.getCurrentGameSpacePosition(), transformComponentProjectile.getSize()), collisionLayer, true, false){
             @Override
             public void onCollide(Collision collision) {
 
-                CollisionComponent otherObjectCollisionComponent = (CollisionComponent) collision.getCollidedObject().getComponent("collision");
-
+//                CollisionComponent otherObjectCollisionComponent = (CollisionComponent) collision.getCollidedObject().getComponent("collision");
 
                 // Collision with Static Object
-                if (otherObjectCollisionComponent.isStaticObject()) {
+//                if (otherObjectCollisionComponent.isStaticObject()) {
                     currentGameWorld.removeGameObject(projectile);
-                }
+//                }
             }
         });
-        projectile.addComponent(new DamageComponent(projectile, new AAB(transformComponentProjectile.getCurrentGameSpacePosition(), transformComponentProjectile.getSize()), collisionLayer, Constants.projectileDamage){
+        projectile.addComponent(new HealthDamageComponent(projectile, new AAB(transformComponentProjectile.getCurrentGameSpacePosition(), transformComponentProjectile.getSize()), collisionLayer, null, Constants.projectileDamage){
             @Override
             public void onCollide(Collision collision) {
                 super.onCollide(collision);
@@ -554,7 +539,7 @@ public class WizGame {
     }
 
     public double getBossHealth() {
-        HealthComponent h = (HealthComponent) boss.getComponent("health");
+        HealthDamageComponent h = (HealthDamageComponent) boss.getComponent("healthDamage");
         return (double) h.getCurrentHealth()/h.getMaxHealth();
     }
 
@@ -563,32 +548,13 @@ public class WizGame {
         gameObject.setName("BOSS");
         gameObject.addComponent(new TileComponent(TileType.BOSS));
 
-        // Boss Damages When Touched
-        gameObject.addComponent(new DamageComponent(gameObject, new AAB(transformComponent.getCurrentGameSpacePosition(), transformComponent.getSize()), Constants.moveEnemyCollisionLayer, Constants.trapsDamage, false));
-
-        // Boss Has Certain Health
-        gameObject.addComponent(new HealthComponent(gameObject, new AAB(transformComponent.getCurrentGameSpacePosition(), transformComponent.getSize()), Constants.moveEnemyCollisionLayer, Constants.bossMaxHealth){
+        // Boss Has Certain Health and Damages When Touched
+        gameObject.addComponent(new HealthDamageComponent(gameObject, new AAB(transformComponent.getCurrentGameSpacePosition(), transformComponent.getSize()), Constants.moveEnemyCollisionLayer, Constants.bossMaxHealth, Constants.trapsDamage){
             @Override
             public void zeroHealthScript() {
                 currentGameWorld.removeGameObject(this.gameObject);
                 for (GameObject g: secretHidden) {
                     currentGameWorld.removeGameObject(g);
-                }
-            }
-        });
-
-        // Boss Cannot Go Through Walls
-        gameObject.addComponent(new CollisionComponent(gameObject, new AAB(transformComponent.getCurrentGameSpacePosition(), transformComponent.getSize()), Constants.moveEnemyCollisionLayer, false){
-            @Override
-            public void onCollide(Collision collision) {
-
-                CollisionComponent otherObjectCollisionComponent = (CollisionComponent) collision.getCollidedObject().getComponent("collision");
-
-                // Collision with Static Object
-                if (otherObjectCollisionComponent.isStaticObject()) {
-                    // Ignore Certain Static Objects As Can Go Through Them
-                    TransformComponent currentPosition = this.gameObject.getTransform();
-                    this.gameObject.getTransform().setCurrentGameSpacePositionNoVelocity(currentPosition.getCurrentGameSpacePosition().plus(collision.getMTV()));
                 }
             }
         });
@@ -629,8 +595,7 @@ public class WizGame {
         int randColor = rand.nextInt(3);
         gameObject.addComponent(new ConstantAnimationComponent(gameObject, images.getResource(TileType.ENEMY.name()), List.of(new Vec2d(0,randColor), new Vec2d(1, randColor)), Constants.enemyMoveTime.divideToIntegralValue(new BigDecimal("2"))));
         gameObject.addComponent(new TileComponent(TileType.ENEMY));
-        gameObject.addComponent(new DamageComponent(gameObject, new AAB(transformComponent.getCurrentGameSpacePosition(), transformComponent.getSize()), Constants.mapCollisionLayer, Constants.trapsDamage, false));
-        gameObject.addComponent(new HealthComponent(gameObject, new AAB(transformComponent.getCurrentGameSpacePosition(), transformComponent.getSize()), Constants.mapCollisionLayer, Constants.trapsMaxHealth){
+        gameObject.addComponent(new HealthDamageComponent(gameObject, new AAB(transformComponent.getCurrentGameSpacePosition(), transformComponent.getSize()), Constants.mapCollisionLayer, Constants.trapsMaxHealth, Constants.trapsDamage){
             @Override
             public void zeroHealthScript() {
                 currentGameWorld.removeGameObject(this.gameObject);
@@ -696,7 +661,7 @@ public class WizGame {
     private class HealAction implements Action {
         @Override
         public Status update(float seconds) {
-            HealthComponent h = (HealthComponent) boss.getComponent("health");
+            HealthDamageComponent h = (HealthDamageComponent) boss.getComponent("healthDamage");
             h.heal(Constants.projectileDamage);
 
             return Status.SUCCESS;

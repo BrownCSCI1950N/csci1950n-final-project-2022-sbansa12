@@ -108,7 +108,7 @@ public class AlcGame {
         GameObject trash = new GameObject(trashTransformComponent, 1);
         trash.addComponent(new SpriteComponent(trash, trashSprite, new Vec2d(0,0)));
         trash.addComponent(new ElementComponent(Element.NULL));
-        trash.addComponent(new CollisionComponent(trash, new AAB(trashTransformComponent.getCurrentGameSpacePosition(), trashTransformComponent.getSize()), 0){
+        trash.addComponent(new CollisionComponent(trash, new AAB(trashTransformComponent.getCurrentGameSpacePosition(), trashTransformComponent.getSize()), 0, true, false){
             @Override
             public void onCollide(Collision collision) {
                 onCollision(trash, collision.getCollidedObject());
@@ -142,7 +142,7 @@ public class AlcGame {
         o.addComponent(new ElementComponent(e));
         o.addComponent(new SpriteComponent(o, sprite, new Vec2d(0,0)));
         o.addComponent(new MouseDragComponent(o, startGameCoordinate, startGameCoordinate));
-        o.addComponent(new CollisionComponent(o, new AAB(transformComponent.getCurrentGameSpacePosition(), transformComponent.getSize()), 0){
+        o.addComponent(new CollisionComponent(o, new AAB(transformComponent.getCurrentGameSpacePosition(), transformComponent.getSize()), 0, true, false){
             @Override
             public void onCollide(Collision collision) {
                 onCollision(this.gameObject, collision.getCollidedObject());
