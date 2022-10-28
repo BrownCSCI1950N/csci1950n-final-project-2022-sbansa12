@@ -1,4 +1,4 @@
-package engine.TerrainGeneration;
+package engine;
 
 public enum Axis {
     X,

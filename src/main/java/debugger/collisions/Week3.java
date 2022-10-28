@@ -53,8 +53,8 @@ public final class Week3 extends Week3Reqs {
 	}
 
 	public Vec2d closestPoint(Vec2d p, Vec2d p1, Vec2d p2) {
-		double distance1 = p.dist(p1);
-		double distance2 = p.dist(p2);
+		double distance1 = p.dist2(p1);
+		double distance2 = p.dist2(p2);
 		if (distance1 <= distance2) {
 			return p1;
 		} else {
