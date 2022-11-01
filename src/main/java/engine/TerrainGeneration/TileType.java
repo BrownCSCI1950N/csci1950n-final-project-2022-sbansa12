@@ -3,14 +3,22 @@ package engine.TerrainGeneration;
 public enum TileType {
     PLAYER,
     ROOM,
-    WALL,
+    WALL0,
+    WALL1,
     SPAWN,
     EXIT,
     STAIRS,
     TRAPS,
     ENEMY,
     BOSS,
-    HIDDEN;
+    HIDDEN,
+    BUTTON,
+    BOX0,
+    BOX1,
+    CORNERTOPLEFT,
+    CORNERTOPRIGHT,
+    CORNERBOTTOMLEFT,
+    CORNERBOTTOMRIGHT;
 
     @Override
     public String toString() {
@@ -19,8 +27,10 @@ public enum TileType {
                 return "P";
             case ROOM:
                 return "□";
-            case WALL:
+            case WALL0:
                 return "■";
+            case WALL1:
+                return "W";
             case SPAWN:
                 return "S";
             case EXIT:
@@ -35,6 +45,20 @@ public enum TileType {
                 return "B";
             case HIDDEN:
                 return "H";
+            case BUTTON:
+                return "b";
+            case BOX0:
+                return "▦";
+            case BOX1:
+                return "▤";
+            case CORNERTOPLEFT:
+                return "◤";
+            case CORNERTOPRIGHT:
+                return "◥";
+            case CORNERBOTTOMLEFT:
+                return "◣";
+            case CORNERBOTTOMRIGHT:
+                return "◢";
             default:
                 return "";
         }
@@ -47,7 +71,9 @@ public enum TileType {
             case "□":
                 return ROOM;
             case "■":
-                return WALL;
+                return WALL0;
+            case "W":
+                return WALL1;
             case "S":
                 return SPAWN;
             case "E":
@@ -62,6 +88,20 @@ public enum TileType {
                 return BOSS;
             case "H":
                 return HIDDEN;
+            case "b":
+                return BUTTON;
+            case "▦":
+                return BOX0;
+            case "▤":
+                return BOX1;
+            case "◤":
+                return CORNERTOPLEFT;
+            case "◥":
+                return CORNERTOPRIGHT;
+            case "◣":
+                return CORNERBOTTOMLEFT;
+            case "◢":
+                return CORNERBOTTOMRIGHT;
             default:
                 return null;
         }

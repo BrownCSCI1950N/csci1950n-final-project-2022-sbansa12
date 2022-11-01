@@ -29,7 +29,7 @@ public class Terrain {
         TileType[][] map = new TileType[sizeOfMap.y][sizeOfMap.x];
 
         for (TileType[] tileTypes : map) {
-            Arrays.fill(tileTypes, TileType.WALL);
+            Arrays.fill(tileTypes, TileType.WALL0);
         }
 
         // Draw Halls into Array
@@ -181,15 +181,6 @@ public class Terrain {
     }
 
     public String stringMap() {
-        TileType[][] map = convertTerrainFullTileMap();
-
-        StringBuilder toReturn = new StringBuilder();
-        for (TileType[] tileTypes : map) {
-            for (TileType tileType : tileTypes) {
-                toReturn.append(tileType).append(" ");
-            }
-            toReturn.append("\n");
-        }
-        return toReturn.toString();
+        return Utility.stringMap(convertTerrainFullTileMap());
     }
 }

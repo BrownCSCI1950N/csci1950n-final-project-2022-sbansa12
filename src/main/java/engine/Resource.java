@@ -16,6 +16,10 @@ public class Resource<T> {
     }
 
     public T getResource(String resourceName) {
-        return resources.get(resourceName);
+        T r = resources.get(resourceName);
+        if (r == null) {
+            System.out.println(resourceName + " resource does not exist");
+        }
+        return r;
     }
 }

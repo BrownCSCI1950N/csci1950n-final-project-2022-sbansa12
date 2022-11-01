@@ -4,7 +4,11 @@ import engine.Interval;
 import engine.Utility;
 import engine.support.Vec2d;
 
-public class AAB implements Shape{
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class AAB implements Shape {
 
     protected Vec2d topLeft;
     protected Vec2d size;
@@ -62,6 +66,11 @@ public class AAB implements Shape{
         Interval aabIntervalY = new Interval(aab.getTopLeft().dot(yAxis), aab.getTopLeft().plus(aab.getSize()).dot(yAxis));
 
         return thisIntervalX.overlap(aabIntervalX) && thisIntervalY.overlap(aabIntervalY);
+    }
+
+    @Override
+    public boolean isCollidingPolygon(Polygon p) {
+        return MTVPolygon(p, false) != null;
     }
 
     @Override
@@ -234,5 +243,50 @@ public class AAB implements Shape{
         }
 
         return direction.smult(magnitude);
+    }
+
+    @Override
+    public Vec2d MTVPolygon(Polygon p, boolean accountVelocity) {
+        List<Vec2d> aabSeparatingAxis = List.of(new Vec2d(1,0), new Vec2d(0,1));
+        List<Vec2d> polySeparatingAxis = p.getEdgeVectors().stream().map(x -> x.perpendicular().normalize()).collect(Collectors.toList());
+
+        List<Vec2d> separatingAxis = new LinkedList<>();
+        separatingAxis.addAll(aabSeparatingAxis);
+        separatingAxis.addAll(polySeparatingAxis);
+
+        double minMagnitude = Double.POSITIVE_INFINITY;
+        Vec2d mtv = null;
+
+        for (Vec2d axis : separatingAxis) {
+            Interval aab = project(axis);
+            Interval poly = p.project(axis);
+            Double mtv1d = aab.mtv(poly);
+            if (mtv1d == null) {
+                return null;
+            }
+            if (Math.abs(mtv1d) < minMagnitude) {
+                minMagnitude = Math.abs(mtv1d);
+                mtv = axis.smult(mtv1d);
+            }
+        }
+
+        return mtv;
+    }
+
+    @Override
+    public Interval project(Vec2d axis) {
+        Vec2d topLeft = this.getTopLeft();
+        Vec2d topRight = this.getTopLeft().plus(this.size.x, 0);
+        Vec2d bottomLeft = this.getTopLeft().plus(0, this.size.y);
+        Vec2d bottomRight = this.getTopLeft().plus(this.size);
+
+        List<Vec2d> points = List.of(topLeft, topRight, bottomLeft, bottomRight);
+
+        return projectPoints(axis, points);
+    }
+
+    @Override
+    public String toString() {
+        return "AAB: Position: " + topLeft + ", Size: " + size;
     }
 }

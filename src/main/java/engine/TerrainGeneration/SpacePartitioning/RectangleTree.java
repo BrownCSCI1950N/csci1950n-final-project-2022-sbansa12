@@ -1,6 +1,6 @@
 package engine.TerrainGeneration.SpacePartitioning;
 
-import engine.TerrainGeneration.Axis;
+import engine.Axis;
 import engine.TerrainGeneration.Room;
 import engine.support.Vec2i;
 
@@ -8,8 +8,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-import static engine.TerrainGeneration.Axis.X;
-import static engine.TerrainGeneration.Axis.Y;
+import static engine.Axis.X;
+import static engine.Axis.Y;
 
 class RectangleTree {
     private final Vec2i position;

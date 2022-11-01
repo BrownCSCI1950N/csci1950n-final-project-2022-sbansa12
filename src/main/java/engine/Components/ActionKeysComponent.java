@@ -50,9 +50,11 @@ public class ActionKeysComponent extends KeysComponent {
 
     }
 
+    public static final String tag = "actionKeys";
+
     @Override
     public String getTag() {
-        return "actionKeys";
+        return tag;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package wiz.Screens;
+package nin.Screens;
 
 import engine.Application;
 import engine.Screen;
@@ -9,7 +9,7 @@ import engine.UI.UIText;
 import engine.Utility;
 import engine.support.Vec2d;
 import javafx.scene.input.MouseEvent;
-import wiz.Constants;
+import nin.Constants.ConstantsInstructionsScreen;
 
 public class InstructionScreen extends Screen {
     public InstructionScreen(Application engine) {
@@ -21,44 +21,45 @@ public class InstructionScreen extends Screen {
                 null,
                 new Vec2d(0,0),
                 engine.getCurrentStageSize(),
-                Constants.backgroundColor);
+                ConstantsInstructionsScreen.instructionsScreenBackgroundColor);
         uiElements.add(background);
 
         // Create Title
         UIElement title = new UIText(
                 this,
                 background,
-                Constants.instructionsScreenTitlePosition,
-                Constants.instructionsScreenTitle,
-                Constants.titleColor,
-                Constants.titleFont);
+                ConstantsInstructionsScreen.instructionsScreenTitlePosition,
+                ConstantsInstructionsScreen.instructionsScreenTitle,
+                ConstantsInstructionsScreen.instructionsScreenTitleColor,
+                ConstantsInstructionsScreen.instructionsScreenTitleFont);
         background.addChildren(title);
 
+        // Create Instructions
         UIElement instructions = new UIText(
                 this,
                 background,
-                Constants.instructionsScreenInstructionsPosition,
-                Constants.instructionsScreenInstructions,
-                Constants.titleColor,
-                Constants.instructionsFont);
+                ConstantsInstructionsScreen.instructionsScreenInstructionsPosition,
+                ConstantsInstructionsScreen.instructionsScreenInstructions,
+                ConstantsInstructionsScreen.instructionsScreenTitleColor,
+                ConstantsInstructionsScreen.instructionsScreenInstructionsFont);
         background.addChildren(instructions);
 
-        // Create Start Button (Changes Screen to Game)
+        // Create Next Button (Changes Screen to Level Choose)
         UIElement startButton = new UIButton(
                 this,
                 background,
-                Constants.buttonPosition,
-                Constants.buttonSize,
-                Constants.buttonColor,
-                Constants.buttonArcSize,
-                Constants.instructionsScreenButtonText,
-                Constants.buttonTextPosition,
-                Constants.buttonTextColor,
-                Constants.buttonTextFont) {
+                ConstantsInstructionsScreen.instructionsScreenButtonPosition,
+                ConstantsInstructionsScreen.instructionsScreenButtonSize,
+                ConstantsInstructionsScreen.instructionsScreenButtonColor,
+                ConstantsInstructionsScreen.instructionsScreenButtonArcSize,
+                ConstantsInstructionsScreen.instructionsScreenButtonText,
+                ConstantsInstructionsScreen.instructionsScreenButtonTextPosition,
+                ConstantsInstructionsScreen.instructionsScreenButtonTextColor,
+                ConstantsInstructionsScreen.instructionsScreenButtonTextFont) {
             @Override
             public void onMouseClicked(MouseEvent e) {
                 if (Utility.inBoundingBox(currentPosition, currentPosition.plus(currentSize), new Vec2d(e.getX(), e.getY()))) {
-                    setActiveScreen("seed");
+                    setActiveScreen("select");
                 }
                 super.onMouseClicked(e);
             }
@@ -66,9 +67,9 @@ public class InstructionScreen extends Screen {
             @Override
             public void onMouseMoved(MouseEvent e) {
                 if (Utility.inBoundingBox(currentPosition, currentPosition.plus(currentSize), new Vec2d(e.getX(), e.getY()))) {
-                    this.color = Constants.buttonHoverColor;
+                    this.color = ConstantsInstructionsScreen.instructionsScreenButtonHoverColor;
                 } else {
-                    this.color = Constants.buttonColor;
+                    this.color = ConstantsInstructionsScreen.instructionsScreenButtonColor;
                 }
 
                 super.onMouseMoved(e);

@@ -1,5 +1,6 @@
 package engine.TerrainGeneration.TerrainReader;
 
+import engine.TerrainGeneration.LevelParseException;
 import engine.TerrainGeneration.Room;
 import engine.TerrainGeneration.Terrain;
 import engine.TerrainGeneration.TileType;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.Random;
 
 public class TerrainReader {
-    public Terrain createTerrain(String filepath, Random rand) throws IOException, NumberFormatException, LevelParseException {
+    public static Terrain createTerrain(String filepath, Random rand) throws IOException, NumberFormatException, LevelParseException {
         if (!filepath.contains(".txt")) {
             throw new LevelParseException("Invalid File Given To Terrain Reader: Requires .txt files");
         }
@@ -98,7 +99,7 @@ public class TerrainReader {
         return new Terrain(new Vec2i(width, height), rooms, halls, rand);
     }
 
-    private Room parseRoom(String line, String roomOrHall, BufferedReader myReader, Integer count, Vec2i mapSize) throws IOException, LevelParseException {
+    private static Room parseRoom(String line, String roomOrHall, BufferedReader myReader, Integer count, Vec2i mapSize) throws IOException, LevelParseException {
         String[] roomDefinition = line.split("\\|");
 
         if (roomDefinition.length != 2 && roomDefinition.length != 1) {

@@ -37,8 +37,10 @@ public class StateMachineComponent implements Component {
 
     }
 
+    public static final String tag = "stateMachine";
+
     @Override
     public String getTag() {
-        return "stateMachine";
+        return tag;
     }
 }

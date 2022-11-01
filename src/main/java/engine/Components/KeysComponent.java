@@ -25,10 +25,11 @@ public abstract class KeysComponent implements Component {
     public void draw(GraphicsContext g) {
 
     }
+    public static final String tag = null;
 
     @Override
     public String getTag() {
-        return null;
+        return tag;
     }
 
     public void script(Pair<InputEvents, List<KeyCode>> input) {}

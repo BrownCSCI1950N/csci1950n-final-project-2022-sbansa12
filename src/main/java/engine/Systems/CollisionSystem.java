@@ -3,6 +3,7 @@ package engine.Systems;
 import Pair.Pair;
 import engine.Components.Collision;
 import engine.Components.CollisionComponent;
+import engine.Components.TransformComponent;
 import engine.GameObject;
 import engine.GameWorld;
 import engine.support.Vec2d;
@@ -17,15 +18,15 @@ import java.util.Set;
 
 public class CollisionSystem extends System {
 
-    private final Set<Pair<CollisionComponent, CollisionComponent>> collided;
+    private final Set<Pair<CollisionComponent, CollisionComponent>> collided = new HashSet<>();
 
-    private final Map<Integer, List<CollisionComponent>> gameObjects;
+    private final Map<Integer, List<CollisionComponent>> gameObjects = new HashMap<>();
 
     private List<Pair<Integer, Integer>> layersCollide;
 
-    boolean bothObjectCollisionScript;
+    static boolean bothObjectCollisionScript;
 
-    List<Pair<String,String>> tagsCollide;
+    static List<Pair<String,String>> tagsCollide;
 
     /**
      * Constructor for a System. Requires all game objects zIndex to be unique game object for the system. Assumes we want to check collisions between same tags. To add collisions across tags, use method.
@@ -36,11 +37,12 @@ public class CollisionSystem extends System {
      */
     public CollisionSystem(GameWorld gameWorld, List<String> relevantTags, boolean bothObjectCollisionScript) {
         super(gameWorld, relevantTags);
-        this.collided = new HashSet<>();
-        this.gameObjects = new HashMap<>();
         this.layersCollide = new LinkedList<>();
-        this.bothObjectCollisionScript = bothObjectCollisionScript;
-        this.tagsCollide = new LinkedList<>();
+        CollisionSystem.bothObjectCollisionScript = bothObjectCollisionScript;
+        tagsCollide = new LinkedList<>();
+        for (String tag: relevantTags) {
+            tagsCollide.add(new Pair<>(tag, tag));
+        }
     }
 
     /**
@@ -49,6 +51,11 @@ public class CollisionSystem extends System {
      */
     public void setLayersCollide(List<Pair<Integer, Integer>> layersCollide) {
         this.layersCollide = layersCollide;
+    }
+
+    public void removeTagsCollide(String s1, String s2) {
+        tagsCollide.remove(new Pair<>(s1, s2));
+        tagsCollide.remove(new Pair<>(s2, s1));
     }
 
     public void addTagsCollide(String s1, String s2) {
@@ -67,6 +74,21 @@ public class CollisionSystem extends System {
                     checkCollision(gameObject1, layerCollideCheck.getRight());
                 }
             }
+        }
+
+        Set<CollisionComponent> notCollided = new HashSet<>();
+
+        for (Integer keys : gameObjects.keySet()) {
+            notCollided.addAll(gameObjects.get(keys));
+        }
+
+        for (Pair<CollisionComponent, CollisionComponent> col : collided) {
+            notCollided.remove(col.getRight());
+            notCollided.remove(col.getLeft());
+        }
+
+        for (CollisionComponent c : notCollided) {
+            c.onNotCollide();
         }
 
         collided.clear();
@@ -107,9 +129,11 @@ public class CollisionSystem extends System {
     }
 
     public void checkCollision(CollisionComponent gameObject1, Integer layer) {
+//        Collision toReturn = null;
         List<CollisionComponent> layer2 = gameObjects.get(layer);
         if (layer2 == null) {
             return;
+//            return null;
         }
         for (CollisionComponent gameObject2: layer2) {
 
@@ -121,23 +145,57 @@ public class CollisionSystem extends System {
             if (gameObject1 != gameObject2) {
 
                 // Check if the objects collide
-                if (gameObject1.getCollisionShape().isColliding(gameObject2.getCollisionShape())) {
+                Vec2d MTV2 = gameObject1.getCollisionShape().MTV(gameObject2.getCollisionShape(), true);
+                if (MTV2 != null) {
 
                     // Make sure you have not already found this collision
                     if (!collided.contains(new Pair<>(gameObject1, gameObject2))) {
-                        Vec2d MTV1 = gameObject2.getCollisionShape().MTV(gameObject1.getCollisionShape(), true);
-                        Vec2d MTV2 = gameObject1.getCollisionShape().MTV(gameObject2.getCollisionShape(), true);
 
-                        gameObject1.onCollide(new Collision(gameObject2.getGameObject(), MTV1));
-                        if(bothObjectCollisionScript) {
-                            gameObject2.onCollide(new Collision(gameObject1.getGameObject(), MTV2));
+//                        toReturn = new Collision(gameObject2.getGameObject(), null);
+
+                        // Check if Overlap Is Allowed
+                        if (gameObject1.allowOverlap() || gameObject2.allowOverlap()) {
+                            gameObject1.onCollide(new Collision(gameObject2.getGameObject(), null));
+                            if(bothObjectCollisionScript) {
+                                gameObject2.onCollide(new Collision(gameObject1.getGameObject(), null));
+                            }
+                        } else if (!gameObject1.allowOverlap() && !gameObject2.allowOverlap()) {
+                            // If Overlap is not allowed, based on static-ness shift position by MTV
+                            Vec2d MTV1 = gameObject2.getCollisionShape().MTV(gameObject1.getCollisionShape(), true);
+
+
+                            if (!gameObject1.isStaticApplyMTV() && gameObject2.isStaticApplyMTV()) {
+                                TransformComponent currentPosition = gameObject1.getGameObject().getTransform();
+                                gameObject1.getGameObject().getTransform().setCurrentGameSpacePositionNoVelocity(currentPosition.getCurrentGameSpacePosition().plus(MTV1));
+                            } else if (gameObject1.isStaticApplyMTV() && !gameObject2.isStaticApplyMTV()) {
+                                TransformComponent currentPosition = gameObject2.getGameObject().getTransform();
+                                gameObject2.getGameObject().getTransform().setCurrentGameSpacePositionNoVelocity(currentPosition.getCurrentGameSpacePosition().plus(MTV2));
+                            } else if (!gameObject1.isStaticApplyMTV() && !gameObject2.isStaticApplyMTV()) {
+                                TransformComponent currentPosition1 = gameObject1.getGameObject().getTransform();
+                                gameObject1.getGameObject().getTransform().setCurrentGameSpacePositionNoVelocity(currentPosition1.getCurrentGameSpacePosition().plus(MTV1.sdiv(2)));
+
+                                TransformComponent currentPosition2 = gameObject2.getGameObject().getTransform();
+                                gameObject2.getGameObject().getTransform().setCurrentGameSpacePositionNoVelocity(currentPosition2.getCurrentGameSpacePosition().plus(MTV2.sdiv(2)));
+                            } else {
+                                // Two Static Objects Should Not Collide
+                                assert false;
+                            }
+
+                            gameObject1.onCollide(new Collision(gameObject2.getGameObject(), MTV1));
+                            if(bothObjectCollisionScript) {
+                                gameObject2.onCollide(new Collision(gameObject1.getGameObject(), MTV2));
+                            }
                         }
+
+                        // Save That We Have Found This Collision
                         collided.add(new Pair<>(gameObject1, gameObject2));
                         collided.add(new Pair<>(gameObject2, gameObject1));
                     }
                 }
             }
         }
+
+//        return toReturn;
     }
 
     public List<String> getRelevantTags(){

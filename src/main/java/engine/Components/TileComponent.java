@@ -13,6 +13,10 @@ public class TileComponent implements Component {
         return tileType;
     }
 
+    public boolean isPlayer() {
+        return tileType == TileType.PLAYER;
+    }
+
     @Override
     public void tick(long nanosSinceLastTick) {
 

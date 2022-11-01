@@ -1,14 +1,20 @@
 package engine.Systems;
 
+import engine.Components.SpriteComponent;
 import engine.GameObject;
 import engine.GameWorld;
 import javafx.scene.canvas.GraphicsContext;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class TickSystem extends System {
-    public TickSystem(GameWorld gameWorld, List<String> relevantTags) {
-        super(gameWorld, relevantTags);
+    public TickSystem(GameWorld gameWorld, List<String> relevantTagsNew) {
+        super(gameWorld, new LinkedList<>());
+        relevantTags.addAll(relevantTagsNew);
+        if (!relevantTags.contains(SpriteComponent.tag)) {
+            relevantTags.add(SpriteComponent.tag);
+        }
     }
 
     public void tick(long t) {

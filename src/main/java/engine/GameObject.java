@@ -94,7 +94,7 @@ public class GameObject {
         if (name.equals("")) {
             return super.toString();
         } else {
-            return "(Name: " + name + " Position: " + transformComponent.getCurrentGameSpacePosition() + ")";
+            return "(Name: " + name + " Position: " + transformComponent.getCurrentGameSpacePosition() + " zIndex: "+zIndex+")";
         }
     }
 }

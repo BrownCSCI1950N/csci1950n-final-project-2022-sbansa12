@@ -2,6 +2,8 @@ package engine;
 
 import engine.support.Vec2d;
 
+import java.util.List;
+
 public class Utility {
     public static boolean inBoundingBox(Vec2d start, Vec2d end, Vec2d coordinate) {
         boolean xInRange = (start.x <= coordinate.x && coordinate.x <= end.x);
@@ -37,5 +39,20 @@ public class Utility {
         } else {
             return p2;
         }
+    }
+
+    public static Vec2d closestPoint(Vec2d p, List<Vec2d> points) {
+        assert points.size() > 0;
+        double distance = p.dist2(points.get(0));
+        Vec2d toReturn = points.get(0);
+        for (Vec2d point : points) {
+            double distance1 = p.dist2(point);
+            if (distance1 < distance) {
+                distance = distance1;
+                toReturn = point;
+            }
+        }
+
+        return toReturn;
     }
 }

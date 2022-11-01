@@ -7,7 +7,7 @@ public class TransformComponent implements Component {
     private Vec2d oldGameSpacePosition;
     private Vec2d currentGameSpacePosition;
     private Vec2d currentGameSpacePositionVelocity;
-    private final Vec2d currentSize;
+    private Vec2d currentSize;
 
     public TransformComponent(Vec2d gameSpacePosition, Vec2d size) {
         this.oldGameSpacePosition = gameSpacePosition;
@@ -44,6 +44,9 @@ public class TransformComponent implements Component {
 
     public Vec2d getSize() {
         return currentSize;
+    }
+    public void setSize(Vec2d newSize) {
+        this.currentSize = newSize;
     }
 
     @Override

@@ -1,6 +1,6 @@
 package engine.TerrainGeneration.SpacePartitioning;
 
-import engine.TerrainGeneration.Axis;
+import engine.Axis;
 import engine.TerrainGeneration.Room;
 import engine.TerrainGeneration.Terrain;
 import engine.TerrainGeneration.TileType;

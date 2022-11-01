@@ -1,11 +1,9 @@
 How To Play Game:
-1) Run the main function in wiz/Main.
+1) Run the main function in nin/Main.
 2) Wait till the game screen pops up.
 3) Click the start button on the title screen.
 4) After reading the instructions, click the "X" to close the instructions screen.
-5) Click the textbox and enter a seed number, or just click create new world. (2218 is a special number that leads directly to the boss room)
+5) Click the level you want to play
 6) Play the game!
-7) You can use WASD to move, and SPACE to shoot projectiles. Clicking R will cause the game to restart by going back to the world generation screen.
-8) First goal is to find the blue portal
-9) Then to defeat the boss
-10) Then you can reach the true exit!
+7) Use the Arrow keys to move and jump. Clicking Q will cause the game to restart by going back to the level selection screen. Clicking K will cause the player to appear back at the start.
+8) The goal is to click the button then reach the exit!

@@ -116,8 +116,8 @@ public class Viewport extends UIElement {
             }
         }
 
-        if (gameWorld != null) {
-            gameWorld.onTick(nanosSincePreviousTick);
+        if (this.gameWorld != null) {
+            this.gameWorld.onTick(nanosSincePreviousTick);
         }
 
         super.onTick(nanosSincePreviousTick);
@@ -128,8 +128,8 @@ public class Viewport extends UIElement {
      */
     @Override
     public void onLateTick() {
-        if (gameWorld != null) {
-            gameWorld.onLateTick();
+        if (this.gameWorld != null) {
+            this.gameWorld.onLateTick();
         }
 
         super.onLateTick();
@@ -151,8 +151,8 @@ public class Viewport extends UIElement {
 
         g.setTransform(gameToScreen);
 
-        if (gameWorld != null) {
-            gameWorld.draw(g);
+        if (this.gameWorld != null) {
+            this.gameWorld.draw(g);
         }
 
         g.setTransform(originalTransform);
@@ -161,8 +161,8 @@ public class Viewport extends UIElement {
 
     @Override
     public void reset() {
-        if (gameWorld != null) {
-            gameWorld.reset();
+        if (this.gameWorld != null) {
+            this.gameWorld.reset();
         }
 
         super.reset();
@@ -174,8 +174,8 @@ public class Viewport extends UIElement {
      */
     @Override
     public void onKeyTyped(KeyEvent e) {
-        if (gameWorld != null) {
-            gameWorld.onKeyTyped(e);
+        if (this.gameWorld != null) {
+            this.gameWorld.onKeyTyped(e);
         }
 
         super.onKeyTyped(e);
@@ -219,8 +219,8 @@ public class Viewport extends UIElement {
             }
         }
 
-        if (gameWorld != null) {
-            gameWorld.onKeyPressed(e);
+        if (this.gameWorld != null) {
+            this.gameWorld.onKeyPressed(e);
         }
 
         super.onKeyPressed(e);
@@ -248,8 +248,8 @@ public class Viewport extends UIElement {
             }
         }
 
-        if (gameWorld != null) {
-            gameWorld.onKeyReleased(e);
+        if (this.gameWorld != null) {
+            this.gameWorld.onKeyReleased(e);
         }
 
         super.onKeyReleased(e);
@@ -263,8 +263,8 @@ public class Viewport extends UIElement {
     public void onMouseClicked(MouseEvent e) {
         Vec2d screenCoordinate = new Vec2d(e.getX(), e.getY());
         Vec2d gameCoordinate = convertScreenCoordinateToGame(screenCoordinate);
-        if (gameWorld != null) {
-            gameWorld.onMouseClicked(gameCoordinate);
+        if (this.gameWorld != null) {
+            this.gameWorld.onMouseClicked(gameCoordinate);
         }
 
         super.onMouseClicked(e);
@@ -278,8 +278,8 @@ public class Viewport extends UIElement {
     public void onMousePressed(MouseEvent e) {
         Vec2d screenCoordinate = new Vec2d(e.getX(), e.getY());
         Vec2d gameCoordinate = convertScreenCoordinateToGame(screenCoordinate);
-        if (gameWorld != null) {
-            gameWorld.onMousePressed(gameCoordinate);
+        if (this.gameWorld != null) {
+            this.gameWorld.onMousePressed(gameCoordinate);
         }
 
         super.onMousePressed(e);
@@ -293,8 +293,8 @@ public class Viewport extends UIElement {
     public void onMouseReleased(MouseEvent e) {
         Vec2d screenCoordinate = new Vec2d(e.getX(), e.getY());
         Vec2d gameCoordinate = convertScreenCoordinateToGame(screenCoordinate);
-        if (gameWorld != null) {
-            gameWorld.onMouseReleased(gameCoordinate);
+        if (this.gameWorld != null) {
+            this.gameWorld.onMouseReleased(gameCoordinate);
         }
 
         super.onMouseReleased(e);
@@ -308,8 +308,8 @@ public class Viewport extends UIElement {
     public void onMouseDragged(MouseEvent e) {
         Vec2d screenCoordinate = new Vec2d(e.getX(), e.getY());
         Vec2d gameCoordinate = convertScreenCoordinateToGame(screenCoordinate);
-        if (gameWorld != null) {
-            gameWorld.onMouseDragged(gameCoordinate);
+        if (this.gameWorld != null) {
+            this.gameWorld.onMouseDragged(gameCoordinate);
         }
 
         super.onMouseDragged(e);
@@ -321,8 +321,8 @@ public class Viewport extends UIElement {
      */
     @Override
     public void onMouseMoved(MouseEvent e) {
-        if (gameWorld != null) {
-            gameWorld.onMouseMoved(e);
+        if (this.gameWorld != null) {
+            this.gameWorld.onMouseMoved(e);
         }
 
         super.onMouseMoved(e);
@@ -334,8 +334,8 @@ public class Viewport extends UIElement {
      */
     @Override
     public void onMouseWheelMoved(ScrollEvent e) {
-        if (gameWorld != null) {
-            gameWorld.onMouseWheelMoved(e);
+        if (this.gameWorld != null) {
+            this.gameWorld.onMouseWheelMoved(e);
         }
 
         super.onMouseWheelMoved(e);
@@ -347,8 +347,8 @@ public class Viewport extends UIElement {
      */
     @Override
     public void onFocusChanged(boolean newVal) {
-        if (gameWorld != null) {
-            gameWorld.onFocusChanged(newVal);
+        if (this.gameWorld != null) {
+            this.gameWorld.onFocusChanged(newVal);
         }
 
         super.onFocusChanged(newVal);
@@ -362,8 +362,8 @@ public class Viewport extends UIElement {
     public void onResize(Vec2d newSize) {
         this.currentPosition = originalPosition.pmult(newSize);
         this.currentViewportSize = originalViewportSize.pmult(newSize);
-        if (gameWorld != null) {
-            gameWorld.onResize(newSize);
+        if (this.gameWorld != null) {
+            this.gameWorld.onResize(newSize);
         }
 
         super.onResize(newSize);
@@ -374,8 +374,8 @@ public class Viewport extends UIElement {
      */
     @Override
     public void onShutdown() {
-        if (gameWorld != null) {
-            gameWorld.onShutdown();
+        if (this.gameWorld != null) {
+            this.gameWorld.onShutdown();
         }
 
         super.onShutdown();
@@ -386,8 +386,8 @@ public class Viewport extends UIElement {
      */
     @Override
     public void onStartup() {
-        if (gameWorld != null) {
-            gameWorld.onStartup();
+        if (this.gameWorld != null) {
+            this.gameWorld.onStartup();
         }
 
         super.onStartup();

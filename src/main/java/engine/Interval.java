@@ -21,4 +21,23 @@ public final class Interval {
     public boolean inInterval(double point) {
         return this.min <= point && point <= this.max;
     }
+
+    public Double mtv(Interval b) {
+        Interval a = this;
+        double aRight = b.max - a.min;
+        double aLeft = a.max - b.min;
+        if (aLeft < 0 || aRight < 0) {
+            return null;
+        }
+        if (aRight < aLeft) {
+            return aRight;
+        } else {
+            return -aLeft;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Interval: (" + min + ", " + max + ")";
+    }
 }

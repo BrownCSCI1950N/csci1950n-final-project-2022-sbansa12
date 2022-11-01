@@ -69,9 +69,10 @@ public class MoveKeysComponent extends KeysComponent {
 
     }
 
+    public static final String tag = "moveKeys";
     @Override
     public String getTag() {
-        return "moveKeys";
+        return tag;
     }
 
     @Override

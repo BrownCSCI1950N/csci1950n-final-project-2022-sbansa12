@@ -56,7 +56,7 @@ public class WizGame {
         // Setup Resources
         images.putResource("PLAYER", new Sprite(new Image("file:.\\src\\main\\java\\wiz\\Images\\PLAYER.png"), new Vec2d(2,9)));
         images.putResource("PROJECTILE_PLAYER", new Sprite(new Image("file:.\\src\\main\\java\\wiz\\Images\\PROJECTILE_PLAYER.png"), new Vec2d(1,1)));
-        images.putResource("WALL", new Sprite(new Image("file:.\\src\\main\\java\\wiz\\Images\\WALL.png"), new Vec2d(1,1)));
+        images.putResource("WALL0", new Sprite(new Image("file:.\\src\\main\\java\\wiz\\Images\\WALL.png"), new Vec2d(1,1)));
         images.putResource("ROOM", new Sprite(new Image("file:.\\src\\main\\java\\wiz\\Images\\ROOM.png"), new Vec2d(2,1)));
         images.putResource("SPAWN", new Sprite(new Image("file:.\\src\\main\\java\\wiz\\Images\\SPAWN.png"), new Vec2d(1,1)));
         images.putResource("EXIT", new Sprite(new Image("file:.\\src\\main\\java\\wiz\\Images\\EXIT.png"), new Vec2d(1,1)));
@@ -180,7 +180,7 @@ public class WizGame {
         collisionSystem.setLayersCollide(Constants.layersCollide);
         level.prependSystem(collisionSystem);
         level.prependSystem(new KeyProcessSystem(level, List.of("moveKeys", "actionKeys")));
-        level.prependSystem(new TickSystem(level, List.of("constantMovement", "timerAction", "sprite", "stateMachine", "discovered", "pathMovement", "AI")));
+        level.prependSystem(new TickSystem(level, List.of("constantMovement", "timerAction", "stateMachine", "discovered", "pathMovement", "AI")));
         level.appendSystem(new LateTickSystem(level, List.of("center")));
 
         // Add Level Map Game Objects
@@ -204,11 +204,11 @@ public class WizGame {
             gameObject.addComponent(new SpriteComponent(gameObject, images.getResource(TileType.ROOM.name()), new Vec2d(rand.nextInt(2),0)));
             gameObject.addComponent(new TileComponent(TileType.ROOM));
             return gameObject;
-        } else if (t == TileType.WALL) {
+        } else if (t == TileType.WALL0) {
             GameObject gameObject = new GameObject(transformComponent, getZIndex());
-            gameObject.setName("WALL");
-            gameObject.addComponent(new SpriteComponent(gameObject, images.getResource(TileType.WALL.name()), new Vec2d(0,0)));
-            gameObject.addComponent(new TileComponent(TileType.WALL));
+            gameObject.setName("WALL0");
+            gameObject.addComponent(new SpriteComponent(gameObject, images.getResource(TileType.WALL0.name()), new Vec2d(0,0)));
+            gameObject.addComponent(new TileComponent(TileType.WALL0));
             gameObject.addComponent(new CollisionComponent(gameObject, new AAB(transformComponent.getCurrentGameSpacePosition(), transformComponent.getSize()), Constants.mapCollisionLayer, false, true));
             return gameObject;
         } else if (t == TileType.SPAWN) {
@@ -225,11 +225,14 @@ public class WizGame {
             gameObject.addComponent(new CollisionComponent(gameObject, new AAB(transformComponent.getCurrentGameSpacePosition(), transformComponent.getSize()), Constants.mapCollisionLayer, true, false){
                 @Override
                 public void onCollide(Collision collision) {
-                    if (collision.getCollidedObject().hasComponentTag("player")) {
-                        if (bossFight) {
-                            gameScreen.setActiveScreen("win");
-                        } else {
-                            gameScreen.setActiveScreen("tryAgain");
+                    if (collision.getCollidedObject().hasComponentTag("tile")) {
+                        TileComponent t = (TileComponent) collision.getCollidedObject().getComponent("tile");
+                        if (t.isPlayer()) {
+                            if (bossFight) {
+                                gameScreen.setActiveScreen("win");
+                            } else {
+                                gameScreen.setActiveScreen("tryAgain");
+                            }
                         }
                     }
                 }
@@ -252,9 +255,12 @@ public class WizGame {
             gameObject.addComponent(new CollisionComponent(gameObject, new AAB(transformComponent.getCurrentGameSpacePosition(), transformComponent.getSize()), Constants.mapCollisionLayer, true, false){
                 @Override
                 public void onCollide(Collision collision) {
-                    if (collision.getCollidedObject().hasComponentTag("player")) {
-                        currentGameWorld = generateBossLevel(rand);
-                        viewport.setGameWorld(currentGameWorld);
+                    if (collision.getCollidedObject().hasComponentTag("tile")) {
+                        TileComponent t = (TileComponent) collision.getCollidedObject().getComponent("tile");
+                        if (t.isPlayer()) {
+                            currentGameWorld = generateBossLevel(rand);
+                            viewport.setGameWorld(currentGameWorld);
+                        }
                     }
                 }
             });
@@ -264,7 +270,7 @@ public class WizGame {
         } else if (t == TileType.HIDDEN) {
             GameObject gameObject = new GameObject(transformComponent, getZIndex());
             gameObject.setName("HIDDEN");
-            gameObject.addComponent(new SpriteComponent(gameObject, images.getResource(TileType.WALL.name()), new Vec2d(0,0)));
+            gameObject.addComponent(new SpriteComponent(gameObject, images.getResource(TileType.WALL0.name()), new Vec2d(0,0)));
             gameObject.addComponent(new TileComponent(TileType.HIDDEN));
             gameObject.addComponent(new CollisionComponent(gameObject, new AAB(transformComponent.getCurrentGameSpacePosition(), transformComponent.getSize()), Constants.mapCollisionLayer, false, true));
             secretHidden.add(gameObject);
@@ -311,7 +317,6 @@ public class WizGame {
         TransformComponent transformComponentPlayer = new TransformComponent(respawnLocation, Constants.playerSize);
         GameObject playerMake = new GameObject(transformComponentPlayer, getZIndex());
         playerMake.setName("PLAYER");
-        playerMake.addComponent(new PlayerComponent());
         playerMake.addComponent(new TileComponent(TileType.PLAYER));
 
         StateMachineComponent sm = new StateMachineComponent();
@@ -404,7 +409,9 @@ public class WizGame {
 
     public static void createProjectile(GameObject shooter) {
         Direction projectileDirection;
-        if (shooter.hasComponentTag("player")) {
+        assert shooter.hasComponentTag("tile");
+        TileComponent t = (TileComponent) shooter.getComponent("tile");
+        if (t.isPlayer()) {
             Vec2d velocityShooter = shooter.getTransform().getVelocity();
             projectileDirection = directionProjectileShootPlayer(velocityShooter);
         } else {
@@ -418,7 +425,7 @@ public class WizGame {
 
 
         if (projectileDirection ==  Direction.LEFT) {
-            if (shooter.hasComponentTag("player")) {
+            if (t.isPlayer()) {
                 initialPosition = shooter.getTransform().getCurrentGameSpacePosition().minus(new Vec2d(Constants.projectileSize.x, (Constants.projectileSize.y-Constants.playerSize.y)/2));
                 velocityProjectile = new Vec2d(-Constants.projectileSpeedPlayer, 0);
             } else {
@@ -426,7 +433,7 @@ public class WizGame {
                 velocityProjectile = new Vec2d(-Constants.projectileSpeedEnemy, 0);
             }
         } else if (projectileDirection ==  Direction.RIGHT) {
-            if (shooter.hasComponentTag("player")) {
+            if (t.isPlayer()) {
                 initialPosition = shooter.getTransform().getCurrentGameSpacePosition().minus(new Vec2d(-Constants.playerSize.x, (Constants.projectileSize.y-Constants.playerSize.y)/2));
                 velocityProjectile = new Vec2d(Constants.projectileSpeedPlayer, 0);
             } else {
@@ -434,7 +441,7 @@ public class WizGame {
                 velocityProjectile = new Vec2d(Constants.projectileSpeedEnemy, 0);
             }
         } else if (projectileDirection ==  Direction.UP) {
-            if (shooter.hasComponentTag("player")) {
+            if (t.isPlayer()) {
                 initialPosition = shooter.getTransform().getCurrentGameSpacePosition().minus(new Vec2d( (Constants.projectileSize.x-Constants.playerSize.x)/2, Constants.projectileSize.y));
                 velocityProjectile = new Vec2d(0,-Constants.projectileSpeedPlayer);
             } else {
@@ -442,7 +449,7 @@ public class WizGame {
                 velocityProjectile = new Vec2d(0,-Constants.projectileSpeedEnemy);
             }
         } else if (projectileDirection ==  Direction.DOWN) {
-            if (shooter.hasComponentTag("player")) {
+            if (t.isPlayer()) {
                 initialPosition = shooter.getTransform().getCurrentGameSpacePosition().minus(new Vec2d( (Constants.projectileSize.x-Constants.playerSize.x)/2, -Constants.playerSize.y));
                 velocityProjectile = new Vec2d(0, Constants.projectileSpeedPlayer);
             } else {
@@ -450,7 +457,7 @@ public class WizGame {
                 velocityProjectile = new Vec2d(0, Constants.projectileSpeedEnemy);
             }
         } else if (projectileDirection ==  Direction.SE) {
-            if (shooter.hasComponentTag("player")) {
+            if (t.isPlayer()) {
                 initialPosition = shooter.getTransform().getCurrentGameSpacePosition().minus(new Vec2d( -Constants.playerSize.x, -Constants.playerSize.y));
                 velocityProjectile = new Vec2d(Constants.projectileSpeedPlayer, Constants.projectileSpeedPlayer);
             } else {
@@ -458,7 +465,7 @@ public class WizGame {
                 velocityProjectile = new Vec2d(Constants.projectileSpeedEnemy, Constants.projectileSpeedEnemy);
             }
         } else if (projectileDirection ==  Direction.SW) {
-            if (shooter.hasComponentTag("player")) {
+            if (t.isPlayer()) {
                 initialPosition = shooter.getTransform().getCurrentGameSpacePosition().minus(new Vec2d( Constants.projectileSize.x, -Constants.playerSize.y));
                 velocityProjectile = new Vec2d(-Constants.projectileSpeedPlayer, Constants.projectileSpeedPlayer);
             } else {
@@ -466,7 +473,7 @@ public class WizGame {
                 velocityProjectile = new Vec2d(-Constants.projectileSpeedEnemy, Constants.projectileSpeedEnemy);
             }
         } else if (projectileDirection ==  Direction.NE) {
-            if (shooter.hasComponentTag("player")) {
+            if (t.isPlayer()) {
                 initialPosition = shooter.getTransform().getCurrentGameSpacePosition().minus(new Vec2d( -Constants.playerSize.x, Constants.playerSize.y));
                 velocityProjectile = new Vec2d(Constants.projectileSpeedPlayer, -Constants.projectileSpeedPlayer);
             } else {
@@ -474,7 +481,7 @@ public class WizGame {
                 velocityProjectile = new Vec2d(Constants.projectileSpeedEnemy, -Constants.projectileSpeedEnemy);
             }
         } else if (projectileDirection ==  Direction.NW) {
-            if (shooter.hasComponentTag("player")) {
+            if (t.isPlayer()) {
                 initialPosition = shooter.getTransform().getCurrentGameSpacePosition().minus(new Vec2d( Constants.projectileSize.x, Constants.playerSize.y));
                 velocityProjectile = new Vec2d(-Constants.projectileSpeedPlayer, -Constants.projectileSpeedPlayer);
             } else {
@@ -486,7 +493,7 @@ public class WizGame {
         TransformComponent transformComponentProjectile = new TransformComponent(initialPosition, Constants.projectileSize);
         GameObject projectile = new GameObject(transformComponentProjectile, getZIndex());
         Integer collisionLayer;
-        if (shooter.hasComponentTag("player")) {
+        if (t.isPlayer()) {
             projectile.setName("PROJECTILE_PLAYER");
             projectile.addComponent(new SpriteComponent(projectile, images.getResource("PROJECTILE_PLAYER"), new Vec2d(0,0)));
             collisionLayer = Constants.projectilesPlayerCollisionLayer;

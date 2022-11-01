@@ -1,6 +1,13 @@
 package engine.Shape;
 
+import engine.Interval;
 import engine.support.Vec2d;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static engine.Utility.closestPoint;
 
 public class Circle implements Shape {
 
@@ -24,6 +31,7 @@ public class Circle implements Shape {
 
     @Override
     public void updatePosition(Vec2d update) {
+        assert false;
         this.center = update;
     }
 
@@ -47,6 +55,11 @@ public class Circle implements Shape {
     @Override
     public boolean isCollidingAAB(AAB aab) {
         return aab.isCollidingCircle(this);
+    }
+
+    @Override
+    public boolean isCollidingPolygon(Polygon p) {
+        return MTVPolygon(p, false) != null;
     }
 
     @Override
@@ -89,7 +102,7 @@ public class Circle implements Shape {
 
     @Override
     public Vec2d MTVAAB(AAB aab, boolean accountVelocity) {
-        Vec2d f = aab.MTV(this, accountVelocity);
+        Vec2d f = aab.MTVCircle(this, accountVelocity);
         return f == null ? null : f.reflect();
     }
 
@@ -102,5 +115,45 @@ public class Circle implements Shape {
         Vec2d direction = this.getCenter().minus(p).normalize();
 
         return direction.smult(magnitude);
+    }
+
+    @Override
+    public Vec2d MTVPolygon(Polygon p, boolean accountVelocity) {
+        // Find the Closest Vertex of Polygon to Circle Center
+        Vec2d closestPoint = closestPoint(this.center, p.getPoints());
+        List<Vec2d> circleSeparatingAxis = List.of(closestPoint.minus(this.center).normalize());
+
+        List<Vec2d> polySeparatingAxis = p.getEdgeVectors().stream().map(x -> x.perpendicular().normalize()).collect(Collectors.toList());
+
+        List<Vec2d> separatingAxis = new LinkedList<>();
+        separatingAxis.addAll(circleSeparatingAxis);
+        separatingAxis.addAll(polySeparatingAxis);
+
+        double minMagnitude = Double.POSITIVE_INFINITY;
+        Vec2d mtv = null;
+
+        for (Vec2d axis : separatingAxis) {
+            Interval circle = project(axis);
+            Interval poly = p.project( axis);
+            Double mtv1d = circle.mtv(poly);
+            if (mtv1d == null) {
+                return null;
+            }
+            if (Math.abs(mtv1d) < minMagnitude) {
+                minMagnitude = Math.abs(mtv1d);
+                mtv = axis.smult(mtv1d);
+            }
+        }
+
+        return mtv;
+    }
+
+    @Override
+    public Interval project(Vec2d axis) {
+        Vec2d center = this.center.projectOnto(axis);
+        Vec2d translate = axis.smult(this.radius);
+        List<Vec2d> points = List.of(center.plus(translate), center.minus(translate));
+
+        return projectPoints(axis, points);
     }
 }

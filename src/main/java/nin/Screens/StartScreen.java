@@ -1,4 +1,4 @@
-package wiz.Screens;
+package nin.Screens;
 
 import engine.Application;
 import engine.Screen;
@@ -9,9 +9,10 @@ import engine.UI.UIText;
 import engine.Utility;
 import engine.support.Vec2d;
 import javafx.scene.input.MouseEvent;
-import wiz.Constants;
+import nin.Constants.ConstantsStartScreen;
 
 public class StartScreen extends Screen {
+
     public StartScreen(Application engine) {
         super(engine);
 
@@ -21,35 +22,34 @@ public class StartScreen extends Screen {
                 null,
                 new Vec2d(0,0),
                 engine.getCurrentStageSize(),
-                Constants.backgroundColor);
+                ConstantsStartScreen.startScreenBackgroundColor);
         uiElements.add(background);
 
         // Create Title
         UIElement title = new UIText(
                 this,
                 background,
-                Constants.startScreenTitlePosition,
-                Constants.startScreenTitle,
-                Constants.titleColor,
-                Constants.titleFont);
+                ConstantsStartScreen.startScreenTitlePosition,
+                ConstantsStartScreen.startScreenTitle,
+                ConstantsStartScreen.startScreenTitleColor,
+                ConstantsStartScreen.startScreenTitleFont);
         background.addChildren(title);
 
         // Create Start Button (Changes Screen to Choose Seed)
         UIElement startButton = new UIButton(
                 this,
                 background,
-                Constants.buttonPosition,
-                Constants.buttonSize,
-                Constants.buttonColor,
-                Constants.buttonArcSize,
-                Constants.startScreenButtonText,
-                Constants.buttonTextPosition,
-                Constants.buttonTextColor,
-                Constants.buttonTextFont) {
+                ConstantsStartScreen.startScreenButtonPosition,
+                ConstantsStartScreen.startScreenButtonSize,
+                ConstantsStartScreen.startScreenButtonColor,
+                ConstantsStartScreen.startScreenButtonArcSize,
+                ConstantsStartScreen.startScreenButtonText,
+                ConstantsStartScreen.startScreenButtonTextPosition,
+                ConstantsStartScreen.startScreenButtonTextColor,
+                ConstantsStartScreen.startScreenButtonTextFont) {
             @Override
             public void onMouseClicked(MouseEvent e) {
                 if (Utility.inBoundingBox(currentPosition, currentPosition.plus(currentSize), new Vec2d(e.getX(), e.getY()))) {
-//                    setActiveScreen("seed");
                     setActiveScreen("instructions");
                 }
                 super.onMouseClicked(e);
@@ -58,9 +58,9 @@ public class StartScreen extends Screen {
             @Override
             public void onMouseMoved(MouseEvent e) {
                 if (Utility.inBoundingBox(currentPosition, currentPosition.plus(currentSize), new Vec2d(e.getX(), e.getY()))) {
-                    this.color = Constants.buttonHoverColor;
+                    this.color = ConstantsStartScreen.startScreenButtonHoverColor;
                 } else {
-                    this.color = Constants.buttonColor;
+                    this.color = ConstantsStartScreen.startScreenButtonColor;
                 }
 
                 super.onMouseMoved(e);

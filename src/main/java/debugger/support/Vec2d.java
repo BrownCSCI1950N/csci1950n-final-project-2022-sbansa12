@@ -148,6 +148,10 @@ public final class Vec2d implements Serializable {
 		return new Vec2d(this.x / s, this.y / s);
 	}
 
+	public final Vec2d sdiv(double s) {
+		return new Vec2d(this.x / s, this.y / s);
+	}
+
 	/**
 	 * Divides the vector piecewise by another vector.
 	 *

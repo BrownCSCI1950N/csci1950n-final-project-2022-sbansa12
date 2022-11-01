@@ -136,7 +136,7 @@ public class Constants {
                 return Color.rgb(136,82,211, opacityMinimap);
             case ROOM:
                 return Color.rgb(128,181,49, opacityMinimap);
-            case WALL:
+            case WALL0:
             case HIDDEN:
                 return Color.rgb(87,173,37, opacityMinimap);
             case SPAWN:

@@ -1,5 +1,6 @@
 package engine;
 
+import engine.Components.TileComponent;
 import engine.Systems.DrawSystem;
 import engine.Systems.System;
 import engine.support.Vec2d;
@@ -108,11 +109,13 @@ public class GameWorld {
     public void onKeyPressed(KeyEvent e) {
         List<KeyCode> keyCodesToRemove = inputEventsKeys.get(InputEvents.ONKEYRELEASED);
         keyCodesToRemove.remove(e.getCode());
+        inputEventsKeys.put(InputEvents.ONKEYRELEASED, keyCodesToRemove);
 
         List<KeyCode> keyCodesToAdd = inputEventsKeys.get(InputEvents.ONKEYPRESSED);
         if (!keyCodesToAdd.contains(e.getCode())) {
             keyCodesToAdd.add(e.getCode());
         }
+        inputEventsKeys.put(InputEvents.ONKEYPRESSED, keyCodesToAdd);
     }
 
     /**
@@ -122,11 +125,13 @@ public class GameWorld {
     public void onKeyReleased(KeyEvent e) {
         List<KeyCode> keyCodesToRemove = inputEventsKeys.get(InputEvents.ONKEYPRESSED);
         keyCodesToRemove.remove(e.getCode());
+        inputEventsKeys.put(InputEvents.ONKEYPRESSED, keyCodesToRemove);
 
         List<KeyCode> keyCodesToAdd = inputEventsKeys.get(InputEvents.ONKEYRELEASED);
         if (!keyCodesToAdd.contains(e.getCode())) {
             keyCodesToAdd.add(e.getCode());
         }
+        inputEventsKeys.put(InputEvents.ONKEYRELEASED, keyCodesToAdd);
     }
 
     /**
