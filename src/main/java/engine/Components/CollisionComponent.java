@@ -97,6 +97,7 @@ public class CollisionComponent implements Component {
         }
     }
 
+    // Called If There Is No Collision Between Two Different Game Objects
     public void onNotCollide() {
     }
 

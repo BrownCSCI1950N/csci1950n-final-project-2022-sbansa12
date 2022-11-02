@@ -68,7 +68,7 @@ public class NinGame {
                         tc.getSize().plus(ConstantsGameValues.playerGroundedShapeSizeAdd)),
                 ConstantsGameValues.physicsGroundedCollisionLayer,
                 p,
-                List.of(TileType.WALL0, TileType.BOX0)
+                List.of(TileType.WALL0, TileType.BOX0, TileType.BOX1)
         ));
 
         // Jumping

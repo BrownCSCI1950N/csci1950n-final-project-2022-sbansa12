@@ -83,8 +83,10 @@ public class CollisionSystem extends System {
         }
 
         for (Pair<CollisionComponent, CollisionComponent> col : collided) {
-            notCollided.remove(col.getRight());
-            notCollided.remove(col.getLeft());
+            if (col.getRight().getGameObject() != col.getLeft().getGameObject()) {
+                notCollided.remove(col.getRight());
+                notCollided.remove(col.getLeft());
+            }
         }
 
         for (CollisionComponent c : notCollided) {

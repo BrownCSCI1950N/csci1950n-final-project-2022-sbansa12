@@ -31,7 +31,8 @@ public class ConstantsSelectionScreen {
     public static final String[][] levels = new String[][]{
             {"00", "01", "02", "03"},
             {"04", "05", "06", "07"},
-            {"08", "09", "10", "11"}
+            {"08", "09", "10", "11"},
+            {"12"}
     };
     public static final Map<String, Boolean> levelComplete = new HashMap<>(){{
         for (String[] level : levels) {
@@ -41,5 +42,5 @@ public class ConstantsSelectionScreen {
         }
     }};
     public static final Vec2d buttonStartingPosition = new Vec2d(290,200);
-    public static final Vec2d buttonPadding = new Vec2d(60,50);
+    public static final Vec2d buttonPadding = new Vec2d(60,30);
 }

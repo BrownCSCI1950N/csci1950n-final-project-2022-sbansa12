@@ -177,11 +177,29 @@ public class NinGameLevel {
                 PhysicsComponent pBox = new PhysicsComponent(toRet, false, Arrays.asList(ConstantsGameValues.gravityDown, null, null), ConstantsGameValues.boxMass, ConstantsGameValues.boxRestitution, false);
                 toRet.addComponent(pBox);
                 toRet.addComponent(new CollisionComponent(toRet, new AAB(tc.getCurrentGameSpacePosition(), tc.getSize()), ConstantsGameValues.boxCollisionLayer, false, false, pBox));
+                // Deal with Grounding and Physics
+                toRet.addComponent(new PhysicsGroundedComponent(
+                        toRet,
+                        new AAB(tc.getCurrentGameSpacePosition(),
+                                tc.getSize().plus(ConstantsGameValues.playerGroundedShapeSizeAdd)),
+                        ConstantsGameValues.physicsGroundedCollisionLayer,
+                        pBox,
+                        List.of(TileType.WALL0, TileType.BOX0, TileType.BOX1)
+                ));
                 break;
             case BOX1:
                 PhysicsComponent pHalfBox = new PhysicsComponent(toRet, false, Arrays.asList(ConstantsGameValues.gravityDown, null, null), ConstantsGameValues.halfboxMass, ConstantsGameValues.halfboxRestitution, false);
                 toRet.addComponent(pHalfBox);
                 toRet.addComponent(new CollisionComponent(toRet, new AAB(tc.getCurrentGameSpacePosition(), tc.getSize()), ConstantsGameValues.boxCollisionLayer, false, false, pHalfBox));
+                // Deal with Grounding and Physics
+                toRet.addComponent(new PhysicsGroundedComponent(
+                        toRet,
+                        new AAB(tc.getCurrentGameSpacePosition(),
+                                tc.getSize().plus(ConstantsGameValues.playerGroundedShapeSizeAdd)),
+                        ConstantsGameValues.physicsGroundedCollisionLayer,
+                        pHalfBox,
+                        List.of(TileType.WALL0, TileType.BOX0, TileType.BOX1)
+                ));
                 break;
             case CORNERBOTTOMRIGHT:
 //                PhysicsComponent pWallBottomRight = new PhysicsComponent(toRet, true, null, ConstantsGameValues.wallMass, ConstantsGameValues.wallRestitution, true);
