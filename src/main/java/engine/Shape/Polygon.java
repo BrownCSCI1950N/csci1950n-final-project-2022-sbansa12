@@ -123,6 +123,42 @@ public class Polygon implements Shape {
         return projectPoints(axis, points);
     }
 
+    @Override
+    public double raycast(Ray ray) {
+        double minT = Double.POSITIVE_INFINITY;
+        boolean foundIntersection = false;
+        for (int i = 0; i < points.size(); i++) {
+            double t = raycastEdge(ray, points.get(i), points.get((i+1) % points.size()));
+            if (t != -1) {
+                foundIntersection = true;
+                if (t < minT) {
+                    minT = t;
+                }
+            }
+        }
+
+        if (foundIntersection) {
+            return minT;
+        } else {
+            return -1;
+        }
+    }
+
+    private double raycastEdge(Ray ray, Vec2d a, Vec2d b) {
+        Vec2d p = ray.src;
+        Vec2d d = ray.dir;
+
+        Vec2d m = b.minus(a).normalize();
+        Vec2d n = m.perpendicular().normalize();
+
+        double checkStraddle = a.minus(p).cross(d) * b.minus(p).cross(d);
+        if (checkStraddle > 0) {
+            return -1;
+        }
+
+        return (float) ((b.minus(p).dot(n))/d.dot(n));
+    }
+
     public List<Vec2d> getEdgeVectors() {
         List<Vec2d> edgeVectors = new LinkedList<>();
         for (int i = 0; i < points.size(); i++) {

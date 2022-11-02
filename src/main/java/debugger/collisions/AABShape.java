@@ -1,6 +1,8 @@
 package debugger.collisions;
 
 import debugger.support.Vec2d;
+import debugger.support.shapes.CircleShapeDefine;
+import debugger.support.shapes.PolygonShapeDefine;
 import debugger.support.shapes.Shape;
 
 public abstract class AABShape extends Shape {
@@ -23,4 +25,11 @@ public abstract class AABShape extends Shape {
 		return size;
 	}
 
+	public PolygonShape toPolygon() {
+		Vec2d topRight = topLeft.plus(size.x, 0);
+		Vec2d bottomLeft = topLeft.plus(0, size.y);
+		Vec2d bottomRight = topLeft.plus(size);
+
+		return new PolygonShapeDefine(topLeft, bottomLeft, bottomRight, topRight);
+	}
 }

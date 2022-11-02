@@ -112,7 +112,12 @@ public class Circle implements Shape {
             return null;
         }
         double magnitude = this.getRadius() - this.getCenter().dist(p);
-        Vec2d direction = this.getCenter().minus(p).normalize();
+        Vec2d direction = this.getCenter().minus(p);
+        if (!direction.isZero()) {
+            direction = direction.normalize();
+        } else {
+            direction = new Vec2d(0,1);
+        }
 
         return direction.smult(magnitude);
     }
@@ -155,5 +160,35 @@ public class Circle implements Shape {
         List<Vec2d> points = List.of(center.plus(translate), center.minus(translate));
 
         return projectPoints(axis, points);
+    }
+
+    @Override
+    public double raycast(Ray ray) {
+        // project center onto ray
+        Vec2d projection = center.projectOntoLine(ray.src, ray.src.plus(ray.dir));
+
+        if (!isCollidingPoint(ray.src)) {
+            // source outside
+
+            // if projection positive and projection point in circle: collide
+            if (center.minus(ray.src).dot(ray.dir) > 0) {
+
+                if (isCollidingPoint(projection)) {
+                    double L = projection.minus(ray.src).mag();
+                    double r = radius;
+                    double x = projection.minus(center).mag();
+                    return (float) (L - Math.sqrt((r * r) - (x * x)));
+                }
+            }
+        } else {
+            // source inside
+
+            double L = projection.minus(ray.src).mag();
+            double r = radius;
+            double x = projection.minus(center).mag();
+            return (float) (L + Math.sqrt((r * r) - (x * x)));
+        }
+
+        return -1;
     }
 }

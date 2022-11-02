@@ -286,7 +286,21 @@ public class AAB implements Shape {
     }
 
     @Override
+    public double raycast(Ray ray) {
+        return toPolygon().raycast(ray);
+    }
+
+    @Override
     public String toString() {
         return "AAB: Position: " + topLeft + ", Size: " + size;
+    }
+
+    public Polygon toPolygon() {
+        Vec2d topLeft = this.getTopLeft();
+        Vec2d topRight = this.getTopLeft().plus(this.size.x, 0);
+        Vec2d bottomLeft = this.getTopLeft().plus(0, this.size.y);
+        Vec2d bottomRight = this.getTopLeft().plus(this.size);
+
+        return new Polygon(topLeft, List.of(topLeft, topRight, bottomLeft, bottomRight));
     }
 }

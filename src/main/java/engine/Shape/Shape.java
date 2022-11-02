@@ -70,4 +70,11 @@ public interface Shape {
 
         return new Interval(min, max);
     }
+
+    /**
+     *
+     * @param ray
+     * @return - -1 if not colliding, else t of src + t*dist
+     */
+    double raycast(Ray ray);
 }
