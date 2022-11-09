@@ -13,7 +13,7 @@ public class UIButton extends UIElement {
     public Vec2d originalSize;
     public Vec2d currentSize;
     public final Vec2d arcSize;
-    protected final String buttonText;
+    protected String buttonText;
 
     private final FontWrapper originalFont;
     public final FontWrapper currentFont;

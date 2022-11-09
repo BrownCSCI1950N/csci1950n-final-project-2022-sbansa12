@@ -1,6 +1,7 @@
 package nin.Screens;
 
 import engine.Application;
+import engine.SavingLoading.SaveFile;
 import engine.Screen;
 import engine.UI.UIButton;
 import engine.UI.UIElement;
@@ -9,8 +10,14 @@ import engine.UI.UIText;
 import engine.Utility;
 import engine.support.Vec2d;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import nin.Constants.ConstantsSelectionScreen;
 import nin.NinGameLevel;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import java.io.File;
+import java.util.Objects;
 
 public class SelectionScreen extends Screen {
     NinGameLevel ninGameLevel;
@@ -47,15 +54,88 @@ public class SelectionScreen extends Screen {
                 background.addChildren(createLevelButton(background, new Vec2d(buttonPositionX, buttonPositionY), row[i]));
             }
         }
+
+        // Back Button
+        UIElement backButton = new UIButton(
+                SelectionScreen.this,
+                background,
+                ConstantsSelectionScreen.selectionScreenBackButtonPosition,
+                ConstantsSelectionScreen.selectionScreenBackButtonSize,
+                ConstantsSelectionScreen.selectionScreenBackButtonColor,
+                ConstantsSelectionScreen.selectionScreenBackButtonArcSize,
+                ConstantsSelectionScreen.selectionScreenBackButtonText,
+                ConstantsSelectionScreen.selectionScreenBackButtonTextPosition,
+                ConstantsSelectionScreen.selectionScreenBackButtonTextColor,
+                ConstantsSelectionScreen.selectionScreenBackButtonTextFont) {
+            @Override
+            public void onMouseClicked(MouseEvent e) {
+                if (Utility.inBoundingBox(currentPosition, currentPosition.plus(currentSize), new Vec2d(e.getX(), e.getY()))) {
+                    setActiveScreen("saveLoad");
+                }
+                super.onMouseClicked(e);
+            }
+
+            @Override
+            public void onMouseMoved(MouseEvent e) {
+                if (Utility.inBoundingBox(currentPosition, currentPosition.plus(currentSize), new Vec2d(e.getX(), e.getY()))) {
+                    this.color = ConstantsSelectionScreen.selectionScreenBackButtonHoverColor;
+                } else {
+                    this.color = ConstantsSelectionScreen.selectionScreenBackButtonColor;
+                }
+
+                super.onMouseMoved(e);
+            }
+        };
+        background.addChildren(backButton);
+
+        // Save Button
+        UIElement saveButton = new UIButton(
+                SelectionScreen.this,
+                background,
+                ConstantsSelectionScreen.selectionScreenSaveButtonPosition,
+                ConstantsSelectionScreen.selectionScreenSaveButtonSize,
+                ConstantsSelectionScreen.selectionScreenSaveButtonColor,
+                ConstantsSelectionScreen.selectionScreenSaveButtonArcSize,
+                ConstantsSelectionScreen.selectionScreenSaveButtonText,
+                ConstantsSelectionScreen.selectionScreenSaveButtonTextPosition,
+                ConstantsSelectionScreen.selectionScreenSaveButtonTextColor,
+                ConstantsSelectionScreen.selectionScreenSaveButtonTextFont) {
+            @Override
+            public void onMouseClicked(MouseEvent e) {
+                if (Utility.inBoundingBox(currentPosition, currentPosition.plus(currentSize), new Vec2d(e.getX(), e.getY()))) {
+                    // TODO: popup
+                    saveFile();
+                }
+                super.onMouseClicked(e);
+            }
+
+            @Override
+            public void onMouseMoved(MouseEvent e) {
+                if (Utility.inBoundingBox(currentPosition, currentPosition.plus(currentSize), new Vec2d(e.getX(), e.getY()))) {
+                    this.color = ConstantsSelectionScreen.selectionScreenSaveButtonHoverColor;
+                } else {
+                    this.color = ConstantsSelectionScreen.selectionScreenSaveButtonColor;
+                }
+
+                super.onMouseMoved(e);
+            }
+        };
+        background.addChildren(saveButton);
     }
 
     private UIElement createLevelButton(UIElement parent, Vec2d buttonPosition, String buttonText) {
+        Color initialColor;
+        if (ConstantsSelectionScreen.levelComplete.get(buttonText)) {
+            initialColor = ConstantsSelectionScreen.levelCompleteButtonColor;
+        } else {
+            initialColor = ConstantsSelectionScreen.levelIncompleteButtonColor;
+        }
         return new UIButton(
                 SelectionScreen.this,
                 parent,
                 buttonPosition,
                 ConstantsSelectionScreen.selectionScreenButtonSize,
-                ConstantsSelectionScreen.levelIncompleteButtonColor,
+                initialColor,
                 ConstantsSelectionScreen.selectionScreenButtonArcSize,
                 buttonText,
                 ConstantsSelectionScreen.selectionScreenButtonTextPosition,
@@ -80,12 +160,49 @@ public class SelectionScreen extends Screen {
                     } else {
                         this.color = ConstantsSelectionScreen.levelIncompleteButtonColor;
                     }
-
                 }
 
                 super.onMouseMoved(e);
             }
         };
+    }
+
+    private void saveFile() {
+        Document doc = SaveFile.create();
+
+        Element game = doc.createElement("Game");
+
+        int count = 0;
+
+        for (String key : ConstantsSelectionScreen.levelComplete.keySet()) {
+            Element level = doc.createElement("Level");
+            Boolean complete = ConstantsSelectionScreen.levelComplete.get(key);
+            if (complete) {
+                count += 1;
+            }
+            level.setAttribute("complete", String.valueOf(complete));
+            level.setAttribute("name", key);
+            game.appendChild(level);
+        }
+
+        doc.appendChild(game);
+        String fix = "-";
+        if (count < 10) {
+            fix = "-0";
+        }
+
+        // Delete Previously Existing Save File
+        String[] files = Objects.requireNonNull(new File(".\\src\\main\\java\\nin\\SaveFiles").list());
+        for (String file : files) {
+            if (file.substring(0, 2).equals(SaveLoadScreen.saveFileName)) {
+                if (!new File(".\\src\\main\\java\\nin\\SaveFiles\\"+file).delete()){
+                    System.out.println("Failed to Delete Old Save File");
+                    System.exit(1);
+                }
+            }
+        }
+
+        SaveFile.save(doc, ".\\src\\main\\java\\nin\\SaveFiles\\" + SaveLoadScreen.saveFileName + fix + count + ".xml");
     }
 
     @Override

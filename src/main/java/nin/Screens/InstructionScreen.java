@@ -59,7 +59,7 @@ public class InstructionScreen extends Screen {
             @Override
             public void onMouseClicked(MouseEvent e) {
                 if (Utility.inBoundingBox(currentPosition, currentPosition.plus(currentSize), new Vec2d(e.getX(), e.getY()))) {
-                    setActiveScreen("select");
+                    setActiveScreen("saveLoad");
                 }
                 super.onMouseClicked(e);
             }

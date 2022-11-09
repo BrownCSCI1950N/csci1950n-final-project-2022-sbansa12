@@ -1,4 +1,4 @@
-package engine;
+package engine.TerrainGeneration;
 
 import engine.Components.GameTileConversion;
 import engine.support.Vec2d;

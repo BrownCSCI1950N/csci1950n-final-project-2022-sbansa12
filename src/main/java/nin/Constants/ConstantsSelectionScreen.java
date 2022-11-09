@@ -43,4 +43,26 @@ public class ConstantsSelectionScreen {
     }};
     public static final Vec2d buttonStartingPosition = new Vec2d(290,200);
     public static final Vec2d buttonPadding = new Vec2d(60,30);
+
+    // Back Button
+    public static final String selectionScreenBackButtonText = "←";
+    public static final Vec2d selectionScreenBackButtonPosition = new Vec2d(850,50);
+    public static final Vec2d selectionScreenBackButtonSize = new Vec2d(50,35);
+    public static final Color selectionScreenBackButtonColor = ConstantsStartScreen.startScreenButtonColor;
+    public static final Color selectionScreenBackButtonHoverColor = ConstantsStartScreen.startScreenButtonHoverColor;
+    public static final Vec2d selectionScreenBackButtonArcSize = ConstantsStartScreen.startScreenButtonArcSize;
+    public static final Vec2d selectionScreenBackButtonTextPosition = new Vec2d(10, 10);
+    public static final Color selectionScreenBackButtonTextColor = ConstantsStartScreen.startScreenButtonTextColor;
+    public static final FontWrapper selectionScreenBackButtonTextFont = ConstantsStartScreen.startScreenButtonTextFont;
+
+    // Save Button
+    public static final String selectionScreenSaveButtonText = "save";
+    public static final Vec2d selectionScreenSaveButtonPosition = new Vec2d(850,470);
+    public static final Vec2d selectionScreenSaveButtonSize = new Vec2d(80,35);
+    public static final Color selectionScreenSaveButtonColor = ConstantsStartScreen.startScreenButtonColor;
+    public static final Color selectionScreenSaveButtonHoverColor = ConstantsStartScreen.startScreenButtonHoverColor;
+    public static final Vec2d selectionScreenSaveButtonArcSize = ConstantsStartScreen.startScreenButtonArcSize;
+    public static final Vec2d selectionScreenSaveButtonTextPosition = new Vec2d(10, 10);
+    public static final Color selectionScreenSaveButtonTextColor = ConstantsStartScreen.startScreenButtonTextColor;
+    public static final FontWrapper selectionScreenSaveButtonTextFont = ConstantsStartScreen.startScreenButtonTextFont;
 }

@@ -34,6 +34,7 @@ public class App extends Application {
         // Add All Screens to Application
         this.addScreen("start", new StartScreen(this));
         this.addScreen("instructions", new InstructionScreen(this));
+        this.addScreen("saveLoad", new SaveLoadScreen(this));
         this.addScreen("select", new SelectionScreen(this, ninGameLevel));
         this.addScreen("game", new GameScreen(this, ninGameLevel, nin));
         this.addScreen("win", new WinScreen(this));
