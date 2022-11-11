@@ -3,7 +3,9 @@ package nin.Constants;
 import engine.FontWrapper;
 import engine.support.Vec2d;
 import javafx.scene.paint.Color;
+import javafx.scene.text.FontWeight;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,7 +34,7 @@ public class ConstantsSelectionScreen {
             {"00", "01", "02", "03"},
             {"04", "05", "06", "07"},
             {"08", "09", "10", "11"},
-            {"12"}
+            {"12", "13"}
     };
     public static final Map<String, Boolean> levelComplete = new HashMap<>(){{
         for (String[] level : levels) {
@@ -65,4 +67,10 @@ public class ConstantsSelectionScreen {
     public static final Vec2d selectionScreenSaveButtonTextPosition = new Vec2d(10, 10);
     public static final Color selectionScreenSaveButtonTextColor = ConstantsStartScreen.startScreenButtonTextColor;
     public static final FontWrapper selectionScreenSaveButtonTextFont = ConstantsStartScreen.startScreenButtonTextFont;
+
+    // Save Popup
+    public static final Vec2d selectionScreenSaveMessagePosition = new Vec2d(850,460);
+    public static final Color selectionScreenSaveMessageColor = Color.rgb(255,255,255);
+    public static final FontWrapper selectionScreenSaveMessageFont = new FontWrapper("Colonna MT", FontWeight.EXTRA_LIGHT, null,32);
+    public static final BigDecimal selectionScreenSaveMessageTime = new BigDecimal("1600000000");
 }

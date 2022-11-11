@@ -9,6 +9,7 @@ import engine.UI.UIRectangle;
 import engine.UI.UIText;
 import engine.Utility;
 import engine.support.Vec2d;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import nin.Constants.ConstantsSelectionScreen;
@@ -17,14 +18,17 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.Objects;
 
 public class SelectionScreen extends Screen {
     NinGameLevel ninGameLevel;
+    Boolean saved;
     public SelectionScreen(Application engine, NinGameLevel ninGameLevel) {
         super(engine);
 
         this.ninGameLevel = ninGameLevel;
+        this.saved = false;
 
         // Create Background
         UIElement background = new UIRectangle(
@@ -103,7 +107,7 @@ public class SelectionScreen extends Screen {
             @Override
             public void onMouseClicked(MouseEvent e) {
                 if (Utility.inBoundingBox(currentPosition, currentPosition.plus(currentSize), new Vec2d(e.getX(), e.getY()))) {
-                    // TODO: popup
+                    saved = true;
                     saveFile();
                 }
                 super.onMouseClicked(e);
@@ -121,6 +125,48 @@ public class SelectionScreen extends Screen {
             }
         };
         background.addChildren(saveButton);
+
+        UIElement saveMessage = new UIText(
+                this,
+                background,
+                ConstantsSelectionScreen.selectionScreenSaveMessagePosition,
+                "",
+                ConstantsSelectionScreen.selectionScreenSaveMessageColor,
+                ConstantsSelectionScreen.selectionScreenSaveMessageFont) {
+
+            BigDecimal count = new BigDecimal("0");
+            Boolean timerStarted = false;
+
+            @Override
+            public void onTick(long nanosSincePreviousTick) {
+
+                if (saved) {
+                    timerStarted = true;
+                    count = new BigDecimal("0");
+                    saved = false;
+                }
+
+                if (timerStarted) {
+                    this.text = "Saved!";
+                    count = count.add(new BigDecimal(nanosSincePreviousTick));
+                    if (count.compareTo(ConstantsSelectionScreen.selectionScreenSaveMessageTime) < 0) {
+                        return;
+                    }
+                    count = new BigDecimal("0");
+                    timerStarted = false;
+                    this.text = "";
+                }
+
+                super.onTick(nanosSincePreviousTick);
+            }
+
+            @Override
+            public void onDraw(GraphicsContext g) {
+
+                super.onDraw(g);
+            }
+        };
+        background.addChildren(saveMessage);
     }
 
     private UIElement createLevelButton(UIElement parent, Vec2d buttonPosition, String buttonText) {

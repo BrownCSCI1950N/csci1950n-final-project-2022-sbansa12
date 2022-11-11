@@ -1,6 +1,7 @@
 package engine.Components;
 
 import engine.GameObject;
+import engine.TerrainGeneration.TileType;
 import engine.support.Vec2d;
 import javafx.scene.canvas.GraphicsContext;
 
@@ -116,6 +117,13 @@ public class PhysicsComponent implements Component {
         }
 
         vel = vel.plus(force.sdiv(mass).smult(convertSeconds(nano)).plus(impulse.sdiv(mass)));
+        if(gameObject.hasComponentTag("tile")) {
+            if (((TileComponent) gameObject.getComponent("tile")).getTileType().equals(TileType.BOX0)) {
+                System.out.println("Force: " + force);
+                System.out.println("Impulse: " + impulse);
+                System.out.println("Velocity: " + vel);
+            }
+        }
         Vec2d pos = gameObject.getTransform().getCurrentGameSpacePosition();
         gameObject.getTransform().setCurrentGameSpacePositionNoVelocity(pos.plus(vel.smult(convertSeconds(nano))));
         force = new Vec2d(0, 0);

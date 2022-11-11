@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Game>
+    <Level complete="false" name="00"/>
+    <Level complete="false" name="11"/>
+    <Level complete="false" name="01"/>
+    <Level complete="false" name="12"/>
+    <Level complete="false" name="02"/>
+    <Level complete="false" name="13"/>
+    <Level complete="false" name="03"/>
+    <Level complete="false" name="04"/>
+    <Level complete="false" name="05"/>
+    <Level complete="false" name="06"/>
+    <Level complete="false" name="07"/>
+    <Level complete="false" name="08"/>
+    <Level complete="false" name="09"/>
+    <Level complete="false" name="10"/>
+</Game>
