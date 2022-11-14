@@ -7,6 +7,7 @@ import engine.Shape.AAB;
 import engine.Shape.Polygon;
 import engine.Systems.CollisionSystem;
 import engine.Systems.KeyProcessSystem;
+import engine.Systems.MouseClickSystem;
 import engine.Systems.TickSystem;
 import engine.TerrainGeneration.LevelParseException;
 import engine.TerrainGeneration.MapReader.MapReader;
@@ -48,6 +49,34 @@ public class NinGameLevel {
         }
     }
 
+    public boolean nextLevel() {
+        if (currentLevel.equals(ConstantsSelectionScreen.lastLevel)) {
+            return false;
+        }
+
+        Integer curL = Integer.parseInt(currentLevel);
+        curL = curL + 1;
+        if (curL < 10) {
+            this.currentLevel = "0"+curL;
+        } else {
+            this.currentLevel = String.valueOf(curL);
+        }
+        try {
+            TileType[][] map = MapReader.createTerrain(".\\src\\main\\java\\nin\\Maps\\" + currentLevel + ".txt", List.of(TileType.BUTTON));
+
+            MapReader.checkMapSize(map, ConstantsGameValues.mapSize, currentLevel);
+
+            GameWorld gameWorld = createWorld();
+            Vec2d spawnPoint = createMapInWorld(gameWorld, map);
+            populateSpecialTiles(gameWorld, map);
+            ninGame.setWorld(gameWorld, spawnPoint);
+        } catch (IOException | LevelParseException e) {
+            System.out.println(e.getMessage());
+            System.exit(1);
+        }
+        return true;
+    }
+
     public void resetCurrentLevel() {
         try {
             TileType[][] map = MapReader.createTerrain(".\\src\\main\\java\\nin\\Maps\\" + this.currentLevel + ".txt", List.of(TileType.BUTTON));
@@ -67,13 +96,16 @@ public class NinGameLevel {
     private GameWorld createWorld() {
         GameWorld toReturn = new GameWorld();
 
-        // Systems: [Keys, Tick, Collision, Draw]
+        // Systems: [Keys, Mouse, Tick, Collision, Draw]
+        toReturn.getSystem("draw").addRelevantTag(ShootRayComponent.tag);
         CollisionSystem c = new CollisionSystem(toReturn,  List.of(CollisionComponent.tag, HealthDamageComponent.tag, PhysicsGroundedComponent.tag), true);
         c.setLayersCollide(ConstantsGameValues.layersCollide);
         c.removeTagsCollide(PhysicsGroundedComponent.tag, PhysicsGroundedComponent.tag);
         c.addTagsCollide(CollisionComponent.tag, PhysicsGroundedComponent.tag);
+        ninGame.setCollisionSystem(c);
         toReturn.prependSystem(c);
         toReturn.prependSystem(new TickSystem(toReturn, List.of(PhysicsComponent.tag, StateMachineComponent.tag)));
+        toReturn.prependSystem(new MouseClickSystem(toReturn, List.of(ShootRayComponent.tag)));
         toReturn.prependSystem(new KeyProcessSystem(toReturn, List.of(MoveKeysComponent.tag, ActionKeysComponent.tag, MovePhysicsComponent.tag)));
 
         return toReturn;

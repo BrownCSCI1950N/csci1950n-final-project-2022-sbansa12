@@ -4,7 +4,9 @@ import Pair.Pair;
 import engine.support.Vec2d;
 import engine.support.Vec2i;
 import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
 
+import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,9 +17,9 @@ public class ConstantsGameValues {
 
     // Controls
     public static final List<KeyCode> movementKeys = new LinkedList<>(){{
-        add(KeyCode.UP);
-        add(KeyCode.RIGHT);
-        add(KeyCode.LEFT);
+        add(KeyCode.W);
+        add(KeyCode.D);
+        add(KeyCode.A);
     }};
     public static final List<Double> movementVelocity = List.of(150.0, 100.0);
 
@@ -54,4 +56,10 @@ public class ConstantsGameValues {
     public static final double boxRestitution = 0.6;
     public static final double halfboxMass = 2.5;
     public static final double halfboxRestitution = 0.3;
+
+    // Projectile
+    public static final double rayImpulse = 100;
+    public static final BigDecimal rayDuration = new BigDecimal("160000000");
+    public static final double rayWidth = 2.0;
+    public static final Color rayColor = Color.RED;
 }

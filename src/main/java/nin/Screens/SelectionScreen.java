@@ -253,15 +253,19 @@ public class SelectionScreen extends Screen {
 
     @Override
     protected void reset() {
+        super.reset();
+        if (isGameComplete()) {
+            setActiveScreen("win");
+        }
+    }
+
+    protected boolean isGameComplete() {
         for (boolean levelComplete : ConstantsSelectionScreen.levelComplete.values()) {
             if (!levelComplete) {
-                super.reset();
-                return;
+                return false;
             }
         }
 
-        // If All Levels Complete
-        setActiveScreen("win");
-        super.reset();
+        return true;
     }
 }

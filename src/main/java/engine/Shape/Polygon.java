@@ -21,6 +21,12 @@ public class Polygon implements Shape {
     }
 
     @Override
+    public Vec2d getCenter() {
+        assert false;
+        return null;
+    }
+
+    @Override
     public void updatePosition(Vec2d update) {
         Vec2d translate = update.minus(topLeftPoint);
         points.replaceAll(vec2d -> vec2d.plus(translate));

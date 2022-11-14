@@ -6,6 +6,7 @@ import engine.support.Vec2d;
 import java.util.List;
 
 public interface Shape {
+    Vec2d getCenter();
     void updatePosition(Vec2d update);
     void setVelocity(Vec2d velocity);
     boolean isColliding(Shape o);

@@ -18,7 +18,8 @@ public enum TileType {
     CORNERTOPLEFT,
     CORNERTOPRIGHT,
     CORNERBOTTOMLEFT,
-    CORNERBOTTOMRIGHT;
+    CORNERBOTTOMRIGHT,
+    BREAKABLE;
 
     @Override
     public String toString() {
@@ -59,6 +60,8 @@ public enum TileType {
                 return "◣";
             case CORNERBOTTOMRIGHT:
                 return "◢";
+            case BREAKABLE:
+                return "☒";
             default:
                 return "";
         }
@@ -102,6 +105,8 @@ public enum TileType {
                 return CORNERBOTTOMLEFT;
             case "◢":
                 return CORNERBOTTOMRIGHT;
+            case "☒":
+                return BREAKABLE;
             default:
                 return null;
         }

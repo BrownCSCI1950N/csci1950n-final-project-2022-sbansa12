@@ -21,6 +21,7 @@ public class Circle implements Shape {
         this.velocity = new Vec2d(0,0);
     }
 
+    @Override
     public Vec2d getCenter() {
         return center;
     }

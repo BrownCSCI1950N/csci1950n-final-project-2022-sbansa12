@@ -18,7 +18,7 @@ public class ConstantsInstructionsScreen {
     // Instructions Constants
     public static final Vec2d instructionsScreenInstructionsPosition = new Vec2d(270, 220);
     public static final String instructionsScreenInstructions = "               Goal: Get to The Door!\n"+
-            "               Movement: Arrow Keys\n" +
+            "               Movement: WASD Keys\n" +
             "                   Restart a Level: K\n" +
             "       Go Back To Selection Screen: Q\n";
     public static final FontWrapper instructionsScreenInstructionsFont = new FontWrapper("Bauhaus 93", FontWeight.EXTRA_LIGHT, null, 24);

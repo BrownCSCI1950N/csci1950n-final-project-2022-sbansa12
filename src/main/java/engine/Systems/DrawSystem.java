@@ -4,11 +4,11 @@ import engine.GameObject;
 import engine.GameWorld;
 import javafx.scene.canvas.GraphicsContext;
 
-import java.util.Collections;
+import java.util.List;
 
 public class DrawSystem extends System {
-    public DrawSystem(GameWorld gameWorld) {
-        super(gameWorld, Collections.singletonList("sprite"));
+    public DrawSystem(GameWorld gameWorld, List<String> relevantTags) {
+        super(gameWorld, relevantTags);
     }
 
     @Override
@@ -23,7 +23,11 @@ public class DrawSystem extends System {
 
     public void draw(GraphicsContext g) {
         for (GameObject gameObj: gameObjects) {
-            gameObj.draw(g);
+            for (String tag: this.relevantTags) {
+                if (gameObj.hasComponentTag(tag)) {
+                    gameObj.getComponent(tag).draw(g);
+                }
+            }
         }
     }
 

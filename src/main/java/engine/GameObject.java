@@ -2,7 +2,6 @@ package engine;
 
 import engine.Components.Component;
 import engine.Components.TransformComponent;
-import javafx.scene.canvas.GraphicsContext;
 
 import java.util.*;
 
@@ -50,23 +49,6 @@ public class GameObject {
 
     public boolean hasComponentTag(String tag) {
         return _components.containsKey(tag);
-    }
-
-    public void tick(long t) {
-        for (Component c: _components.values()) {
-            c.tick(t);
-        }
-    }
-    public void lateTick() {
-        for (Component c: _components.values()) {
-            c.lateTick();
-        }
-    }
-
-    public void draw(GraphicsContext g) {
-        for (Component c: _components.values()) {
-            c.draw(g);
-        }
     }
 
     @Override

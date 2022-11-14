@@ -21,9 +21,9 @@ public class MouseDragSystem extends System {
 
     @Override
     public void tick(long t) {
-        Vec2d onMousePressed = gameWorld.findInputEventMouse(InputEvents.ONMOUSEPRESSED);
-        Vec2d onMouseDragged = gameWorld.findInputEventMouse(InputEvents.ONMOUSEDRAGGED);
-        Vec2d onMouseReleased = gameWorld.findInputEventMouse(InputEvents.ONMOUSERELEASED);
+        Vec2d onMousePressed = gameWorld.findInputEventMouse(InputEvents.ONMOUSEPRESSED).getRight();
+        Vec2d onMouseDragged = gameWorld.findInputEventMouse(InputEvents.ONMOUSEDRAGGED).getRight();
+        Vec2d onMouseReleased = gameWorld.findInputEventMouse(InputEvents.ONMOUSERELEASED).getRight();
 
         if (!startedDrag && onMousePressed != null) {
             this.startedDrag = true;

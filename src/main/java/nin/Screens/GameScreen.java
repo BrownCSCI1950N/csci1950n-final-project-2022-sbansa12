@@ -14,9 +14,11 @@ import nin.NinGameLevel;
 public class GameScreen extends Screen {
     NinGameLevel ninGameLevel;
     NinGame ninGame;
+    SelectionScreen ss;
 
-    public GameScreen(Application engine, NinGameLevel ninGameLevel, NinGame ninGame) {
+    public GameScreen(Application engine, SelectionScreen ss, NinGameLevel ninGameLevel, NinGame ninGame) {
         super(engine);
+        this.ss = ss;
         this.ninGameLevel = ninGameLevel;
         this.ninGame = ninGame;
 
@@ -58,7 +60,15 @@ public class GameScreen extends Screen {
 
         if (ninGame.levelComplete()) {
             if (e.getCode() == KeyCode.SPACE) {
-                setActiveScreen("select");
+                // Check Win Condition
+                if (ss.isGameComplete()) {
+                    setActiveScreen("win");
+                }
+
+                // Go To Next Level
+                if (!ninGameLevel.nextLevel()) {
+                    setActiveScreen("select");
+                }
             }
 
             // Only Allow Space If Game Over

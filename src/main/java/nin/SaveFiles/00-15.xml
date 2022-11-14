@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Game>
+    <Level complete="false" name="00"/>
+    <Level complete="true" name="11"/>
+    <Level complete="true" name="01"/>
+    <Level complete="true" name="12"/>
+    <Level complete="true" name="02"/>
+    <Level complete="true" name="13"/>
+    <Level complete="true" name="03"/>
+    <Level complete="true" name="14"/>
+    <Level complete="true" name="04"/>
+    <Level complete="true" name="15"/>
+    <Level complete="true" name="05"/>
+    <Level complete="true" name="06"/>
+    <Level complete="true" name="07"/>
+    <Level complete="true" name="08"/>
+    <Level complete="true" name="09"/>
+    <Level complete="true" name="10"/>
+</Game>

@@ -119,9 +119,9 @@ public class PhysicsComponent implements Component {
         vel = vel.plus(force.sdiv(mass).smult(convertSeconds(nano)).plus(impulse.sdiv(mass)));
         if(gameObject.hasComponentTag("tile")) {
             if (((TileComponent) gameObject.getComponent("tile")).getTileType().equals(TileType.BOX0)) {
-                System.out.println("Force: " + force);
-                System.out.println("Impulse: " + impulse);
-                System.out.println("Velocity: " + vel);
+//                System.out.println("Force: " + force);
+//                System.out.println("Impulse: " + impulse);
+//                System.out.println("Velocity: " + vel);
             }
         }
         Vec2d pos = gameObject.getTransform().getCurrentGameSpacePosition();
@@ -134,13 +134,13 @@ public class PhysicsComponent implements Component {
         this.isGrounded = gr;
     }
 
-    void applyForce(Vec2d f) {
+    public void applyForce(Vec2d f) {
         if (!isStaticPhysics) {
             force = force.plus(f);
         }
     }
 
-    void applyImpulse(Vec2d p) {
+    public void applyImpulse(Vec2d p) {
         if (!isStaticPhysics) {
             impulse = impulse.plus(p);
         }

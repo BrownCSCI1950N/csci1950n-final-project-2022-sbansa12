@@ -54,6 +54,11 @@ public abstract class System {
         return relevantTags;
     }
 
+    public void addRelevantTag(String tag) {
+        relevantTags = new LinkedList<>(relevantTags);
+        relevantTags.add(tag);
+    }
+
     public void tick(long t) {
         if (toAdd.size() != 0) {
             gameObjects.addAll(toAdd);

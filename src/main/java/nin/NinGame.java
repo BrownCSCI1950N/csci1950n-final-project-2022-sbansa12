@@ -4,6 +4,8 @@ import engine.Components.*;
 import engine.GameObject;
 import engine.GameWorld;
 import engine.Shape.AAB;
+import engine.Shape.Ray;
+import engine.Systems.CollisionSystem;
 import engine.TerrainGeneration.TileType;
 import engine.UI.Viewport;
 import engine.support.Vec2d;
@@ -12,9 +14,13 @@ import nin.Constants.ConstantsGameValues;
 import java.util.List;
 
 public class NinGame {
+    CollisionSystem c;
     Viewport viewport;
     public static Boolean doorOpen;
     private Boolean levelComplete;
+    public void setCollisionSystem(CollisionSystem c) {
+        this.c = c;
+    }
     public void setWorld(GameWorld gameWorld, Vec2d spawnPoint) {
         addPlayer(gameWorld, spawnPoint);
         doorOpen = false;
@@ -76,6 +82,22 @@ public class NinGame {
                 player,
                 ConstantsGameValues.movementKeys,
                 ConstantsGameValues.movementVelocity));
+
+        // Projectile
+        player.addComponent(new ShootRayComponent(c, player, List.of(ConstantsGameValues.wallCollisionLayer, ConstantsGameValues.boxCollisionLayer), ConstantsGameValues.rayDuration, ConstantsGameValues.rayWidth, ConstantsGameValues.rayColor){
+            @Override
+            public void action(Ray r, GameObject gO) {
+                if (gO.hasComponentTag("tile")) {
+                    if (((TileComponent) gO.getComponent("tile")).getTileType().equals(TileType.WALL0) || ((TileComponent) gO.getComponent("tile")).getTileType().equals(TileType.WALL1)) {
+                        return;
+                    }
+                    if (((TileComponent) gO.getComponent("tile")).getTileType().equals(TileType.BOX0) || ((TileComponent) gO.getComponent("tile")).getTileType().equals(TileType.BOX1)) {
+                        PhysicsComponent p = (PhysicsComponent) gO.getComponent("physics");
+                        p.applyImpulse(r.dir.smult(ConstantsGameValues.rayImpulse));
+                    }
+                }
+            }
+        });
 
         gameWorld.addGameObject(player);
     }

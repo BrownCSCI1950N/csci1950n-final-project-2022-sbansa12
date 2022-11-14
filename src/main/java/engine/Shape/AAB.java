@@ -29,6 +29,11 @@ public class AAB implements Shape {
     }
 
     @Override
+    public Vec2d getCenter() {
+        return topLeft.plus(size.sdiv(2));
+    }
+
+    @Override
     public void updatePosition(Vec2d update) {
         this.topLeft = update;
     }

@@ -6,6 +6,7 @@ import engine.Components.CollisionComponent;
 import engine.Components.TransformComponent;
 import engine.GameObject;
 import engine.GameWorld;
+import engine.Shape.Ray;
 import engine.support.Vec2d;
 import javafx.scene.canvas.GraphicsContext;
 
@@ -134,6 +135,7 @@ public class CollisionSystem extends System {
 //        Collision toReturn = null;
         List<CollisionComponent> layer2 = gameObjects.get(layer);
         if (layer2 == null) {
+            assert false;
             return;
 //            return null;
         }
@@ -198,6 +200,35 @@ public class CollisionSystem extends System {
         }
 
 //        return toReturn;
+    }
+
+    public Collision checkRayCollision(Ray ray, List<Integer> layers) {
+        double minT = Double.POSITIVE_INFINITY;
+        CollisionComponent c = null;
+
+        for (Integer layer : layers) {
+            List<CollisionComponent> layer2 = gameObjects.get(layer);
+            if (layer2 == null) {
+                assert false;
+                return null;
+            }
+
+            for (CollisionComponent gameObject2: layer2) {
+                double t = gameObject2.getCollisionShape().raycast(ray);
+                if (t != -1) {
+                    if (t > 0 && t < minT) {
+                        minT = t;
+                        c = gameObject2;
+                    }
+                }
+            }
+        }
+
+        if (c == null) {
+            return null;
+        } else {
+            return new Collision(c.getGameObject(), minT);
+        }
     }
 
     public List<String> getRelevantTags(){
