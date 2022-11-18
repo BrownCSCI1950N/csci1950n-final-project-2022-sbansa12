@@ -1,4 +1,4 @@
-package nin;
+package hel;
 
 import engine.support.FXApplication;
 import engine.support.FXFrontEnd;
@@ -6,7 +6,7 @@ import engine.support.FXFrontEnd;
 public class Main {
 
     public static void main(String[] args) {
-        FXFrontEnd app = new App("Nin");
+        FXFrontEnd app = new App("Hel");
         FXApplication application = new FXApplication();
         application.begin(app);
     }

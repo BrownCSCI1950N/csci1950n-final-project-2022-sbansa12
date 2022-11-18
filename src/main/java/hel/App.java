@@ -1,10 +1,9 @@
-package nin;
+package hel;
 
 import engine.Application;
 import engine.support.Vec2d;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import nin.Screens.*;
 
 public class App extends Application {
 
@@ -28,17 +27,17 @@ public class App extends Application {
     @Override
     protected void onStartup() {
 
-        NinGame nin = new NinGame();
-        NinGameLevel ninGameLevel = new NinGameLevel(nin);
-
-        // Add All Screens to Application
-        this.addScreen("start", new StartScreen(this));
-        this.addScreen("instructions", new InstructionScreen(this));
-        this.addScreen("saveLoad", new SaveLoadScreen(this));
-        SelectionScreen ss = new SelectionScreen(this, ninGameLevel);
-        this.addScreen("select", ss);
-        this.addScreen("game", new GameScreen(this, ss, ninGameLevel, nin));
-        this.addScreen("win", new WinScreen(this));
+//        NinGame nin = new NinGame();
+//        NinGameLevel ninGameLevel = new NinGameLevel(nin);
+//
+//        // Add All Screens to Application
+//        this.addScreen("start", new StartScreen(this));
+//        this.addScreen("instructions", new InstructionScreen(this));
+//        this.addScreen("saveLoad", new SaveLoadScreen(this));
+//        SelectionScreen ss = new SelectionScreen(this, ninGameLevel);
+//        this.addScreen("select", ss);
+//        this.addScreen("game", new GameScreen(this, ss, ninGameLevel, nin));
+//        this.addScreen("win", new WinScreen(this));
 
         // Set Active Screen
         this.setActiveScreen("start");
