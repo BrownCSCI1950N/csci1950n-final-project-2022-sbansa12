@@ -1,0 +1,70 @@
+package hel.Screens;
+
+import engine.Application;
+import engine.Screen;
+import engine.UI.UIButton;
+import engine.UI.UIElement;
+import engine.UI.UIRectangle;
+import engine.UI.UIText;
+import engine.Utility;
+import engine.support.Vec2d;
+import hel.Constants.ConstantsSettingsScreen;
+import javafx.scene.input.MouseEvent;
+
+public class SettingsScreen extends Screen {
+    public SettingsScreen(Application engine) {
+        super(engine);
+
+        // Create Background
+        UIElement background = new UIRectangle(
+                this,
+                null,
+                new Vec2d(0,0),
+                engine.getCurrentStageSize(),
+                ConstantsSettingsScreen.backgroundColor);
+        uiElements.add(background);
+
+        // Create Title
+        UIElement title = new UIText(
+                this,
+                background,
+                ConstantsSettingsScreen.titlePosition,
+                ConstantsSettingsScreen.title,
+                ConstantsSettingsScreen.titleColor,
+                ConstantsSettingsScreen.titleFont);
+        background.addChildren(title);
+
+        // Create Back Button
+        UIElement backButton = new UIButton(
+                this,
+                background,
+                ConstantsSettingsScreen.backButtonPosition,
+                ConstantsSettingsScreen.backButtonSize,
+                ConstantsSettingsScreen.backButtonColor,
+                ConstantsSettingsScreen.backButtonArcSize,
+                ConstantsSettingsScreen.backButtonText,
+                ConstantsSettingsScreen.backButtonTextPosition,
+                ConstantsSettingsScreen.backButtonTextColor,
+                ConstantsSettingsScreen.backButtonTextFont) {
+            @Override
+            public void onMouseClicked(MouseEvent e) {
+                if (Utility.inBoundingBox(currentPosition, currentPosition.plus(currentSize), new Vec2d(e.getX(), e.getY()))) {
+                    setActiveScreen("start");
+                }
+                super.onMouseClicked(e);
+            }
+
+            @Override
+            public void onMouseMoved(MouseEvent e) {
+                if (Utility.inBoundingBox(currentPosition, currentPosition.plus(currentSize), new Vec2d(e.getX(), e.getY()))) {
+                    this.color = ConstantsSettingsScreen.backButtonHoverColor;
+                } else {
+                    this.color = ConstantsSettingsScreen.backButtonColor;
+                }
+
+                super.onMouseMoved(e);
+            }
+        };
+        background.addChildren(backButton);
+    }
+}
