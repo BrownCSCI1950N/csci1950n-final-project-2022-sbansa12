@@ -1,0 +1,6 @@
+- Capitalization of titles and buttons is inconsistent
+- "X" are off-center
+- choose matching fonts for all the text
+- good that stuff is centered
+- good spacing as gives clear grouping
+- colors work together meaning color blind person could see stuff easily

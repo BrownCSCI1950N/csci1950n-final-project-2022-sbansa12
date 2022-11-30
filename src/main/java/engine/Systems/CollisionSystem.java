@@ -135,7 +135,6 @@ public class CollisionSystem extends System {
 //        Collision toReturn = null;
         List<CollisionComponent> layer2 = gameObjects.get(layer);
         if (layer2 == null) {
-            assert false;
             return;
 //            return null;
         }

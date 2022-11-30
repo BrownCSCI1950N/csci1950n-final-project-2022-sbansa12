@@ -37,6 +37,7 @@ public class App extends Application {
         this.addScreen("start", new StartScreen(this));
         this.addScreen("settings", new SettingsScreen(this));
         this.addScreen("saveFileSelection", new SaveFileSelectionScreen(this));
+//        this.addScreen("select", new);
 //        SelectionScreen ss = new SelectionScreen(this, ninGameLevel);
 //        this.addScreen("select", ss);
 //        this.addScreen("game", new GameScreen(this, ss, ninGameLevel, nin));

@@ -1,0 +1,2 @@
+- In the "Select Save File" screen do not the "X" button if there is no save file, i.e. if clicking new game.
+- The background color can be better. Do not use yellow-ish or red-ish colors for things because they can make things hard to read/see, as things then tend to blend in.
