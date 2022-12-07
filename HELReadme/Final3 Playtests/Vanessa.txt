@@ -1,0 +1,5 @@
+The new game and load buttons (with delete buttons) should all be centered
+There is no information about the game and how to play
+The back button should be on the top left rather than the top right as we expect an "X" on the top right.
+Clicking the save button shouldnt take you back to the level selection screen
+it is a bit weird to put the save button in the settings page.

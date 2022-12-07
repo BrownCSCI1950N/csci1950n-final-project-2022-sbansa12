@@ -1,0 +1,5 @@
+The start interface is very simple
+The settings button icon can be better because it currently looks like a sun.
+The sliding physics for the game is very interesting
+The font for the title is very old style and ugly
+The fonts should all be standerdized

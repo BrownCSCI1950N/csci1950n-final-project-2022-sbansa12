@@ -33,7 +33,7 @@ public class Application extends FXFrontEnd {
     this.activeScreen = null;
   }
 
-  protected void addScreen(String name, Screen screen) {
+  public void addScreen(String name, Screen screen) {
     screens.put(name, screen);
   }
   public void setActiveScreen(String name) {

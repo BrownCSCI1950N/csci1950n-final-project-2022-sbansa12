@@ -40,12 +40,12 @@ public class SettingsScreen extends Screen {
                 background,
                 ConstantsSettingsScreen.backButtonPosition,
                 ConstantsSettingsScreen.backButtonSize,
-                ConstantsSettingsScreen.backButtonColor,
-                ConstantsSettingsScreen.backButtonArcSize,
+                ConstantsSettingsScreen.buttonColor,
+                ConstantsSettingsScreen.buttonArcSize,
                 ConstantsSettingsScreen.backButtonText,
                 ConstantsSettingsScreen.backButtonTextPosition,
-                ConstantsSettingsScreen.backButtonTextColor,
-                ConstantsSettingsScreen.backButtonTextFont) {
+                ConstantsSettingsScreen.buttonTextColor,
+                ConstantsSettingsScreen.buttonTextFont) {
             @Override
             public void onMouseClicked(MouseEvent e) {
                 if (Utility.inBoundingBox(currentPosition, currentPosition.plus(currentSize), new Vec2d(e.getX(), e.getY()))) {
@@ -57,9 +57,9 @@ public class SettingsScreen extends Screen {
             @Override
             public void onMouseMoved(MouseEvent e) {
                 if (Utility.inBoundingBox(currentPosition, currentPosition.plus(currentSize), new Vec2d(e.getX(), e.getY()))) {
-                    this.color = ConstantsSettingsScreen.backButtonHoverColor;
+                    this.color = ConstantsSettingsScreen.buttonHoverColor;
                 } else {
-                    this.color = ConstantsSettingsScreen.backButtonColor;
+                    this.color = ConstantsSettingsScreen.buttonColor;
                 }
 
                 super.onMouseMoved(e);

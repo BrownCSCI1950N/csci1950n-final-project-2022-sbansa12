@@ -107,6 +107,8 @@ public class SaveFileSelectionScreen extends Screen {
                         newGame();
                     }
 
+                    engine.addScreen("select", new LevelSelectScreen(engine));
+
                     setActiveScreen("select");
                 }
 
@@ -155,6 +157,13 @@ public class SaveFileSelectionScreen extends Screen {
 
             final String buttonName = buttonNumber;
             String saveFilename = filename;
+
+            @Override
+            public void onDraw(GraphicsContext g) {
+                if (saveFilename != null) {
+                    super.onDraw(g);
+                }
+            }
 
             @Override
             public void onMouseClicked(MouseEvent e) {
@@ -215,7 +224,7 @@ public class SaveFileSelectionScreen extends Screen {
         for (String level: ConstantsGameValues.levels) {
             if (ConstantsGameValues.levelComplete.get(level) == null) {
                 showPopup = true;
-                // TODO: throw save file corrupted error, click button to continue and delete save file
+                deleteFile(filename);
             }
         }
     }

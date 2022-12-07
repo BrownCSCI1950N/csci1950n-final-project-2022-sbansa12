@@ -2,6 +2,7 @@ package hel;
 
 import engine.Application;
 import engine.support.Vec2d;
+import hel.Screens.LevelSelectScreen;
 import hel.Screens.SaveFileSelectionScreen;
 import hel.Screens.SettingsScreen;
 import hel.Screens.StartScreen;
@@ -32,12 +33,11 @@ public class App extends Application {
 
 //        NinGame nin = new NinGame();
 //        NinGameLevel ninGameLevel = new NinGameLevel(nin);
-//
+
         // Add All Screens to Application
         this.addScreen("start", new StartScreen(this));
-        this.addScreen("settings", new SettingsScreen(this));
         this.addScreen("saveFileSelection", new SaveFileSelectionScreen(this));
-//        this.addScreen("select", new);
+        this.addScreen("settings", new SettingsScreen(this));
 //        SelectionScreen ss = new SelectionScreen(this, ninGameLevel);
 //        this.addScreen("select", ss);
 //        this.addScreen("game", new GameScreen(this, ss, ninGameLevel, nin));
