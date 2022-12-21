@@ -5,7 +5,10 @@
         <Level complete="true" name="01"/>
         <Level complete="true" name="02"/>
         <Level complete="true" name="03"/>
-        <Level complete="false" name="04"/>
+        <Level complete="true" name="04"/>
+        <Level complete="true" name="05"/>
+        <Level complete="true" name="06"/>
+        <Level complete="false" name="07"/>
     </Levels>
     <Controls>
         <Player action="C" down="S" left="A" right="D" up="W"/>

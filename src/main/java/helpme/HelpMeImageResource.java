@@ -20,6 +20,8 @@ public class HelpMeImageResource {
         putResource("BOX1", new Sprite(new Image(ConstantsGameValues.resourcesPathway + "BOX1.png"), new Vec2d(1,1)));
         putResource("TRAP1", new Sprite(new Image(ConstantsGameValues.resourcesPathway + "TRAP1.png"), new Vec2d(1,1)));
         putResource("TRAP2", new Sprite(new Image(ConstantsGameValues.resourcesPathway + "TRAP2.png"), new Vec2d(1,1)));
+        putResource("TRAP3", new Sprite(new Image(ConstantsGameValues.resourcesPathway + "TRAP3.png"), new Vec2d(1,1)));
+
     }};
     public static Sprite getResource(String resourceName) {
         return images.getResource(resourceName);

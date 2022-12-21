@@ -78,7 +78,7 @@ public class HelpMeGameLevel {
                 Vec2d position = new Vec2d(ConstantsGameValues.tileSize.x * i, ConstantsGameValues.tileSize.y * j);
                 TileType t = map[j][i];
                 if (!tiles.contains(t)) {
-                    if (t == TileType.TRAP1 || t == TileType.TRAP2) {
+                    if (ConstantsGameValues.backWall.contains(t)) {
                         t = TileType.WALL1;
                     } else {
                         t = TileType.ROOM;
@@ -236,12 +236,11 @@ public class HelpMeGameLevel {
                 ));
                 break;
             case TRAP1:
-                toRet.addComponent(new HealthDamageComponent(toRet, new AAB(tc.getCurrentGameSpacePosition().plus(ConstantsGameValues.trapPositionAdd), tc.getSize().plus(ConstantsGameValues.trapShapeAdd)), ConstantsGameValues.wallCollisionLayer, 0, ConstantsGameValues.trapsDamage) {
+                tc.setCurrentGameSpacePositionNoVelocity(tc.getCurrentGameSpacePosition().plus(ConstantsGameValues.trapPositionAdd));
+                toRet.addComponent(new HealthDamageComponent(toRet, new AAB(tc.getCurrentGameSpacePosition(), tc.getSize().plus(ConstantsGameValues.trapShapeAdd)), ConstantsGameValues.wallCollisionLayer, 0, ConstantsGameValues.trapsDamage) {
                     @Override
                     public void onCollide(Collision collision) {
-                        System.out.println("HERE");
                         if (((TileComponent) collision.getCollidedObject().getComponent("tile")).isTile(TileType.PLAYER1)) {
-                            System.out.println("HER1");
                             return;
                         }
 
@@ -250,7 +249,8 @@ public class HelpMeGameLevel {
                 });
                 break;
             case TRAP2:
-                toRet.addComponent(new HealthDamageComponent(toRet, new AAB(tc.getCurrentGameSpacePosition().plus(ConstantsGameValues.trapPositionAdd), tc.getSize().plus(ConstantsGameValues.trapShapeAdd)), ConstantsGameValues.wallCollisionLayer, 0, ConstantsGameValues.trapsDamage) {
+                tc.setCurrentGameSpacePositionNoVelocity(tc.getCurrentGameSpacePosition().plus(ConstantsGameValues.trapPositionAdd));
+                toRet.addComponent(new HealthDamageComponent(toRet, new AAB(tc.getCurrentGameSpacePosition(), tc.getSize().plus(ConstantsGameValues.trapShapeAdd)), ConstantsGameValues.wallCollisionLayer, 0, ConstantsGameValues.trapsDamage) {
                     @Override
                     public void onCollide(Collision collision) {
                         if (((TileComponent) collision.getCollidedObject().getComponent("tile")).isTile(TileType.PLAYER2)) {
@@ -260,6 +260,10 @@ public class HelpMeGameLevel {
                         super.onCollide(collision);
                     }
                 });
+                break;
+            case TRAP3:
+                tc.setCurrentGameSpacePositionNoVelocity(tc.getCurrentGameSpacePosition().plus(ConstantsGameValues.trapPositionAdd));
+                toRet.addComponent(new HealthDamageComponent(toRet, new AAB(tc.getCurrentGameSpacePosition(), tc.getSize().plus(ConstantsGameValues.trapShapeAdd)), ConstantsGameValues.wallCollisionLayer, 0, ConstantsGameValues.trapsDamage));
                 break;
             case ENEMY:
             case BOX2:

@@ -8,7 +8,7 @@
 - https://github.com/BrownCSCI1950N/csci1950n-final-project-2022-sbansa12
 
 ## Version Number:
-- Final 4.0
+- Final 4.1
 
 ## Demo Uploaded to Slack: 
 - Yes

@@ -13,6 +13,7 @@ public enum TileType {
     STAIRS,
     TRAP1,
     TRAP2,
+    TRAP3,
     ENEMY,
     BOSS,
     HIDDEN,
@@ -52,6 +53,8 @@ public enum TileType {
                 return "T";
             case TRAP2:
                 return "t";
+            case TRAP3:
+                return "R";
             case ENEMY:
                 return "X";
             case BOSS:
@@ -105,6 +108,8 @@ public enum TileType {
                 return TRAP1;
             case "t":
                 return TRAP2;
+            case "R":
+                return TRAP3;
             case "X":
                 return ENEMY;
             case "B":

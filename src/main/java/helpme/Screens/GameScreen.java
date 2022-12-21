@@ -59,6 +59,9 @@ public class GameScreen extends Screen {
         // Map Corrupted Pop Up
         createPopUpGameFileCorruption(viewport);
 
+        // Level Restart Pop Up
+        createPopUpNeedRestart(viewport);
+
         hel.setViewport(viewport);
     }
 
@@ -164,12 +167,14 @@ public class GameScreen extends Screen {
             @Override
             public void onMouseClicked(MouseEvent e) {
                 if (Utility.inBoundingBox(currentPosition, currentPosition.plus(currentSize), new Vec2d(e.getX(), e.getY()))) {
-                    try {
-                        helLevel.resetCurrentLevel();
-                    } catch (IOException | LevelParseException ex) {
-                        System.out.println(ex.getMessage());
-                        showPopupGameFileCorruption = true;
-                        return;
+                    if (hel.isNeedRestart()) {
+                        try {
+                            helLevel.resetCurrentLevel();
+                        } catch (IOException | LevelParseException ex) {
+                            System.out.println(ex.getMessage());
+                            showPopupGameFileCorruption = true;
+                            return;
+                        }
                     }
                 }
                 super.onMouseClicked(e);
@@ -261,7 +266,9 @@ public class GameScreen extends Screen {
             @Override
             public void onMouseClicked(MouseEvent e) {
                 if (Utility.inBoundingBox(currentPosition, currentPosition.plus(currentSize), new Vec2d(e.getX(), e.getY()))) {
-                    setActiveScreen("select");
+                    if (hel.isLevelComplete()) {
+                        setActiveScreen("select");
+                    }
                 }
                 super.onMouseClicked(e);
             }

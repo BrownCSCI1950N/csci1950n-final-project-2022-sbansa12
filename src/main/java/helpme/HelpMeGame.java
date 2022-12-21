@@ -57,7 +57,6 @@ public class HelpMeGame {
         player.addComponent(new RespawnComponent(player, spawnPoint) {
             @Override
             public void script() {
-                System.out.println("RESTART");
                 needRestart = true;
             }
         });
@@ -67,7 +66,6 @@ public class HelpMeGame {
 
             @Override
             public void zeroHealthScript() {
-                System.out.println("ZERO HEALTH");
                 RespawnComponent respawnComponent = (RespawnComponent) player.getComponent("respawn");
                 respawnComponent.script();
             }

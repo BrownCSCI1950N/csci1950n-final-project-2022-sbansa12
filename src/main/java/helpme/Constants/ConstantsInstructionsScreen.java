@@ -16,11 +16,12 @@ public class ConstantsInstructionsScreen {
     public static final FontWrapper titleFont = ConstantsStartScreen.titleFont;
 
     // Credits Constants
-    public static final Vec2d instructionsPosition = new Vec2d(130, 220);
-    public static final String instructions = "Have Fire and Ice work together to hit the button and reach the exits.\n" +
-                                              "               (DEFAULT) Use WASD and IJKL to move each player\n" +
-                                              "                          Press 1 to go back to level selection\n" +
-                                              "                                    Press 2 to reset the level.";
+    public static final Vec2d instructionsPosition = new Vec2d(60, 200);
+    public static final String instructions = "           Have Fire and Ice work together to hit the button and reach the exits.\n" +
+                                              "Fire can only walk on Fire, and Ice only on Ice. Neither can walk on the Swamp\n" +
+                                              "                        (DEFAULT) Use WASD and IJKL to move each player\n" +
+                                              "                                   Press 1 to go back to level selection\n" +
+                                              "                                             Press 2 to reset the level.";
     public static final Color instructionsColor = titleColor;
     public static final FontWrapper instructionsFont = new FontWrapper("Bauhaus 93", FontWeight.EXTRA_LIGHT, null, 24);
 

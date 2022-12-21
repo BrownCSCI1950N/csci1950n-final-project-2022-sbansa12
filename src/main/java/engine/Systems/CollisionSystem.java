@@ -163,11 +163,12 @@ public class CollisionSystem extends System {
 
                 // Check if the objects collide
                 Vec2d MTV2;
-                if (accountVel != null) {
-                    MTV2 = gameObject1.getCollisionShape().MTV(gameObject2.getCollisionShape(), accountVel.get(gameObject1.getTag()) || accountVel.get(gameObject2.getTag()));
-                } else {
+                // TODO
+//                if (accountVel != null) {
+//                    MTV2 = gameObject1.getCollisionShape().MTV(gameObject2.getCollisionShape(), accountVel.get(gameObject1.getTag()) || accountVel.get(gameObject2.getTag()));
+//                } else {
                     MTV2 = gameObject1.getCollisionShape().MTV(gameObject2.getCollisionShape(), true);
-                }
+//                }
                 if (MTV2 != null) {
 
                     // Make sure you have not already found this collision

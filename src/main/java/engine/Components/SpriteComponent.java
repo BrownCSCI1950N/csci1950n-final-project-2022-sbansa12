@@ -47,6 +47,16 @@ public class SpriteComponent implements Component {
 //                g.strokeRect(center.x, center.y, size.x, size.y+1);
 //            }
 //        }
+//        if (gameObject.hasComponentTag("tile")) {
+//            TileComponent t = (TileComponent) gameObject.getComponent("tile");
+//            if (t.getTileType() == TileType.TRAP1) {
+//                HealthDamageComponent h = (HealthDamageComponent) gameObject.getComponent("healthDamage");
+//                Vec2d center = h.getCollisionShape().gameObject.getTransform().getCurrentGameSpacePosition();
+//                Vec2d size = gameObject.getTransform().getSize();
+//                g.setFill(Color.BLACK);
+//                g.strokeRect(center.x, center.y, size.x, h.y+1);
+//            }
+//        }
         sprite.draw(g, gameSpacePosition, gameObject.getTransform().getSize(), this.currentSpritePosition);
     }
 

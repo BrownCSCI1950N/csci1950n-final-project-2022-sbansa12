@@ -19,6 +19,9 @@ public class MapReader {
         BufferedReader myReader = new BufferedReader(new FileReader(filepath));
 
         String line = myReader.readLine();
+        if (line == null) {
+            throw new LevelParseException(filepath + " file empty.");
+        }
         int count = 1;
         int lineLength = line.length();
         List<String> lines = new LinkedList<>();

@@ -86,6 +86,9 @@ public class ConstantsGameValues {
         add("02");
         add("03");
         add("04");
+        add("05");
+        add("06");
+        add("07");
     }};
     public static final Integer numberOfLevelsAcross = 4;
     public static final Map<String, Boolean> levelComplete = new HashMap<>();
@@ -94,8 +97,9 @@ public class ConstantsGameValues {
     public static String mapsPathway = ".\\src\\main\\java\\helpme\\Maps";
     public static List<TileType> mapMustInclude = List.of(TileType.BUTTON, SPAWN1, SPAWN2, TileType.EXIT1, TileType.EXIT2);
     public static List<TileType> mapTiles = List.of(ROOM, SPAWN1, SPAWN2, WALL1, EXIT1, EXIT2, BUTTON);
-    public static List<TileType> specialTiles = List.of(BOX1, TRAP1, TRAP2, PLAYER1, PLAYER2);
+    public static List<TileType> specialTiles = List.of(BOX1, TRAP1, TRAP2, TRAP3, PLAYER1, PLAYER2);
     public static List<TileType> spawns = List.of(SPAWN1, SPAWN2);
+    public static List<TileType> backWall = List.of(TRAP1, TRAP2, TRAP3);
     public static final Vec2i mapSize = new Vec2i(39, 22);
     public static final Vec2d tileSize = new Vec2d(25,25);
 
@@ -128,7 +132,7 @@ public class ConstantsGameValues {
 
     // Physics Player
     public static final double playerMass = 1.0;
-    public static final double playerRestitution = 0.0;
+    public static final double playerRestitution = 0.2;
     public static final List<Double> movementVelocity = List.of(150.0, 100.0);
 
     // Physics Box
@@ -139,6 +143,6 @@ public class ConstantsGameValues {
     // Health and Damage System: Traps
     public static final Integer playerMaxHealth = 10;
     public static final Integer trapsDamage = 10;
-    public static final Vec2d trapPositionAdd = new Vec2d(0,20);
-    public static final Vec2d trapShapeAdd = new Vec2d(0,20);
+    public static final Vec2d trapPositionAdd = new Vec2d(0,-1);
+    public static final Vec2d trapShapeAdd = new Vec2d(0,1);
 }
