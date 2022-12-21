@@ -1,0 +1,4 @@
+- add more interesting levels, that provide more of a challenge
+- the game glitches at times like if I jump up while also holding the side sometimes it doesn't fully rise
+- another glitch is sometimes the tiles seem to overlap if travelling too fast, like falling fast from above
+- the settings icon doesnt really look like a proper gear, more like a water wheel

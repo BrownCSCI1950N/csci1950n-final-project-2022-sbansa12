@@ -17,7 +17,7 @@ public class ClosedExit extends State {
     public ClosedExit(StateMachineComponent sm, GameObject gameObject) {
         this.sm = sm;
         this.gameObject = gameObject;
-        this.image = new SpriteComponent(gameObject, NinImageResource.images.getResource(TileType.EXIT.name()), new Vec2d(0,0));
+        this.image = new SpriteComponent(gameObject, NinImageResource.images.getResource(TileType.EXIT1.name()), new Vec2d(0,0));
     }
 
     @Override

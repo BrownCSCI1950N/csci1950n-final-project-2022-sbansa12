@@ -1,4 +1,4 @@
-package hel.Screens;
+package helpme.Screens;
 
 import engine.Application;
 import engine.Screen;
@@ -8,7 +8,7 @@ import engine.UI.UIRectangle;
 import engine.UI.UIText;
 import engine.Utility;
 import engine.support.Vec2d;
-import hel.Constants.ConstantsStartScreen;
+import helpme.Constants.ConstantsStartScreen;
 import javafx.scene.input.MouseEvent;
 
 public class StartScreen extends Screen {
@@ -49,7 +49,7 @@ public class StartScreen extends Screen {
             @Override
             public void onMouseClicked(MouseEvent e) {
                 if (Utility.inBoundingBox(currentPosition, currentPosition.plus(currentSize), new Vec2d(e.getX(), e.getY()))) {
-                    setActiveScreen("saveFileSelection");
+                    setActiveScreen("instructions");
                 }
                 super.onMouseClicked(e);
             }

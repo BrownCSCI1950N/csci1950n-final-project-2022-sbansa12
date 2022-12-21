@@ -2,6 +2,7 @@ package nin.Screens;
 
 import engine.Application;
 import engine.SavingLoading.SaveFile;
+import engine.SavingLoading.SaveFileParseException;
 import engine.Screen;
 import engine.UI.UIButton;
 import engine.UI.UIElement;
@@ -214,41 +215,46 @@ public class SelectionScreen extends Screen {
     }
 
     private void saveFile() {
-        Document doc = SaveFile.create();
+        try {
+            Document doc = SaveFile.create();
 
-        Element game = doc.createElement("Game");
+            Element game = doc.createElement("Game");
 
-        int count = 0;
+            int count = 0;
 
-        for (String key : ConstantsSelectionScreen.levelComplete.keySet()) {
-            Element level = doc.createElement("Level");
-            Boolean complete = ConstantsSelectionScreen.levelComplete.get(key);
-            if (complete) {
-                count += 1;
+            for (String key : ConstantsSelectionScreen.levelComplete.keySet()) {
+                Element level = doc.createElement("Level");
+                Boolean complete = ConstantsSelectionScreen.levelComplete.get(key);
+                if (complete) {
+                    count += 1;
+                }
+                level.setAttribute("complete", String.valueOf(complete));
+                level.setAttribute("name", key);
+                game.appendChild(level);
             }
-            level.setAttribute("complete", String.valueOf(complete));
-            level.setAttribute("name", key);
-            game.appendChild(level);
-        }
 
-        doc.appendChild(game);
-        String fix = "-";
-        if (count < 10) {
-            fix = "-0";
-        }
+            doc.appendChild(game);
+            String fix = "-";
+            if (count < 10) {
+                fix = "-0";
+            }
 
-        // Delete Previously Existing Save File
-        String[] files = Objects.requireNonNull(new File(".\\src\\main\\java\\nin\\SaveFiles").list());
-        for (String file : files) {
-            if (file.substring(0, 2).equals(SaveLoadScreen.saveFileName)) {
-                if (!new File(".\\src\\main\\java\\nin\\SaveFiles\\"+file).delete()){
-                    System.out.println("Failed to Delete Old Save File");
-                    System.exit(1);
+            // Delete Previously Existing Save File
+            String[] files = Objects.requireNonNull(new File(".\\src\\main\\java\\nin\\SaveFiles").list());
+            for (String file : files) {
+                if (file.substring(0, 2).equals(SaveLoadScreen.saveFileName)) {
+                    if (!new File(".\\src\\main\\java\\nin\\SaveFiles\\" + file).delete()) {
+                        System.out.println("Failed to Delete Old Save File");
+                        System.exit(1);
+                    }
                 }
             }
-        }
 
-        SaveFile.save(doc, ".\\src\\main\\java\\nin\\SaveFiles\\" + SaveLoadScreen.saveFileName + fix + count + ".xml");
+            SaveFile.save(doc, ".\\src\\main\\java\\nin\\SaveFiles\\" + SaveLoadScreen.saveFileName + fix + count + ".xml");
+        } catch (SaveFileParseException e) {
+            System.out.println(e.getMessage());
+            System.exit(1);
+        }
     }
 
     @Override

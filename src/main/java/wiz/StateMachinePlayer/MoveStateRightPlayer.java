@@ -19,7 +19,7 @@ public class MoveStateRightPlayer extends State {
     public MoveStateRightPlayer(StateMachineComponent sm, GameObject gameObject) {
         this.sm = sm;
         this.gameObject = gameObject;
-        this.animation = new ConstantAnimationComponent(gameObject, WizGame.images.getResource(TileType.PLAYER.name()), List.of(new Vec2d(1,3), new Vec2d(0,3)), Constants.playerMoveTime);
+        this.animation = new ConstantAnimationComponent(gameObject, WizGame.images.getResource(TileType.PLAYER1.name()), List.of(new Vec2d(1,3), new Vec2d(0,3)), Constants.playerMoveTime);
     }
 
     @Override

@@ -1,0 +1,15 @@
+How To Play Game:
+1) Run the main function in helpme/Main.
+2) Wait till the game screen pops up.
+3) Click the start button on the title screen.
+4) After reading the instructions, click "next" to continue.
+5) Click either "new game" to start a new game or "load:" to load in a previously saved game. Clicking "x" deletes that load file.
+6) Click the level you want to play. They must be completed in order!
+7) Clicking the cog wheel at the bottom right opens settings
+8) Click the "controls" button in settings
+9) You can edit the control bindings by clicking a box/button, clicking backspace to delete the current key binding, then clicking the key you want to bind. Once done, click save to save settings.
+10) Clicking the back arrow on the top right, takes you back a screen.
+11) Play the game!
+12) Use the keys to move and jump. Clicking 1 will cause the game to go back to the level selection screen. Clicking 2 will cause the level to reset.
+13) The goal is to click the button then have both characters reach their respective exit!
+14) Have fun!

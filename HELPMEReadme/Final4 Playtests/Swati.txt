@@ -1,0 +1,3 @@
+- allow changing of the reset and quit buttons on the control screen
+- the physics feel of the characters is very interesting, they are slightly floaty but not too much
+- the instructions can be better, perhaps have more of a story, or just be more informative

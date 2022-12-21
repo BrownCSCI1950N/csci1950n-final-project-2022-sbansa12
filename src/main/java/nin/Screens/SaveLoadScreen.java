@@ -2,6 +2,7 @@ package nin.Screens;
 
 import engine.Application;
 import engine.SavingLoading.SaveFile;
+import engine.SavingLoading.SaveFileParseException;
 import engine.Screen;
 import engine.UI.UIButton;
 import engine.UI.UIElement;
@@ -237,15 +238,20 @@ public class SaveLoadScreen extends Screen {
     }
 
     private void loadFile(String filename) {
-        Document doc = SaveFile.read(".\\src\\main\\java\\nin\\SaveFiles\\"+filename);
+        try {
+            Document doc = SaveFile.read(".\\src\\main\\java\\nin\\SaveFiles\\" + filename);
 
-        NodeList nList = doc.getElementsByTagName("Level");
+            NodeList nList = doc.getElementsByTagName("Level");
 
-        for (int i = 0; i < nList.getLength(); i++) {
-            Element level = (Element) nList.item(i);
-            String levelName = level.getAttribute("name");
-            Boolean levelComplete = Boolean.valueOf(level.getAttribute("complete"));
-            ConstantsSelectionScreen.levelComplete.put(levelName, levelComplete);
+            for (int i = 0; i < nList.getLength(); i++) {
+                Element level = (Element) nList.item(i);
+                String levelName = level.getAttribute("name");
+                Boolean levelComplete = Boolean.valueOf(level.getAttribute("complete"));
+                ConstantsSelectionScreen.levelComplete.put(levelName, levelComplete);
+            }
+        } catch (SaveFileParseException e) {
+            System.out.println(e.getMessage());
+            System.exit(1);
         }
     }
 

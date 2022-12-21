@@ -12,7 +12,7 @@ public class CollisionComponent implements Component {
     protected Integer layer;
     protected PhysicsComponent p;
 
-    public CollisionComponent(GameObject gameObject, Shape s, Integer layer, boolean allowOverlap, boolean IsStaticApplyMTV) {
+    public CollisionComponent(GameObject gameObject, Shape s, Integer layer, boolean allowOverlap, Boolean IsStaticApplyMTV) {
         this.gameObject = gameObject;
         this.collisionShape = s;
         this.layer = layer;
@@ -69,7 +69,7 @@ public class CollisionComponent implements Component {
         if (p != null) {
             if (collision.getCollidedObject().hasComponentTag(PhysicsComponent.tag)) {
                 if (collision.getMTV() != null) {
-                    if (!p.isStaticPhysics) {
+                    if (!(p.isStaticPhysics.get(0) && p.isStaticPhysics.get(1))) {
                         PhysicsComponent bPhysics = (PhysicsComponent) collision.getCollidedObject().getComponent(PhysicsComponent.tag);
 
                         double COR = Math.sqrt(p.restitution * bPhysics.restitution);
@@ -82,7 +82,7 @@ public class CollisionComponent implements Component {
 
                         // use impulse formula
                         double I_a;
-                        if (!bPhysics.isStaticPhysics) {
+                        if (!(bPhysics.isStaticPhysics.get(0) && bPhysics.isStaticPhysics.get(1))) {
                             I_a = ((m_a * m_b) * (u_b - u_a) * (1+COR))/(m_a + m_b);
                         } else {
                             // B is a Static Object

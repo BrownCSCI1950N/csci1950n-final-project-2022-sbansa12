@@ -3,6 +3,7 @@ package engine.Systems;
 import Pair.Pair;
 import engine.Components.Collision;
 import engine.Components.CollisionComponent;
+import engine.Components.HealthDamageComponent;
 import engine.Components.TransformComponent;
 import engine.GameObject;
 import engine.GameWorld;
@@ -28,6 +29,7 @@ public class CollisionSystem extends System {
     static boolean bothObjectCollisionScript;
 
     static List<Pair<String,String>> tagsCollide;
+    Map<String, Boolean> accountVel;
 
     /**
      * Constructor for a System. Requires all game objects zIndex to be unique game object for the system. Assumes we want to check collisions between same tags. To add collisions across tags, use method.
@@ -36,6 +38,17 @@ public class CollisionSystem extends System {
      * @param relevantTags - list of strings of relevant component tags to check collisions between.
      * @param bothObjectCollisionScript - boolean representing if both collided objects should have their scripts called or only one of them
      */
+    public CollisionSystem(GameWorld gameWorld, List<String> relevantTags, boolean bothObjectCollisionScript, Map<String, Boolean> accountVel) {
+        super(gameWorld, relevantTags);
+        this.layersCollide = new LinkedList<>();
+        CollisionSystem.bothObjectCollisionScript = bothObjectCollisionScript;
+        tagsCollide = new LinkedList<>();
+        for (String tag: relevantTags) {
+            tagsCollide.add(new Pair<>(tag, tag));
+        }
+        this.accountVel = accountVel;
+    }
+
     public CollisionSystem(GameWorld gameWorld, List<String> relevantTags, boolean bothObjectCollisionScript) {
         super(gameWorld, relevantTags);
         this.layersCollide = new LinkedList<>();
@@ -44,6 +57,7 @@ public class CollisionSystem extends System {
         for (String tag: relevantTags) {
             tagsCollide.add(new Pair<>(tag, tag));
         }
+        this.accountVel = null;
     }
 
     /**
@@ -148,7 +162,12 @@ public class CollisionSystem extends System {
             if (gameObject1 != gameObject2) {
 
                 // Check if the objects collide
-                Vec2d MTV2 = gameObject1.getCollisionShape().MTV(gameObject2.getCollisionShape(), true);
+                Vec2d MTV2;
+                if (accountVel != null) {
+                    MTV2 = gameObject1.getCollisionShape().MTV(gameObject2.getCollisionShape(), accountVel.get(gameObject1.getTag()) || accountVel.get(gameObject2.getTag()));
+                } else {
+                    MTV2 = gameObject1.getCollisionShape().MTV(gameObject2.getCollisionShape(), true);
+                }
                 if (MTV2 != null) {
 
                     // Make sure you have not already found this collision

@@ -25,6 +25,28 @@ public class MovePhysicsComponent extends KeysComponent {
         onceHappened = new boolean[] {false, false, false};
         this.movementVelocity = movementVelocity;
         this.directionProcessing = 0;
+        this.turnOffMovement = false;
+        this.doubleJump = false;
+    }
+
+    boolean doubleJump;
+    boolean doneOneJump;
+    boolean doneDoubleJump;
+
+    public MovePhysicsComponent(GameObject gameObject, List<KeyCode> keys, List<Double> movementVelocity, boolean doubleJump) {
+        // [UP, RIGHT, LEFT]
+        assert keys.size() == 3;
+        assert movementVelocity.size() == 2;
+
+        this.gameObject = gameObject;
+        this.keys = keys;
+        onceHappened = new boolean[] {false, false, false};
+        this.movementVelocity = movementVelocity;
+        this.directionProcessing = 0;
+        this.turnOffMovement = false;
+        this.doubleJump = doubleJump;
+        this.doneOneJump = false;
+        this.doneDoubleJump = false;
     }
 
     @Override
@@ -50,6 +72,9 @@ public class MovePhysicsComponent extends KeysComponent {
 
     @Override
     public void script(Pair<InputEvents, List<KeyCode>> input) {
+        if (turnOffMovement) {
+            return;
+        }
         assert gameObject.hasComponentTag("physics");
         PhysicsComponent p = (PhysicsComponent) gameObject.getComponent("physics");
 
@@ -58,6 +83,17 @@ public class MovePhysicsComponent extends KeysComponent {
                 if (input.getRight().contains(keys.get(i))) {
                     if (i == 0) {
                         if (!onceHappened[0]) {
+                            if (doubleJump) {
+                                System.out.println("Done Single: " + doneOneJump);
+                                System.out.println("Done Double: " + doneDoubleJump);
+                                if (!doneDoubleJump && doneOneJump) {
+                                    System.out.println("Double Jump");
+                                    actionJumpForce(p);
+                                    this.doneDoubleJump = true;
+                                    this.doneOneJump = false;
+                                }
+                            }
+
                             actionJump(p);
                             this.onceHappened[0] = true;
                         }
@@ -93,17 +129,29 @@ public class MovePhysicsComponent extends KeysComponent {
         }
     }
 
-    public void actionSide(Integer direction, PhysicsComponent p) {
+    private void actionSide(Integer direction, PhysicsComponent p) {
         p.vel = new Vec2d(direction * movementVelocity.get(1), p.vel.y);
     }
 
-    public void actionJump(PhysicsComponent p) {
+    private void actionJump(PhysicsComponent p) {
         if (p.isGrounded) {
             p.applyImpulse(new Vec2d(0, -movementVelocity.get(0)));
+            this.doneOneJump = true;
+            this.doneDoubleJump = false;
         }
+    }
+
+    private void actionJumpForce(PhysicsComponent p) {
+        p.applyImpulse(new Vec2d(0, -movementVelocity.get(0)));
     }
 
     public boolean getOnceHappenedJump() {
         return onceHappened[0];
+    }
+
+    Boolean turnOffMovement;
+
+    public void turnOffMovement() {
+        turnOffMovement = true;
     }
 }

@@ -14,7 +14,11 @@ public class TileComponent implements Component {
     }
 
     public boolean isPlayer() {
-        return tileType == TileType.PLAYER;
+        return tileType == TileType.PLAYER1 || tileType == TileType.PLAYER2 ;
+    }
+
+    public boolean isTile(TileType check) {
+        return tileType == check;
     }
 
     @Override

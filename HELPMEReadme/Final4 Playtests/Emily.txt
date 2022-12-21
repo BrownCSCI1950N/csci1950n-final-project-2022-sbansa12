@@ -1,0 +1,5 @@
+- some of the things like the text and buttons feel like they are slightly off-center
+- the centering of the arrow keys in the control menu is way off
+- casing of the text is better weird and inconsistent, especially capitalizing every other word
+- background colors for the screen can be nicer, the orange is very bright, though it is good for color blind people
+- i like how the jumps are additive so you can do a super big jump

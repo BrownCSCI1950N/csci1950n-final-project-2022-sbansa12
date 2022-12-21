@@ -55,11 +55,11 @@ public class TerrainReader {
 
             Room newRoom = parseRoom(line, "Room", myReader, count, new Vec2i(width, height));
 
-            if (newRoom.getRoomType() == TileType.SPAWN) {
+            if (newRoom.getRoomType() == TileType.SPAWN1) {
                 spawn = true;
             }
 
-            if (newRoom.getRoomType() == TileType.EXIT) {
+            if (newRoom.getRoomType() == TileType.EXIT1) {
                 exit = true;
             }
 
@@ -79,11 +79,11 @@ public class TerrainReader {
 
             Room newHall = parseRoom(line, "Hall", myReader, count, new Vec2i(width, height));
 
-            if (newHall.getRoomType() == TileType.SPAWN) {
+            if (newHall.getRoomType() == TileType.SPAWN1) {
                 spawn = true;
             }
 
-            if (newHall.getRoomType() == TileType.EXIT) {
+            if (newHall.getRoomType() == TileType.EXIT1) {
                 exit = true;
             }
 

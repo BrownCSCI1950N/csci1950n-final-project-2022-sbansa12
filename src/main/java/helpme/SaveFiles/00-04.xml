@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Game>
+    <Levels>
+        <Level complete="true" name="00"/>
+        <Level complete="true" name="01"/>
+        <Level complete="true" name="02"/>
+        <Level complete="true" name="03"/>
+        <Level complete="false" name="04"/>
+    </Levels>
+    <Controls>
+        <Player action="C" down="S" left="A" right="D" up="W"/>
+        <Player action="N" down="K" left="J" right="L" up="I"/>
+    </Controls>
+</Game>

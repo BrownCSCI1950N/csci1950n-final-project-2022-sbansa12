@@ -1,4 +1,4 @@
-package hel.Constants;
+package helpme.Constants;
 
 import engine.FontWrapper;
 import engine.support.Vec2d;
@@ -16,7 +16,7 @@ public class ConstantsSaveFileSelectionScreen {
     public static final FontWrapper titleFont = ConstantsStartScreen.titleFont;
 
     // Save Files Pathway
-    public static String savefilesPathway = ".\\src\\main\\java\\hel\\SaveFiles";
+    public static String savefilesPathway = ".\\src\\main\\java\\helpme\\SaveFiles";
 
     // Number of Possible Save Files
     public static Integer numberOfPossibleSavefiles = 3;
@@ -43,17 +43,23 @@ public class ConstantsSaveFileSelectionScreen {
     public static final Color buttonTextColor = ConstantsStartScreen.buttonTextColor;
     public static final FontWrapper buttonTextFont = ConstantsStartScreen.buttonTextFont;
 
-    // PopUp Constants
+    // Game Corrupted
+    public static final String popUpTextGameFileCorruption = "Game Corrupted... Redownload Game";
+
+    // Save File Corruption
+    public static final String popUpTextSaveFileCorruption = "Save File Corrupted... Deleting Save File";
+
+    // General PopUp Constants
     public static final Color popUpOverlayColor = Color.rgb(141,139,139 ,0.8);
     public static final Vec2d popUpPanelPosition = new Vec2d(100,80);
     public static final Vec2d popUpPanelSize = new Vec2d(760,380);
     public static final Color popUpPanelColor = Color.rgb(243,236,224);
     public static final Vec2d popUpPanelArcSize = new Vec2d(10,10);
     public static final Vec2d popUpTextPosition = new Vec2d(195,280);
-    public static final String popUpText = "Save File Corrupted... Deleting Save File";
     public static final Color popUpTextColor = Color.rgb(61, 15,26);
     public static final FontWrapper popUpTextFont = new FontWrapper("Bauhaus 93", FontWeight.EXTRA_LIGHT, null, 32);
     public static final Vec2d popUpButtonPosition = new Vec2d(790, 110);
     public static final Vec2d popUpButtonSize = new Vec2d(40,40);
+    public static final Vec2d popUpButtonTextPosition = new Vec2d(12, 10);
     public static final String popUpButtonText = "X";
 }

@@ -15,7 +15,7 @@ public class IdleStateRightPlayer extends State {
     public IdleStateRightPlayer(StateMachineComponent sm, GameObject gameObject) {
         this.sm = sm;
         this.gameObject = gameObject;
-        this.idle = new SpriteComponent(gameObject, WizGame.images.getResource(TileType.PLAYER.name()), new Vec2d(0,1));
+        this.idle = new SpriteComponent(gameObject, WizGame.images.getResource(TileType.PLAYER1.name()), new Vec2d(0,1));
     }
     @Override
     public void onStart() {

@@ -1,7 +1,8 @@
-package hel.Screens;
+package helpme.Screens;
 
 import engine.Application;
 import engine.SavingLoading.SaveFile;
+import engine.SavingLoading.SaveFileParseException;
 import engine.Screen;
 import engine.UI.UIButton;
 import engine.UI.UIElement;
@@ -9,26 +10,34 @@ import engine.UI.UIRectangle;
 import engine.UI.UIText;
 import engine.Utility;
 import engine.support.Vec2d;
-import hel.Constants.ConstantsGameValues;
-import hel.Constants.ConstantsSaveFileSelectionScreen;
+import helpme.Constants.ConstantsGameValues;
+import helpme.Constants.ConstantsSaveFileSelectionScreen;
+import helpme.HelpMeGame;
+import helpme.HelpMeGameLevel;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
 public class SaveFileSelectionScreen extends Screen {
 
     // Save files are saved as <buttonName>-<number of completed levels>
 
-    Boolean showPopup;
+    Boolean showPopupSaveFileCorruption;
+    Boolean showPopupGameFileCorruption;
+
     public SaveFileSelectionScreen(Application engine) {
         super(engine);
 
-        showPopup = false;
+        showPopupSaveFileCorruption = false;
+        showPopupGameFileCorruption = false;
 
         // Create Background
         UIElement background = new UIRectangle(
@@ -53,7 +62,8 @@ public class SaveFileSelectionScreen extends Screen {
         checkFilesAndCreateGameAndDeletionButtons(background);
 
         // Create Save File Corrupted Popup
-        createPopUp(background);
+        createPopUpSaveFileCorruption(background);
+        createPopUpGameFileCorruption(background);
     }
 
     private void checkFilesAndCreateGameAndDeletionButtons(UIElement parent) {
@@ -70,11 +80,11 @@ public class SaveFileSelectionScreen extends Screen {
 
             String file = findSaveFile(buttonNumber);
             if (file != null) {
-                UIElement button = createLoadButton(parent, new Vec2d(buttonPositionX, buttonPositionY), buttonNumber, file, "load: " + file.substring(3, 5) + "/" + ConstantsGameValues.levels.size());
+                UIElement button = createLoadButton(parent, new Vec2d(buttonPositionX, buttonPositionY), buttonNumber, file, loadButtonMessage(file));
                 parent.addChildren(button);
                 button.addChildren(createDeleteButton(button, new Vec2d(buttonPositionX, buttonPositionY).plus(ConstantsSaveFileSelectionScreen.deleteButtonRelativePosition), buttonNumber, file));
             } else {
-                // if do not find a file that corresponds to that button, this should lead to a new game.
+                // If do not find a file that corresponds to that button, this should lead to a new game.
                 UIElement button = createLoadButton(parent, new Vec2d(buttonPositionX, buttonPositionY), buttonNumber, null, " new game");
                 parent.addChildren(button);
                 button.addChildren(createDeleteButton(button, new Vec2d(buttonPositionX, buttonPositionY).plus(ConstantsSaveFileSelectionScreen.deleteButtonRelativePosition), buttonNumber, null));
@@ -101,14 +111,23 @@ public class SaveFileSelectionScreen extends Screen {
             @Override
             public void onMouseClicked(MouseEvent e) {
                 if (Utility.inBoundingBox(currentPosition, currentPosition.plus(currentSize), new Vec2d(e.getX(), e.getY()))) {
+                    int err;
                     if (saveFilename != null) {
-                        loadFile(saveFilename);
+                        err = loadFile(saveFilename);
                     } else {
-                        newGame();
+                        err = newGame();
+                    }
+                    if (err < 0) {
+                        reset();
+                        return;
                     }
 
-                    engine.addScreen("select", new LevelSelectScreen(engine));
-
+                    HelpMeGame hel = new HelpMeGame();
+                    HelpMeGameLevel helLevel = new HelpMeGameLevel(hel);
+                    engine.addScreen("select", new LevelSelectScreen(engine, buttonName, helLevel));
+                    engine.addScreen("settings", new SettingsScreen(engine));
+                    engine.addScreen("controls", new ControlsScreen(engine));
+                    engine.addScreen("game", new GameScreen(engine, helLevel, hel));
                     setActiveScreen("select");
                 }
 
@@ -131,7 +150,7 @@ public class SaveFileSelectionScreen extends Screen {
                 String file = findSaveFile(buttonName);
                 if (file != null) {
                     this.saveFilename = file;
-                    this.buttonText = "Load: " + file.substring(3, 5) + "/" + ConstantsGameValues.levels.size();
+                    this.buttonText = loadButtonMessage(file);
                 } else {
                     this.saveFilename = null;
                     this.buttonText = " new game";
@@ -140,6 +159,16 @@ public class SaveFileSelectionScreen extends Screen {
                 super.reset();
             }
         };
+    }
+
+    private String loadButtonMessage(String file) {
+        String numberLevels;
+        if (ConstantsGameValues.levels.size() < 10) {
+            numberLevels = "0" + ConstantsGameValues.levels.size();
+        } else {
+            numberLevels = String.valueOf(ConstantsGameValues.levels.size());
+        }
+        return "load: " + file.substring(3, 5) + "/" + numberLevels;
     }
 
     private UIElement createDeleteButton(UIElement parent, Vec2d buttonPosition, String buttonNumber, String filename) {
@@ -206,27 +235,98 @@ public class SaveFileSelectionScreen extends Screen {
         return null;
     }
 
-    private void loadFile(String filename) {
+    private int loadFile(String filename) {
 
         ConstantsGameValues.levelComplete.clear();
+        ConstantsGameValues.controls.clear();
 
-        Document doc = SaveFile.read(ConstantsSaveFileSelectionScreen.savefilesPathway + "\\" + filename);
+        try {
+            Document doc = SaveFile.read(ConstantsSaveFileSelectionScreen.savefilesPathway + "\\" + filename);
 
-        NodeList nList = doc.getElementsByTagName("Level");
+            NodeList levelList = doc.getElementsByTagName("Level");
 
-        for (int i = 0; i < nList.getLength(); i++) {
-            Element level = (Element) nList.item(i);
-            String levelName = level.getAttribute("name");
-            Boolean levelComplete = Boolean.valueOf(level.getAttribute("complete"));
-            ConstantsGameValues.levelComplete.put(levelName, levelComplete);
+            for (int i = 0; i < levelList.getLength(); i++) {
+                Element level = (Element) levelList.item(i);
+                String levelName = level.getAttribute("name");
+                Boolean levelComplete = Boolean.valueOf(level.getAttribute("complete"));
+                ConstantsGameValues.levelComplete.put(levelName, levelComplete);
+            }
+
+            for (String level : ConstantsGameValues.levels) {
+                if (ConstantsGameValues.levelComplete.get(level) == null) {
+                    showPopupSaveFileCorruption = true;
+                    showPopupGameFileCorruption = false;
+                    deleteFile(filename);
+                    return -1;
+                }
+            }
+
+            NodeList playerControlList = doc.getElementsByTagName("Player");
+
+            List<List<KeyCode>> temp = new LinkedList<>();
+
+            for (int i = 0; i < playerControlList.getLength(); i++) {
+                Element level = (Element) playerControlList.item(i);
+                KeyCode up = KeyCode.getKeyCode(level.getAttribute("up"));
+                KeyCode down = KeyCode.getKeyCode(level.getAttribute("down"));
+                KeyCode right = KeyCode.getKeyCode(level.getAttribute("right"));
+                KeyCode left = KeyCode.getKeyCode(level.getAttribute("left"));
+                KeyCode action = KeyCode.getKeyCode(level.getAttribute("action"));
+
+                if (up == null || down == null || right == null || left == null || action == null) {
+                    showPopupSaveFileCorruption = true;
+                    showPopupGameFileCorruption = false;
+                    deleteFile(filename);
+                    return -1;
+                }
+
+
+                temp.add(new LinkedList<>() {{
+                    add(up);
+                    add(down);
+                    add(right);
+                    add(left);
+                    add(action);
+                }});
+            }
+
+            List<KeyCode> check = new LinkedList<>();
+            check.addAll(temp.get(0));
+            check.addAll(temp.get(1));
+
+            for (KeyCode k : check) {
+                if (k == ConstantsGameValues.clickButtonLevelQuit || k == ConstantsGameValues.clickButtonLevelReset || occurMoreThanOnce(k, check)) {
+                    showPopupSaveFileCorruption = true;
+                    showPopupGameFileCorruption = false;
+                    deleteFile(filename);
+                    return -1;
+                }
+            }
+
+            ConstantsGameValues.controls = temp;
+
+        } catch (SaveFileParseException e) {
+            System.out.println(e.getMessage());
+            showPopupSaveFileCorruption = true;
+            showPopupGameFileCorruption = false;
+            deleteFile(filename);
+            return -1;
         }
 
-        for (String level: ConstantsGameValues.levels) {
-            if (ConstantsGameValues.levelComplete.get(level) == null) {
-                showPopup = true;
-                deleteFile(filename);
+        return 0;
+    }
+
+    private boolean occurMoreThanOnce(KeyCode k, List<KeyCode> lst) {
+        int count = 0;
+        for (KeyCode k1 : lst) {
+            if (k == k1) {
+                count++;
+                if (count > 1) {
+                    return true;
+                }
             }
         }
+        return false;
     }
 
     private void deleteFile(String saveFilename) {
@@ -235,18 +335,23 @@ public class SaveFileSelectionScreen extends Screen {
             if (!f.delete()){
                 System.out.println("Failed to Delete Old Save File");
                 System.out.println(f.getAbsolutePath() + " Exists: " + f.exists());
-                System.exit(1);
+                showPopupSaveFileCorruption = false;
+                showPopupGameFileCorruption = true;
             }
         }
     }
 
-    private void newGame() {
+    private int newGame() {
         for (String level: ConstantsGameValues.levels) {
             ConstantsGameValues.levelComplete.put(level, false);
         }
+
+        ConstantsGameValues.controls.addAll(ConstantsGameValues.defaultControls);
+
+        return 0;
     }
 
-    private void createPopUp(UIElement parent) {
+    private void createPopUpSaveFileCorruption(UIElement parent) {
         // Create Background
         UIElement overlay = new UIRectangle(
                 this,
@@ -256,7 +361,7 @@ public class SaveFileSelectionScreen extends Screen {
                 ConstantsSaveFileSelectionScreen.popUpOverlayColor){
             @Override
             public void onDraw(GraphicsContext g) {
-                if (showPopup) {
+                if (showPopupSaveFileCorruption) {
                     super.onDraw(g);
                 }
             }
@@ -272,7 +377,7 @@ public class SaveFileSelectionScreen extends Screen {
                 ConstantsSaveFileSelectionScreen.popUpPanelArcSize){
             @Override
             public void onDraw(GraphicsContext g) {
-                if (showPopup) {
+                if (showPopupSaveFileCorruption) {
                     super.onDraw(g);
                 }
             }
@@ -283,13 +388,13 @@ public class SaveFileSelectionScreen extends Screen {
                 this,
                 box,
                 ConstantsSaveFileSelectionScreen.popUpTextPosition,
-                ConstantsSaveFileSelectionScreen.popUpText,
+                ConstantsSaveFileSelectionScreen.popUpTextSaveFileCorruption,
                 ConstantsSaveFileSelectionScreen.popUpTextColor,
                 ConstantsSaveFileSelectionScreen.popUpTextFont
         ){
             @Override
             public void onDraw(GraphicsContext g) {
-                if (showPopup) {
+                if (showPopupSaveFileCorruption) {
                     super.onDraw(g);
                 }
             }
@@ -304,13 +409,13 @@ public class SaveFileSelectionScreen extends Screen {
                 ConstantsSaveFileSelectionScreen.buttonColor,
                 ConstantsSaveFileSelectionScreen.buttonArcSize,
                 ConstantsSaveFileSelectionScreen.popUpButtonText,
-                ConstantsSaveFileSelectionScreen.buttonTextPosition,
+                ConstantsSaveFileSelectionScreen.popUpButtonTextPosition,
                 ConstantsSaveFileSelectionScreen.buttonTextColor,
                 ConstantsSaveFileSelectionScreen.buttonTextFont
         ){
             @Override
             public void onDraw(GraphicsContext g) {
-                if (showPopup) {
+                if (showPopupSaveFileCorruption) {
                     super.onDraw(g);
                 }
             }
@@ -318,7 +423,7 @@ public class SaveFileSelectionScreen extends Screen {
             @Override
             public void onMouseClicked(MouseEvent e) {
                 if (Utility.inBoundingBox(currentPosition, currentPosition.plus(currentSize), new Vec2d(e.getX(), e.getY()))) {
-                    showPopup = false;
+                    showPopupSaveFileCorruption = false;
                 }
                 super.onMouseClicked(e);
             }
@@ -335,5 +440,55 @@ public class SaveFileSelectionScreen extends Screen {
             }
         };
         box.addChildren(button);
+    }
+    private void createPopUpGameFileCorruption(UIElement parent) {
+        // Create Background
+        UIElement overlay = new UIRectangle(
+                this,
+                parent,
+                new Vec2d(0,0),
+                this.engine.getCurrentStageSize(),
+                ConstantsSaveFileSelectionScreen.popUpOverlayColor){
+            @Override
+            public void onDraw(GraphicsContext g) {
+                if (showPopupGameFileCorruption) {
+                    super.onDraw(g);
+                }
+            }
+        };
+        parent.addChildren(overlay);
+
+        UIElement box = new UIRectangle(
+                this,
+                overlay,
+                ConstantsSaveFileSelectionScreen.popUpPanelPosition,
+                ConstantsSaveFileSelectionScreen.popUpPanelSize,
+                ConstantsSaveFileSelectionScreen.popUpPanelColor,
+                ConstantsSaveFileSelectionScreen.popUpPanelArcSize){
+            @Override
+            public void onDraw(GraphicsContext g) {
+                if (showPopupGameFileCorruption) {
+                    super.onDraw(g);
+                }
+            }
+        };
+        overlay.addChildren(box);
+
+        UIElement text = new UIText(
+                this,
+                box,
+                ConstantsSaveFileSelectionScreen.popUpTextPosition,
+                ConstantsSaveFileSelectionScreen.popUpTextGameFileCorruption,
+                ConstantsSaveFileSelectionScreen.popUpTextColor,
+                ConstantsSaveFileSelectionScreen.popUpTextFont
+        ){
+            @Override
+            public void onDraw(GraphicsContext g) {
+                if (showPopupGameFileCorruption) {
+                    super.onDraw(g);
+                }
+            }
+        };
+        box.addChildren(text);
     }
 }

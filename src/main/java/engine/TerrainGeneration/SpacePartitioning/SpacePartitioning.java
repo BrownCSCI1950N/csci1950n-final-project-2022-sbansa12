@@ -85,9 +85,9 @@ public class SpacePartitioning {
 
         int randXs = 1 + rand.nextInt(spawn.getWidth() - 2);
         int randYs = 1 + rand.nextInt(spawn.getHeight() - 2);
-        spawn.addSpecialTile(randXs, randYs, TileType.SPAWN);
+        spawn.addSpecialTile(randXs, randYs, TileType.SPAWN1);
         int randXe = 1 + rand.nextInt(exit.getWidth() - 2);
         int randYe = 1 + rand.nextInt(exit.getHeight() - 2);
-        exit.addSpecialTile(randXe, randYe, TileType.EXIT);
+        exit.addSpecialTile(randXe, randYe, TileType.EXIT1);
     }
 }

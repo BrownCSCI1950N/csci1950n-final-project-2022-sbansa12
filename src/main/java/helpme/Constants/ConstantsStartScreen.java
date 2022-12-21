@@ -1,4 +1,4 @@
-package hel.Constants;
+package helpme.Constants;
 
 import engine.FontWrapper;
 import engine.support.Vec2d;
@@ -10,13 +10,13 @@ public class ConstantsStartScreen {
     public static Color backgroundColor = Color.rgb(255,166,0);
 
     // Title Constants
-    public static final String title = "        HEL";
+    public static final String title = "    Help Me";
     public static final Vec2d titlePosition = new Vec2d(300, 160);
     public static final Color titleColor = Color.rgb(61, 15,26);
     public static final FontWrapper titleFont = new FontWrapper("Colonna MT", FontWeight.EXTRA_LIGHT, null,64);
 
     // Specified Button Constants
-    public static final String startButtonText = "Start!";
+    public static final String startButtonText = " start";
     public static final Vec2d startButtonPosition =  new Vec2d(370, 300);
     public static final Vec2d startButtonTextPosition = new Vec2d(76, 20);
 

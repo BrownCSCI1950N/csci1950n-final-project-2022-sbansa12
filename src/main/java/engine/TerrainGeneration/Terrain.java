@@ -29,7 +29,7 @@ public class Terrain {
         TileType[][] map = new TileType[sizeOfMap.y][sizeOfMap.x];
 
         for (TileType[] tileTypes : map) {
-            Arrays.fill(tileTypes, TileType.WALL0);
+            Arrays.fill(tileTypes, TileType.WALL1);
         }
 
         // Draw Halls into Array

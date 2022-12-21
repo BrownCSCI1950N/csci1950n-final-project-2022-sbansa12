@@ -48,11 +48,11 @@ public class MapReader {
                 }
                 toReturn[j][i] = t;
 
-                if (t == TileType.SPAWN) {
+                if (t == TileType.SPAWN1) {
                     spawn = true;
                 }
 
-                if (t == TileType.EXIT) {
+                if (t == TileType.EXIT1) {
                     exit = true;
                 }
                 int index = mustInclude.indexOf(t);

@@ -17,20 +17,18 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class SaveFile {
-    public static Document create() {
+    public static Document create() throws SaveFileParseException {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = factory.newDocumentBuilder();
 
             return docBuilder.newDocument();
         } catch (ParserConfigurationException e) {
-            System.out.println("SaveFile Create Fatal Error Document Builder");
-            System.exit(1);
+            throw new SaveFileParseException("SaveFile Create Fatal Error Document Builder");
         }
-        return null;
     }
 
-    public static void save(Document doc, String filename) {
+    public static void save(Document doc, String filename) throws SaveFileParseException {
         // Does Not Create File Instantaneously
         try {
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -45,13 +43,11 @@ public class SaveFile {
             writer.flush();
             writer.close();
         } catch (IOException | TransformerException e) {
-            System.out.println("SaveFile Save Fatal Error");
-            System.out.println(e.getMessage());
-            System.exit(1);
+            throw new SaveFileParseException("SaveFile Save Fatal Error");
         }
     }
 
-    public static Document read(String filepath) {
+    public static Document read(String filepath) throws SaveFileParseException {
         try {
         // Set up the parser
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -61,17 +57,11 @@ public class SaveFile {
 
             return doc;
         } catch (ParserConfigurationException e) {
-            System.out.println("SaveFile Read Fatal Error Document Builder");
-            System.exit(1);
+            throw new SaveFileParseException("SaveFile Read Fatal Error Document Builder");
         } catch (IOException e) {
-            System.out.println("SaveFile Read IOException");
-            System.out.println(e.getMessage());
-            System.exit(1);
+            throw new SaveFileParseException("SaveFile Read IOException");
         } catch (SAXException e) {
-            System.out.println("SaveFile Read File Parse Error");
-            System.out.println(e.getMessage());
-            System.exit(1);
+            throw new SaveFileParseException("SaveFile Read File Parse Error");
         }
-        return null;
     }
 }

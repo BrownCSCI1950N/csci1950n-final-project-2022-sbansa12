@@ -1,20 +1,24 @@
 package engine.TerrainGeneration;
 
 public enum TileType {
-    PLAYER,
+    PLAYER1,
+    PLAYER2,
     ROOM,
-    WALL0,
     WALL1,
-    SPAWN,
-    EXIT,
+    WALL2,
+    SPAWN1,
+    SPAWN2,
+    EXIT1,
+    EXIT2,
     STAIRS,
-    TRAPS,
+    TRAP1,
+    TRAP2,
     ENEMY,
     BOSS,
     HIDDEN,
     BUTTON,
-    BOX0,
     BOX1,
+    BOX2,
     CORNERTOPLEFT,
     CORNERTOPRIGHT,
     CORNERBOTTOMLEFT,
@@ -24,22 +28,30 @@ public enum TileType {
     @Override
     public String toString() {
         switch (this) {
-            case PLAYER:
+            case PLAYER1:
                 return "P";
+            case PLAYER2:
+                return "p";
             case ROOM:
                 return "□";
-            case WALL0:
-                return "■";
             case WALL1:
+                return "■";
+            case WALL2:
                 return "W";
-            case SPAWN:
+            case SPAWN1:
                 return "S";
-            case EXIT:
+            case SPAWN2:
+                return "s";
+            case EXIT1:
                 return "E";
+            case EXIT2:
+                return "e";
             case STAIRS:
                 return "=";
-            case TRAPS:
+            case TRAP1:
                 return "T";
+            case TRAP2:
+                return "t";
             case ENEMY:
                 return "X";
             case BOSS:
@@ -48,9 +60,9 @@ public enum TileType {
                 return "H";
             case BUTTON:
                 return "b";
-            case BOX0:
-                return "▦";
             case BOX1:
+                return "▦";
+            case BOX2:
                 return "▤";
             case CORNERTOPLEFT:
                 return "◤";
@@ -70,21 +82,29 @@ public enum TileType {
     public static TileType stringToTile(String s) {
         switch (s) {
             case "P":
-                return PLAYER;
+                return PLAYER1;
+            case "p":
+                return PLAYER2;
             case "□":
                 return ROOM;
             case "■":
-                return WALL0;
-            case "W":
                 return WALL1;
+            case "W":
+                return WALL2;
             case "S":
-                return SPAWN;
+                return SPAWN1;
+            case "s":
+                return SPAWN2;
             case "E":
-                return EXIT;
+                return EXIT1;
+            case "e":
+                return EXIT2;
             case "=":
                 return STAIRS;
             case "T":
-                return TRAPS;
+                return TRAP1;
+            case "t":
+                return TRAP2;
             case "X":
                 return ENEMY;
             case "B":
@@ -94,9 +114,9 @@ public enum TileType {
             case "b":
                 return BUTTON;
             case "▦":
-                return BOX0;
-            case "▤":
                 return BOX1;
+            case "▤":
+                return BOX2;
             case "◤":
                 return CORNERTOPLEFT;
             case "◥":

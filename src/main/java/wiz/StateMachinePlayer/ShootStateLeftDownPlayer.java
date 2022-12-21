@@ -5,10 +5,7 @@ import engine.Direction;
 import engine.GameObject;
 import engine.TerrainGeneration.TileType;
 import engine.support.Vec2d;
-import wiz.Constants;
 import wiz.WizGame;
-
-import java.math.BigDecimal;
 
 public class ShootStateLeftDownPlayer extends State {
 
@@ -19,7 +16,7 @@ public class ShootStateLeftDownPlayer extends State {
     public ShootStateLeftDownPlayer(StateMachineComponent sm, GameObject gameObject) {
         this.sm = sm;
         this.gameObject = gameObject;
-        this.animation = new SpriteComponent(gameObject, WizGame.images.getResource(TileType.PLAYER.name()), new Vec2d(1,7));
+        this.animation = new SpriteComponent(gameObject, WizGame.images.getResource(TileType.PLAYER1.name()), new Vec2d(1,7));
     }
 
     @Override

@@ -55,13 +55,13 @@ public class WizGame {
 
     public WizGame() {
         // Setup Resources
-        images.putResource("PLAYER", new Sprite(new Image("file:.\\src\\main\\java\\wiz\\Images\\PLAYER.png"), new Vec2d(2,9)));
+        images.putResource("PLAYER1", new Sprite(new Image("file:.\\src\\main\\java\\wiz\\Images\\PLAYER.png"), new Vec2d(2,9)));
         images.putResource("PROJECTILE_PLAYER", new Sprite(new Image("file:.\\src\\main\\java\\wiz\\Images\\PROJECTILE_PLAYER.png"), new Vec2d(1,1)));
-        images.putResource("WALL0", new Sprite(new Image("file:.\\src\\main\\java\\wiz\\Images\\WALL.png"), new Vec2d(1,1)));
+        images.putResource("WALL1", new Sprite(new Image("file:.\\src\\main\\java\\wiz\\Images\\WALL.png"), new Vec2d(1,1)));
         images.putResource("ROOM", new Sprite(new Image("file:.\\src\\main\\java\\wiz\\Images\\ROOM.png"), new Vec2d(2,1)));
-        images.putResource("SPAWN", new Sprite(new Image("file:.\\src\\main\\java\\wiz\\Images\\SPAWN.png"), new Vec2d(1,1)));
-        images.putResource("EXIT", new Sprite(new Image("file:.\\src\\main\\java\\wiz\\Images\\EXIT.png"), new Vec2d(1,1)));
-        images.putResource("TRAPS", new Sprite(new Image("file:.\\src\\main\\java\\wiz\\Images\\TRAPS.png"), new Vec2d(4,1)));
+        images.putResource("SPAWN1", new Sprite(new Image("file:.\\src\\main\\java\\wiz\\Images\\SPAWN.png"), new Vec2d(1,1)));
+        images.putResource("EXIT1", new Sprite(new Image("file:.\\src\\main\\java\\wiz\\Images\\EXIT.png"), new Vec2d(1,1)));
+        images.putResource("TRAP1", new Sprite(new Image("file:.\\src\\main\\java\\wiz\\Images\\TRAPS.png"), new Vec2d(4,1)));
         images.putResource("STAIRS", new Sprite(new Image("file:.\\src\\main\\java\\wiz\\Images\\STAIRS.png"), new Vec2d(1,1)));
         images.putResource("ENEMY", new Sprite(new Image("file:.\\src\\main\\java\\wiz\\Images\\ENEMY.png"), new Vec2d(2,3)));
         images.putResource("BOSS", new Sprite(new Image("file:.\\src\\main\\java\\wiz\\Images\\BOSS.png"), new Vec2d(3,1)));
@@ -133,7 +133,7 @@ public class WizGame {
             terrain.placeSingleTileRandom(TileType.STAIRS, List.of(TileType.ROOM));
         }
         terrain.placeTileRandomlyRooms(TileType.ENEMY, List.of(TileType.ROOM), 0.4F, 0.07F, -1);
-        terrain.placeTileRandomlyRoomsCenter(TileType.TRAPS, List.of(TileType.ROOM),0.4F, 0.05F, -1);
+        terrain.placeTileRandomlyRoomsCenter(TileType.TRAP1, List.of(TileType.ROOM),0.4F, 0.05F, -1);
         TileType[][] map = terrain.getTileMap();
 
         mapWorld = terrain;
@@ -164,7 +164,7 @@ public class WizGame {
                 minimapTiles.add(g);
 
                 assert g != null;
-                if (((TileComponent) g.getComponent("tile")).getTileType().equals(TileType.SPAWN)) {
+                if (((TileComponent) g.getComponent("tile")).getTileType().equals(TileType.SPAWN1)) {
                     spawnPoint = g;
                 }
             }
@@ -205,24 +205,24 @@ public class WizGame {
             gameObject.addComponent(new SpriteComponent(gameObject, images.getResource(TileType.ROOM.name()), new Vec2d(rand.nextInt(2),0)));
             gameObject.addComponent(new TileComponent(TileType.ROOM));
             return gameObject;
-        } else if (t == TileType.WALL0) {
+        } else if (t == TileType.WALL1) {
             GameObject gameObject = new GameObject(transformComponent, getZIndex());
             gameObject.setName("WALL0");
-            gameObject.addComponent(new SpriteComponent(gameObject, images.getResource(TileType.WALL0.name()), new Vec2d(0,0)));
-            gameObject.addComponent(new TileComponent(TileType.WALL0));
+            gameObject.addComponent(new SpriteComponent(gameObject, images.getResource(TileType.WALL1.name()), new Vec2d(0,0)));
+            gameObject.addComponent(new TileComponent(TileType.WALL1));
             gameObject.addComponent(new CollisionComponent(gameObject, new AAB(transformComponent.getCurrentGameSpacePosition(), transformComponent.getSize()), Constants.mapCollisionLayer, false, true));
             return gameObject;
-        } else if (t == TileType.SPAWN) {
+        } else if (t == TileType.SPAWN1) {
             GameObject gameObject = new GameObject(transformComponent, getZIndex());
             gameObject.setName("SPAWN");
-            gameObject.addComponent(new SpriteComponent(gameObject, images.getResource(TileType.SPAWN.name()), new Vec2d(0,0)));
-            gameObject.addComponent(new TileComponent(TileType.SPAWN));
+            gameObject.addComponent(new SpriteComponent(gameObject, images.getResource(TileType.SPAWN1.name()), new Vec2d(0,0)));
+            gameObject.addComponent(new TileComponent(TileType.SPAWN1));
             return gameObject;
-        } else if (t == TileType.EXIT) {
+        } else if (t == TileType.EXIT1) {
             GameObject gameObject = new GameObject(transformComponent, getZIndex());
             gameObject.setName("EXIT");
-            gameObject.addComponent(new SpriteComponent(gameObject, images.getResource(TileType.EXIT.name()), new Vec2d(0,0)));
-            gameObject.addComponent(new TileComponent(TileType.EXIT));
+            gameObject.addComponent(new SpriteComponent(gameObject, images.getResource(TileType.EXIT1.name()), new Vec2d(0,0)));
+            gameObject.addComponent(new TileComponent(TileType.EXIT1));
             gameObject.addComponent(new CollisionComponent(gameObject, new AAB(transformComponent.getCurrentGameSpacePosition(), transformComponent.getSize()), Constants.mapCollisionLayer, true, false){
                 @Override
                 public void onCollide(Collision collision) {
@@ -239,11 +239,11 @@ public class WizGame {
                 }
             });
             return gameObject;
-        } else if (t == TileType.TRAPS) {
+        } else if (t == TileType.TRAP1) {
             GameObject gameObject = new GameObject(transformComponent, getZIndex());
             gameObject.setName("TRAP");
-            gameObject.addComponent(new SpriteComponent(gameObject, images.getResource(TileType.TRAPS.name()), new Vec2d(rand.nextInt(4),0)));
-            gameObject.addComponent(new TileComponent(TileType.TRAPS));
+            gameObject.addComponent(new SpriteComponent(gameObject, images.getResource(TileType.TRAP1.name()), new Vec2d(rand.nextInt(4),0)));
+            gameObject.addComponent(new TileComponent(TileType.TRAP1));
             gameObject.addComponent(new HealthDamageComponent(gameObject, new AAB(transformComponent.getCurrentGameSpacePosition(), transformComponent.getSize()), Constants.mapCollisionLayer, 0, Constants.trapsDamage));
             return gameObject;
         } else if (t == TileType.ENEMY) {
@@ -271,7 +271,7 @@ public class WizGame {
         } else if (t == TileType.HIDDEN) {
             GameObject gameObject = new GameObject(transformComponent, getZIndex());
             gameObject.setName("HIDDEN");
-            gameObject.addComponent(new SpriteComponent(gameObject, images.getResource(TileType.WALL0.name()), new Vec2d(0,0)));
+            gameObject.addComponent(new SpriteComponent(gameObject, images.getResource(TileType.WALL1.name()), new Vec2d(0,0)));
             gameObject.addComponent(new TileComponent(TileType.HIDDEN));
             gameObject.addComponent(new CollisionComponent(gameObject, new AAB(transformComponent.getCurrentGameSpacePosition(), transformComponent.getSize()), Constants.mapCollisionLayer, false, true));
             secretHidden.add(gameObject);
@@ -318,7 +318,7 @@ public class WizGame {
         TransformComponent transformComponentPlayer = new TransformComponent(respawnLocation, Constants.playerSize);
         GameObject playerMake = new GameObject(transformComponentPlayer, getZIndex());
         playerMake.setName("PLAYER");
-        playerMake.addComponent(new TileComponent(TileType.PLAYER));
+        playerMake.addComponent(new TileComponent(TileType.PLAYER1));
 
         StateMachineComponent sm = new StateMachineComponent();
         sm.setCurrentState(new IdleStateRightPlayer(sm, playerMake));

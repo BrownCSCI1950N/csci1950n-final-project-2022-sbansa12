@@ -35,7 +35,7 @@ public class NinGame {
         player.setName("PLAYER");
 
         // Player Components
-        player.addComponent(new TileComponent(TileType.PLAYER));
+        player.addComponent(new TileComponent(TileType.PLAYER1));
         player.addComponent(new SpriteComponent(player, NinImageResource.getResource("PLAYER"), new Vec2d(0,0)));
         player.addComponent(new RespawnComponent(player, spawnPoint));
         player.addComponent(new HealthDamageComponent(player, new AAB(tc.getCurrentGameSpacePosition(), tc.getSize()), ConstantsGameValues.playerCollisionLayer, ConstantsGameValues.playerMaxHealth, 0){
@@ -74,7 +74,7 @@ public class NinGame {
                         tc.getSize().plus(ConstantsGameValues.playerGroundedShapeSizeAdd)),
                 ConstantsGameValues.physicsGroundedCollisionLayer,
                 p,
-                List.of(TileType.WALL0, TileType.BOX0, TileType.BOX1)
+                List.of(TileType.WALL1, TileType.BOX1, TileType.BOX2)
         ));
 
         // Jumping
@@ -88,10 +88,10 @@ public class NinGame {
             @Override
             public void action(Ray r, GameObject gO) {
                 if (gO.hasComponentTag("tile")) {
-                    if (((TileComponent) gO.getComponent("tile")).getTileType().equals(TileType.WALL0) || ((TileComponent) gO.getComponent("tile")).getTileType().equals(TileType.WALL1)) {
+                    if (((TileComponent) gO.getComponent("tile")).getTileType().equals(TileType.WALL1) || ((TileComponent) gO.getComponent("tile")).getTileType().equals(TileType.WALL2)) {
                         return;
                     }
-                    if (((TileComponent) gO.getComponent("tile")).getTileType().equals(TileType.BOX0) || ((TileComponent) gO.getComponent("tile")).getTileType().equals(TileType.BOX1)) {
+                    if (((TileComponent) gO.getComponent("tile")).getTileType().equals(TileType.BOX1) || ((TileComponent) gO.getComponent("tile")).getTileType().equals(TileType.BOX2)) {
                         PhysicsComponent p = (PhysicsComponent) gO.getComponent("physics");
                         p.applyImpulse(r.dir.smult(ConstantsGameValues.rayImpulse));
                     }

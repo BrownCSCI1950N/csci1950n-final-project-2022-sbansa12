@@ -112,7 +112,7 @@ public class NinGameLevel {
     }
 
     private Vec2d createMapInWorld(GameWorld gameWorld, TileType[][] map) {
-        List<TileType> tiles = List.of(ROOM, SPAWN, WALL0, EXIT, BUTTON, STAIRS, WALL1, CORNERTOPLEFT, CORNERTOPRIGHT, CORNERBOTTOMRIGHT, CORNERBOTTOMLEFT);
+        List<TileType> tiles = List.of(ROOM, SPAWN1, WALL1, EXIT1, BUTTON, STAIRS, WALL2, CORNERTOPLEFT, CORNERTOPRIGHT, CORNERBOTTOMRIGHT, CORNERBOTTOMLEFT);
         Vec2d spawnPoint = null;
         for (int j = 0; j < map.length; j++) {
             for (int i = 0; i < map[j].length; i ++) {
@@ -121,7 +121,7 @@ public class NinGameLevel {
                 if (!tiles.contains(t)) {
                     continue;
                 }
-                if (t == TileType.SPAWN) {
+                if (t == TileType.SPAWN1) {
                     spawnPoint = position;
                 }
                 GameObject g = tileToGameObject(t, position);
@@ -134,7 +134,7 @@ public class NinGameLevel {
     }
 
     private void populateSpecialTiles(GameWorld gameWorld, TileType[][] map) {
-        List<TileType> tiles = List.of(BOX1, BOX0, TRAPS, ENEMY, BOSS, HIDDEN, PLAYER);
+        List<TileType> tiles = List.of(BOX2, BOX1, TRAP1, ENEMY, BOSS, HIDDEN, PLAYER1);
         for (int j = 0; j < map.length; j++) {
             for (int i = 0; i < map[j].length; i ++) {
                 Vec2d position = new Vec2d(ConstantsGameValues.tileSize.x * i, ConstantsGameValues.tileSize.y * j);
@@ -158,17 +158,17 @@ public class NinGameLevel {
 
         switch (t) {
             case ROOM:
-            case SPAWN:
-                break;
-            case WALL0:
-                toRet.addComponent(new CollisionComponent(toRet, new AAB(tc.getCurrentGameSpacePosition(), tc.getSize()), ConstantsGameValues.wallCollisionLayer, false, true));
+            case SPAWN1:
                 break;
             case WALL1:
+                toRet.addComponent(new CollisionComponent(toRet, new AAB(tc.getCurrentGameSpacePosition(), tc.getSize()), ConstantsGameValues.wallCollisionLayer, false, true));
+                break;
+            case WALL2:
                 PhysicsComponent pWall = new PhysicsComponent(toRet, true, null, ConstantsGameValues.wallMass, ConstantsGameValues.wallRestitution, true);
                 toRet.addComponent(pWall);
                 toRet.addComponent(new CollisionComponent(toRet, new AAB(tc.getCurrentGameSpacePosition(), tc.getSize()), ConstantsGameValues.wallCollisionLayer, false, true, pWall));
                 break;
-            case EXIT:
+            case EXIT1:
                 toRet.addComponent(new CollisionComponent(toRet, new AAB(tc.getCurrentGameSpacePosition(), tc.getSize()), ConstantsGameValues.exitCollisionLayer, true, true){
                     @Override
                     public void onCollide(Collision collision) {
@@ -205,7 +205,7 @@ public class NinGameLevel {
                 smButton.setCurrentState(new UnClickedButton(smButton, toRet));
                 toRet.addComponent(smButton);
                 break;
-            case BOX0:
+            case BOX1:
                 PhysicsComponent pBox = new PhysicsComponent(toRet, false, Arrays.asList(ConstantsGameValues.gravityDown, null, null), ConstantsGameValues.boxMass, ConstantsGameValues.boxRestitution, false);
                 toRet.addComponent(pBox);
                 toRet.addComponent(new CollisionComponent(toRet, new AAB(tc.getCurrentGameSpacePosition(), tc.getSize()), ConstantsGameValues.boxCollisionLayer, false, false, pBox));
@@ -216,10 +216,10 @@ public class NinGameLevel {
                                 tc.getSize().plus(ConstantsGameValues.playerGroundedShapeSizeAdd)),
                         ConstantsGameValues.physicsGroundedCollisionLayer,
                         pBox,
-                        List.of(TileType.WALL0, TileType.BOX0, TileType.BOX1)
+                        List.of(TileType.WALL1, TileType.BOX1, TileType.BOX2)
                 ));
                 break;
-            case BOX1:
+            case BOX2:
                 PhysicsComponent pHalfBox = new PhysicsComponent(toRet, false, Arrays.asList(ConstantsGameValues.gravityDown, null, null), ConstantsGameValues.halfboxMass, ConstantsGameValues.halfboxRestitution, false);
                 toRet.addComponent(pHalfBox);
                 toRet.addComponent(new CollisionComponent(toRet, new AAB(tc.getCurrentGameSpacePosition(), tc.getSize()), ConstantsGameValues.boxCollisionLayer, false, false, pHalfBox));
@@ -230,7 +230,7 @@ public class NinGameLevel {
                                 tc.getSize().plus(ConstantsGameValues.playerGroundedShapeSizeAdd)),
                         ConstantsGameValues.physicsGroundedCollisionLayer,
                         pHalfBox,
-                        List.of(TileType.WALL0, TileType.BOX0, TileType.BOX1)
+                        List.of(TileType.WALL1, TileType.BOX1, TileType.BOX2)
                 ));
                 break;
             case CORNERBOTTOMRIGHT:
@@ -289,11 +289,11 @@ public class NinGameLevel {
                 toRet.addComponent(new CollisionComponent(toRet, new Polygon(topLeftTopLeft, pointsTopLeft), ConstantsGameValues.wallCollisionLayer, false, true));
                 break;
             case STAIRS:
-            case TRAPS:
+            case TRAP1:
             case ENEMY:
             case BOSS:
             case HIDDEN:
-            case PLAYER:
+            case PLAYER1:
             default:
                 assert false;
                 break;

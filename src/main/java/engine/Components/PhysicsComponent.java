@@ -19,10 +19,14 @@ public class PhysicsComponent implements Component {
     Vec2d gravityUp;
     Vec2d gravityDown;
     Vec2d gravityLowJump;
+    Vec2d gravityRest;
     BigDecimal count;
     GameObject gameObject;
-    boolean isStaticPhysics;
+    List<Boolean> isStaticPhysics;
+
 //    boolean startCount;
+    boolean friction;
+    double frictionCoefficient;
 
     public PhysicsComponent(GameObject gameObject, boolean permanentGravityOff, List<Vec2d> gravity, double mass, double restitution, boolean isStaticPhysics) {
         this.gameObject = gameObject;
@@ -47,7 +51,69 @@ public class PhysicsComponent implements Component {
         assert restitution >= 0.0;
         assert restitution <= 1.0;
         this.restitution = restitution;
-        this.isStaticPhysics = isStaticPhysics;
+        this.isStaticPhysics = List.of(isStaticPhysics, isStaticPhysics);
+        this.friction = false;
+
+//        this.startCount = false;
+    }
+
+    public PhysicsComponent(GameObject gameObject, boolean permanentGravityOff, List<Vec2d> gravity, double mass, double restitution, boolean isStaticPhysicsX, boolean isStaticPhysicsY) {
+        this.gameObject = gameObject;
+        this.isGrounded = true;
+        this.permanentGravityOff = permanentGravityOff;
+        // [UP, DOWN, LowJump]
+        if (permanentGravityOff) {
+            assert gravity == null;
+        } else {
+            assert gravity.size() > 0;
+            assert gravity.size() < 4;
+            this.gravityUp = gravity.get(0);
+            this.gravityDown = gravity.get(1);
+            this.gravityLowJump = gravity.get(2);
+        }
+        this.count = new BigDecimal("0");
+
+        this.vel = new Vec2d(0,0);
+        this.force = new Vec2d(0,0);
+        this.impulse = new Vec2d(0,0);
+        this.mass = mass;
+        assert restitution >= 0.0;
+        assert restitution <= 1.0;
+        this.restitution = restitution;
+        this.isStaticPhysics = List.of(isStaticPhysicsX, isStaticPhysicsY);
+        this.friction = false;
+
+//        this.startCount = false;
+    }
+
+    public PhysicsComponent(GameObject gameObject, boolean permanentGravityOff, List<Vec2d> gravity, double mass, double restitution, boolean isStaticPhysics, double frictionCoefficient) {
+        this.gameObject = gameObject;
+        this.isGrounded = true;
+        this.permanentGravityOff = permanentGravityOff;
+        // [UP, DOWN, LowJump]
+        if (permanentGravityOff) {
+            assert gravity == null;
+        } else {
+            assert gravity.size() > 0;
+            assert gravity.size() < 5;
+            this.gravityUp = gravity.get(0);
+            this.gravityDown = gravity.get(1);
+            this.gravityLowJump = gravity.get(2);
+            this.gravityRest = gravity.get(3);
+        }
+        this.count = new BigDecimal("0");
+
+        this.vel = new Vec2d(0,0);
+        this.force = new Vec2d(0,0);
+        this.impulse = new Vec2d(0,0);
+        this.mass = mass;
+        assert restitution >= 0.0;
+        assert restitution <= 1.0;
+        this.restitution = restitution;
+        this.isStaticPhysics = List.of(isStaticPhysics, isStaticPhysics);
+        this.friction = true;
+        this.frictionCoefficient = frictionCoefficient;
+
 
 //        this.startCount = false;
     }
@@ -111,14 +177,24 @@ public class PhysicsComponent implements Component {
                     }
                 }
                 applyForce(gravity);
+                if (friction && vel.x != 0) {
+                    applyForce(new Vec2d(-sign(vel.x)*frictionCoefficient * mass * gravity.y, 0));
+                }
             } else {
+                // friction = coefficient of friction * normal force
+                // normal force = mass * gravity on flat surface (Component of this on a diagonal)
+                // Since AAB is always upright and never diagonal can be used exactly
+                // acts opposite to motion
+                if (friction && vel.x != 0) {
+                    applyForce(new Vec2d(-sign(vel.x)*frictionCoefficient * mass * gravityRest.y, 0));
+                }
                 vel = new Vec2d(vel.x, 0);
             }
         }
 
         vel = vel.plus(force.sdiv(mass).smult(convertSeconds(nano)).plus(impulse.sdiv(mass)));
         if(gameObject.hasComponentTag("tile")) {
-            if (((TileComponent) gameObject.getComponent("tile")).getTileType().equals(TileType.BOX0)) {
+            if (((TileComponent) gameObject.getComponent("tile")).getTileType().equals(TileType.BOX1)) {
 //                System.out.println("Force: " + force);
 //                System.out.println("Impulse: " + impulse);
 //                System.out.println("Velocity: " + vel);
@@ -130,19 +206,37 @@ public class PhysicsComponent implements Component {
         impulse = new Vec2d(0, 0);
     }
 
+    private int sign(double n) {
+        if (n >= 0) {
+            return 1;
+        } else {
+            return -1;
+        }
+    }
+
     public void setIsGrounded(boolean gr) {
         this.isGrounded = gr;
     }
 
     public void applyForce(Vec2d f) {
-        if (!isStaticPhysics) {
-            force = force.plus(f);
+        Vec2d toApply = new Vec2d(0,0);
+        if (!isStaticPhysics.get(0)) {
+            toApply = new Vec2d(f.x, toApply.y);
         }
+        if (!isStaticPhysics.get(1)) {
+            toApply = new Vec2d(toApply.x, f.y);
+        }
+        force = force.plus(toApply);
     }
 
     public void applyImpulse(Vec2d p) {
-        if (!isStaticPhysics) {
-            impulse = impulse.plus(p);
+        Vec2d toApply = new Vec2d(0,0);
+        if (!isStaticPhysics.get(0)) {
+            toApply = new Vec2d(p.x, toApply.y);
         }
+        if (!isStaticPhysics.get(1)) {
+            toApply = new Vec2d(toApply.x, p.y);
+        }
+        impulse = impulse.plus(toApply);
     }
 }

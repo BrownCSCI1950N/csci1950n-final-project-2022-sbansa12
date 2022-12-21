@@ -132,20 +132,20 @@ public class Constants {
     private static final double opacityMinimap = 0.7;
     public static Color tileToColor(TileType t) {
         switch (t) {
-            case PLAYER:
+            case PLAYER1:
                 return Color.rgb(136,82,211, opacityMinimap);
             case ROOM:
                 return Color.rgb(128,181,49, opacityMinimap);
-            case WALL0:
+            case WALL1:
             case HIDDEN:
                 return Color.rgb(87,173,37, opacityMinimap);
-            case SPAWN:
+            case SPAWN1:
                 return Color.rgb(82,169,43, opacityMinimap);
-            case EXIT:
+            case EXIT1:
                 return Color.rgb(229,189,68,opacityMinimap);
             case STAIRS:
                 return Color.rgb(26,66,187,opacityMinimap);
-            case TRAPS:
+            case TRAP1:
             case ENEMY:
             case BOSS:
                 return Color.rgb(255,0,0,opacityMinimap);
